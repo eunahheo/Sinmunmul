@@ -1,5 +1,8 @@
 package com.newsbig.sinmunmul.service;
 
-public interface UserService {
+import java.util.List;
+import java.util.Map;
 
+public interface UserService {
+	public List<Map<String, Object>> userAllInfo();
 }
