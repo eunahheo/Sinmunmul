@@ -9,4 +9,7 @@ import com.newsbig.sinmunmul.entity.User;
 public interface UserRepository extends JpaRepository<User, Integer> {
 
 	List<User> findAll();
+	
+	public User findBydelYnAndUserEmail(String delYn, String userEmail);
+	
 }

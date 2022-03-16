@@ -30,4 +30,10 @@ public class UserServiceImpl implements UserService{
 		
 		return result;
 	}
+
+	@Override
+	public void regist(User user) {
+		// TODO Auto-generated method stub
+		
+	}
 }
