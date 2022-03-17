@@ -7,9 +7,9 @@
 # useful for handling different item types with a single interface
 from __future__ import unicode_literals
 from scrapy.exporters import CsvItemExporter
-from scrapy.conf import settings
+from scrapy import settings
 from scrapy.exceptions import DropItem
-from scrapy import log
+# from scrapy import log
 from itemadapter import ItemAdapter
 
 class JsonPipeline(object):
