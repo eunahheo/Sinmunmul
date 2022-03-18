@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.newsbig.sinmunmul.dto.CodeDto;
 import com.newsbig.sinmunmul.entity.Interest;
 import com.newsbig.sinmunmul.entity.User;
 import com.newsbig.sinmunmul.exception.NotExistsUserException;
@@ -23,14 +24,15 @@ public class InterestServiceImpl implements InterestService {
 	UserRepository userRepository;
 	
 	@Override
-	public void registInterest(List<Integer> list, int userSeq) {
+	public void registInterest(List<CodeDto> list, int userSeq) {
 		
 		String now = TimeUtils.curTime();
 		User user = userRepository.findBydelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsUserException());
-		for(int code : list) {
+		for(CodeDto codeDto : list) {
 			interestRepository.save(Interest.builder()
 					.userSeq(userSeq)
-					.code(code)
+					.codeGroup(codeDto.getCodeGroup())
+					.code(codeDto.getCode())
 					.regDt(now)
 					.regId(user.getUserEmail())
 					.modDt(now)
