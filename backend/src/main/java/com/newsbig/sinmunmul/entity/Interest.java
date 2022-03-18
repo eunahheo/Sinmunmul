@@ -9,6 +9,7 @@ import javax.persistence.Table;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -35,7 +36,7 @@ public class Interest {
 	private int code;
 	
 	@Column(name = "del_yn")
-	private String delYn;
+	private String delYn = "n";
 	
 	@Column(name = "reg_dt")
 	private String regDt;
@@ -48,5 +49,18 @@ public class Interest {
 	
 	@Column(name = "mod_id")
 	private String modId;
+
+	@Builder
+	public Interest(int userSeq, int code, String regDt, String regId, String modDt, String modId) {
+		super();
+		this.userSeq = userSeq;
+		this.code = code;
+		this.regDt = regDt;
+		this.regId = regId;
+		this.modDt = modDt;
+		this.modId = modId;
+	}
+	
+	
 
 }

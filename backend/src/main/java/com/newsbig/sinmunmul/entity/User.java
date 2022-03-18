@@ -9,6 +9,7 @@ import javax.persistence.Table;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -40,14 +41,8 @@ public class User {
 	@Column(name = "user_age")
 	private int userAge;
 	
-	@Column(name = "certkey")
-	private String certKey;
-	
-	@Column(name = "enable_yn")
-	private String enableYn;
-	
 	@Column(name = "del_yn")
-	private String delYn;
+	private String delYn = "n";
 	
 	@Column(name = "reg_dt")
 	private String regDt;
@@ -60,5 +55,21 @@ public class User {
 	
 	@Column(name = "mod_id")
 	private String modId;
+
+	@Builder
+	public User(String userEmail, String userPwd, String userGender, int userAge, String regDt, String regId,
+			String modDt, String modId) {
+		super();
+		this.userEmail = userEmail;
+		this.userPwd = userPwd;
+		this.userGender = userGender;
+		this.userAge = userAge;
+		this.regDt = regDt;
+		this.regId = regId;
+		this.modDt = modDt;
+		this.modId = modId;
+	}
+	
+	
 
 }

@@ -16,13 +16,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.newsbig.sinmunmul.dto.EmailDto;
+import com.newsbig.sinmunmul.dto.SigninDto;
+import com.newsbig.sinmunmul.entity.Interest;
 import com.newsbig.sinmunmul.entity.User;
+import com.newsbig.sinmunmul.exception.NotExistsUserException;
+import com.newsbig.sinmunmul.repository.UserRepository;
+import com.newsbig.sinmunmul.response.BaseResponseBody;
 import com.newsbig.sinmunmul.service.MailService;
 import com.newsbig.sinmunmul.service.UserService;
 import com.newsbig.sinmunmul.util.MailContentBuilder;
+import com.newsbig.sinmunmul.util.TimeUtils;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping("/user")
@@ -38,22 +46,34 @@ public class UserController {
 	@Autowired
 	private MailContentBuilder mailContentBuilder;
 	
-	@GetMapping
-	@ApiOperation(value = "모든 사용자 조회", notes = "테스트용", response = List.class)
-	public ResponseEntity<List<Map<String, Object>>> getInfo() {
-		List<Map<String, Object>> userinfo = new ArrayList<>();
-		userinfo = userService.userAllInfo();
-
-		return new ResponseEntity<List<Map<String, Object>>>(userinfo, HttpStatus.OK);
-	}
-	
 	@PostMapping("/signin")
-	@ApiOperation(value = "회원가입", notes = "사용자가 입력한 회원정보를 등록한다.", response = String.class)
-	public ResponseEntity<String> regist(@RequestBody User user) {
+	@ApiOperation(value = "회원가입", notes = "사용자가 입력한 회원정보를 등록한다.", response = BaseResponseBody.class)
+	@ApiResponses(
+			{ @ApiResponse(code = 200, message = "회원가입 성공"),
+			  @ApiResponse(code = 400, message = "잘못된 요청입니다."),
+			  @ApiResponse(code = 500, message = "서버 오류")
+			})
+	public ResponseEntity<? extends BaseResponseBody> regist(@RequestBody SigninDto signInDto) {
+		String now = TimeUtils.curTime();
 		
+		User user = User.builder()
+				.userEmail(signInDto.getUserEmail())
+				.userPwd(signInDto.getUserPwd())
+				.userGender(signInDto.getUserGender())
+				.userAge(signInDto.getUserAge())
+				.regDt(now)
+				.regId(signInDto.getUserEmail())
+				.modDt(now)
+				.modId(signInDto.getUserEmail()).build();
 		
-		
-		return new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+		try {
+			if(userService.getUserByEmail(signInDto.getUserEmail())!=null);
+			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "이미 가입된 이메일입니다."));
+		}
+		catch(NotExistsUserException e) {
+			userService.signin(user);
+		}
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "회원가입 성공"));
 	}
 	
 	@GetMapping("/cert")
