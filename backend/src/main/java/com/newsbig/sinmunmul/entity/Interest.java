@@ -21,25 +21,19 @@ import lombok.ToString;
 @Setter
 @ToString
 @AllArgsConstructor
-public class User {
+public class Interest {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // PK, Auto_Increment로 설정해서 직접 할당 방식이 아니라, 자동으로 생성되도록 하기 위한
 														// 어노테이션
+	@Column(name = "interest_seq")
+	private int interestSeq;
+	
 	@Column(name = "user_seq")
 	private int userSeq;
 	
-	@Column(name = "user_email")
-	private String userEmail;
-	
-	@Column(name = "user_pwd")
-	private String userPwd;
-	
-	@Column(name = "user_gender")
-	private String userGender;
-	
-	@Column(name = "user_age")
-	private int userAge;
+	@Column(name = "code")
+	private int code;
 	
 	@Column(name = "del_yn")
 	private String delYn = "n";
@@ -57,13 +51,10 @@ public class User {
 	private String modId;
 
 	@Builder
-	public User(String userEmail, String userPwd, String userGender, int userAge, String regDt, String regId,
-			String modDt, String modId) {
+	public Interest(int userSeq, int code, String regDt, String regId, String modDt, String modId) {
 		super();
-		this.userEmail = userEmail;
-		this.userPwd = userPwd;
-		this.userGender = userGender;
-		this.userAge = userAge;
+		this.userSeq = userSeq;
+		this.code = code;
 		this.regDt = regDt;
 		this.regId = regId;
 		this.modDt = modDt;
