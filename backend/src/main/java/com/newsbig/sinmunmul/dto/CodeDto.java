@@ -12,9 +12,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @AllArgsConstructor
-public class SigninDto {
-	private String userEmail;
-	private String userPwd;
-	private String userGender;
-	private int userAge;
+public class CodeDto {
+	private int codeGroup;
+	private int code;
 }

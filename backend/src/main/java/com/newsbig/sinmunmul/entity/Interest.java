@@ -32,6 +32,9 @@ public class Interest {
 	@Column(name = "user_seq")
 	private int userSeq;
 	
+	@Column(name = "code_group")
+	private int codeGroup;
+	
 	@Column(name = "code")
 	private int code;
 	
@@ -51,9 +54,10 @@ public class Interest {
 	private String modId;
 
 	@Builder
-	public Interest(int userSeq, int code, String regDt, String regId, String modDt, String modId) {
+	public Interest(int userSeq, int codeGroup, int code, String regDt, String regId, String modDt, String modId) {
 		super();
 		this.userSeq = userSeq;
+		this.codeGroup = codeGroup;
 		this.code = code;
 		this.regDt = regDt;
 		this.regId = regId;

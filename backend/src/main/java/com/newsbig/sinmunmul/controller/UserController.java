@@ -1,8 +1,6 @@
 package com.newsbig.sinmunmul.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,16 +9,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.newsbig.sinmunmul.dto.EmailDto;
 import com.newsbig.sinmunmul.dto.SigninDto;
-import com.newsbig.sinmunmul.entity.Interest;
 import com.newsbig.sinmunmul.entity.User;
 import com.newsbig.sinmunmul.exception.NotExistsUserException;
-import com.newsbig.sinmunmul.repository.UserRepository;
 import com.newsbig.sinmunmul.response.BaseResponseBody;
 import com.newsbig.sinmunmul.service.MailService;
 import com.newsbig.sinmunmul.service.UserService;
@@ -29,6 +25,7 @@ import com.newsbig.sinmunmul.util.TimeUtils;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
@@ -78,7 +75,7 @@ public class UserController {
 	
 	@GetMapping("/cert")
 	@ApiOperation(value = "회원가입", notes = "사용자가 입력한 회원정보를 등록한다.", response = String.class)
-	public ResponseEntity<Map<String, String>> emailCertify(String email) {
+	public ResponseEntity<Map<String, String>> emailCertify(@RequestParam String email) {
 		Map<String, String> result = new HashMap<>();
 		
 		String certKey = mailService.generateKey();
