@@ -6,15 +6,14 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.newsbig.sinmunmul.dto.PwdUpdateInfo;
+import com.newsbig.sinmunmul.repository.MypageRepository;
 import com.newsbig.sinmunmul.response.BaseResponseBody;
 import com.newsbig.sinmunmul.service.MypageService;
 
@@ -33,6 +32,8 @@ public class MypageController {
 	private MypageService mypageService;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	@Autowired
+	MypageRepository mypageRepository;
 	
 	@PutMapping("/{user_seq}/updatePassword")
 	@ApiImplicitParam(name = "user_seq", value = "user_seq")
@@ -46,9 +47,10 @@ public class MypageController {
 		String userPwd = pwdUpdateInfo.getUserPwd();
 		String newUserPwd = pwdUpdateInfo.getNewUserPwd();
 		
-		if(!passwordEncoder.matches(userPwd, mypageService.getUserByUserSeq(userSeq).getUserPwd()))
+		if(!passwordEncoder.matches(userPwd, mypageRepository.getById(userSeq).getUserPwd()))
 			return ResponseEntity.status(400).body(BaseResponseBody.of(400, "비밀번호가 올바르지 않습니다."));
 		
+		// 비밀번호 유효성 검사
 		String regx = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,16}";
 		Pattern pattern = Pattern.compile(regx);
 		Matcher matcher = pattern.matcher(newUserPwd);
