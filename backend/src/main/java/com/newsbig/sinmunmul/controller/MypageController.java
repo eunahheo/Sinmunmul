@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.newsbig.sinmunmul.dto.PwdUpdateInfo;
+import com.newsbig.sinmunmul.dto.PwdUpdateDto;
 import com.newsbig.sinmunmul.repository.MypageRepository;
 import com.newsbig.sinmunmul.response.BaseResponseBody;
 import com.newsbig.sinmunmul.service.MypageService;
@@ -45,9 +45,9 @@ public class MypageController {
 			  @ApiResponse(code = 400, message = "존재하지 않는 회원입니다."),
 			  @ApiResponse(code = 500, message = "서버 오류")
 			})
-	public ResponseEntity<? extends BaseResponseBody> updatePassword(@PathVariable("user_seq") int userSeq, @RequestBody PwdUpdateInfo pwdUpdateInfo) {
-		String userPwd = pwdUpdateInfo.getUserPwd();
-		String newUserPwd = pwdUpdateInfo.getNewUserPwd();
+	public ResponseEntity<? extends BaseResponseBody> updatePassword(@PathVariable("user_seq") int userSeq, @RequestBody PwdUpdateDto pwdUpdateDto) {
+		String userPwd = pwdUpdateDto.getUserPwd();
+		String newUserPwd = pwdUpdateDto.getNewUserPwd();
 		
 		if(!passwordEncoder.matches(userPwd, mypageRepository.getById(userSeq).getUserPwd()))
 			return ResponseEntity.status(400).body(BaseResponseBody.of(400, "비밀번호가 올바르지 않습니다."));
