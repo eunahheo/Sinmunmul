@@ -6,10 +6,12 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.newsbig.sinmunmul.dto.PwdUpdateInfo;
@@ -40,7 +42,7 @@ public class MypageController {
 	@ApiOperation(value = "비밀번호 수정", notes = "영어, 숫자, 특수문자(!@#$%^&*)를 포함한 8~16자리로 비밀번호를 수정할 수 있습니다.")
 	@ApiResponses(
 			{ @ApiResponse(code = 200, message = "비밀번호 수정 성공"),
-			  @ApiResponse(code = 400, message = "존재하지 않는 유저입니다."),
+			  @ApiResponse(code = 400, message = "존재하지 않는 회원입니다."),
 			  @ApiResponse(code = 500, message = "서버 오류")
 			})
 	public ResponseEntity<? extends BaseResponseBody> updatePassword(@PathVariable("user_seq") int userSeq, @RequestBody PwdUpdateInfo pwdUpdateInfo) {
@@ -60,5 +62,22 @@ public class MypageController {
 		mypageService.updatePassword(userSeq, newUserPwd);
 		
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "비밀번호 수정 성공"));
+	}
+	
+	@DeleteMapping("/{user_seq}")
+	@ApiImplicitParam(name = "user_seq", value = "user_seq")
+	@ApiOperation(value = "회원 탈퇴", notes = "DB에서 로그인한 회원의 del_yn 값을 'y'로, mod_dt 값을 현재 시간으로 업데이트")
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "회원 탈퇴 성공"),
+		@ApiResponse(code = 400, message = "존재하지 않는 회원입니다."),
+		@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<? extends BaseResponseBody> deleteUser(@PathVariable("user_seq") int userSeq, @RequestParam String userPwd) {
+		if(!passwordEncoder.matches(userPwd, mypageRepository.getById(userSeq).getUserPwd()))
+			return ResponseEntity.status(400).body(BaseResponseBody.of(400, "비밀번호가 올바르지 않습니다."));
+		
+		mypageService.deleteUser(userSeq);
+		
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "회원 탈퇴 성공"));
 	}
 }

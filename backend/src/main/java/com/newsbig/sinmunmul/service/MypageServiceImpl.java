@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.newsbig.sinmunmul.entity.User;
 import com.newsbig.sinmunmul.repository.MypageRepository;
+import com.newsbig.util.TimeUtils;
 
 @Service("/mypageService")
 public class MypageServiceImpl implements MypageService {
@@ -23,6 +24,15 @@ public class MypageServiceImpl implements MypageService {
 		if(!mypageRepository.getById(userSeq).getUserPwd().equals(passwordEncoder.encode(userPwd)))
 			user.setUserPwd(passwordEncoder.encode(userPwd));
 
+		mypageRepository.save(user);
+	}
+	
+	// 회원 탈퇴
+	@Override
+	public void deleteUser(int userSeq) {
+		User user = mypageRepository.getById(userSeq);
+		user.setDelYn("y");
+		user.setModDt(TimeUtils.curTime());
 		mypageRepository.save(user);
 	}
 }
