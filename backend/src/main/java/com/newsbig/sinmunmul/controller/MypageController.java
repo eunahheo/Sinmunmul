@@ -1,5 +1,6 @@
 package com.newsbig.sinmunmul.controller;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,8 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.newsbig.sinmunmul.dto.CodeDto;
 import com.newsbig.sinmunmul.dto.PwdUpdateDto;
-import com.newsbig.sinmunmul.repository.MypageRepository;
+import com.newsbig.sinmunmul.repository.UserRepository;
 import com.newsbig.sinmunmul.response.BaseResponseBody;
 import com.newsbig.sinmunmul.service.MypageService;
 
@@ -35,7 +37,7 @@ public class MypageController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	@Autowired
-	MypageRepository mypageRepository;
+	UserRepository userRepository;
 	
 	@PutMapping("/{user_seq}/updatePassword")
 	@ApiImplicitParam(name = "user_seq", value = "user_seq")
@@ -49,7 +51,7 @@ public class MypageController {
 		String userPwd = pwdUpdateDto.getUserPwd();
 		String newUserPwd = pwdUpdateDto.getNewUserPwd();
 		
-		if(!passwordEncoder.matches(userPwd, mypageRepository.getById(userSeq).getUserPwd()))
+		if(!passwordEncoder.matches(userPwd, userRepository.getById(userSeq).getUserPwd()))
 			return ResponseEntity.status(400).body(BaseResponseBody.of(400, "비밀번호가 올바르지 않습니다."));
 		
 		// 비밀번호 유효성 검사
@@ -64,6 +66,19 @@ public class MypageController {
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "비밀번호 수정 성공"));
 	}
 	
+	@PutMapping("/{user_seq}/updateInterest")
+	@ApiImplicitParam(name = "user_seq", value = "user_seq")
+	@ApiOperation(value = "관심사 수정", notes = "등록된 관심사들의 관심분야 코드들을 DB에 저장")
+	@ApiResponses(
+			{ @ApiResponse(code = 200, message = "관심사 수정 성공"),
+			  @ApiResponse(code = 400, message = "존재하지 않는 유저입니다."),
+			  @ApiResponse(code = 500, message = "서버 오류")
+			})
+	public ResponseEntity<? extends BaseResponseBody> updateInterest(@PathVariable("user_seq") int userSeq, @RequestParam List<CodeDto> interests) {
+		mypageService.updateInterest(userSeq, interests);
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "관심사 수정 성공"));
+	}
+	
 	@DeleteMapping("/{user_seq}")
 	@ApiImplicitParam(name = "user_seq", value = "user_seq")
 	@ApiOperation(value = "회원 탈퇴", notes = "DB에서 로그인한 회원의 del_yn 값을 'y'로, mod_dt 값을 현재 시간으로 업데이트")
@@ -73,7 +88,7 @@ public class MypageController {
 		@ApiResponse(code = 500, message = "서버 오류")
 	})
 	public ResponseEntity<? extends BaseResponseBody> deleteUser(@PathVariable("user_seq") int userSeq, @RequestParam String userPwd) {
-		if(!passwordEncoder.matches(userPwd, mypageRepository.getById(userSeq).getUserPwd()))
+		if(!passwordEncoder.matches(userPwd, userRepository.getById(userSeq).getUserPwd()))
 			return ResponseEntity.status(400).body(BaseResponseBody.of(400, "비밀번호가 올바르지 않습니다."));
 		
 		mypageService.deleteUser(userSeq);
