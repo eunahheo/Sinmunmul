@@ -20,16 +20,25 @@ class NewsUrlSpider(scrapy.Spider):
         ]
         for url in urls:
             for i in range(1,len(url)):
-                # for topicPage in range(1,2):
+                maxNum = scrapy.Request(url=f'https://news.naver.com/main/list.naver?mode=LS2D&mid=shm&sid1={url[0]}&sid2={url[i]}&page=100', callback=self.parse_page)
+                print(maxNum)
+                # for topicPage in range(1,10):
+                #     if sc
                 topicPage = 1
                 yield scrapy.Request(url=f'https://news.naver.com/main/list.naver?mode=LS2D&mid=shm&sid1={url[0]}&sid2={url[i]}&page={topicPage}', callback=self.parse_news)
                 time.sleep(0.1)
 
+    def parse_page(self, response):
+        return response.xpath('//*[@id="main_content"]/div[3]/strong/text()').extract()
+
     def parse_news(self, response):
-        for sel in response.xpath('//*[@id="main_content"]/div[2]/ul[1]/li[1]/dl'):
-            print(sel.xpath('dt/a/@href').extract())
-            request = scrapy.Request(sel.xpath('dt[2]/a/@href').extract()[-1], callback=self.parse_news_detail)
+        # print(response.xpath('//*[@id="main_content"]/div[2]/ul').getall()) # title parse
+        # print(response.xpath('//*[@id="main_content"]/div[1]/ul/li/dl/dd').extract()) # desc parse
+        for sel in response.xpath('//*[@id="main_content"]/div[2]/ul/li'):
+            # print(sel.xpath('dt[1]/a/@href').extract())
+            request = scrapy.Request(sel.xpath('dl/dt/a/@href').extract()[-1], callback=self.parse_news_detail)
             yield request
+            time.sleep(0.1)
 
     def parse_news_detail(self, response):
         item = NaverNewsCrawlingItem()
@@ -38,6 +47,11 @@ class NewsUrlSpider(scrapy.Spider):
         item['press'] = response.xpath('//*[@id="main_content"]/div[1]/div[1]/a/img/@title').extract()
         item['author'] = response.xpath('//*[@id="articleBody"]/div[2]/p/text()').extract()
         item['desc'] = response.xpath('//*[@id="articleBodyContents"]/text()').extract()
+        for i in item['desc']:
+            i.replace('\t','')
         item['date'] = response.xpath('//*[@id="main_content"]/div[1]/div[3]/div/span/text()').extract()
-
+        item['topic1'] = response.url.split('sid1=')[-1].split('&sid2')[0]
+        item['topic2'] = response.url.split('sid2=')[-1].split('&oid')[0]
         yield item
+        time.sleep(0.1)
+

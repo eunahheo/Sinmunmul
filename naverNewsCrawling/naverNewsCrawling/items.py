@@ -14,4 +14,6 @@ class NaverNewsCrawlingItem(scrapy.Item):
     author = scrapy.Field()
     desc = scrapy.Field()
     date = scrapy.Field()
+    topic1 = scrapy.Field()
+    topic2 = scrapy.Field()
     pass

@@ -28,7 +28,7 @@ class JsonPipeline(object):
 
 class CsvPipeline(object):
     def __init__(self):
-        self.file = open("newsUrlCrawl.csv", 'wb')
+        self.file = open(f'newsUrlCrawl-001.csv', 'wb')
         self.exporter = CsvItemExporter(self.file, encoding='utf-8')
         self.exporter.start_exporting()
  
