@@ -24,9 +24,6 @@ export default {
         {text : "KK", size : 22},
         {text : "LL", size : 40},
         {text : "MMMMM", size : 50},
-        
-
-
       ],
     };
   },

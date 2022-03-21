@@ -6,10 +6,9 @@
           <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
         </form>
 
-      <router-link to="/temp" class="navbar-brand col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto">
+      <router-link to="/" class="navbar-brand col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto">
       <img src="@/assets/img/titleLogo.png" alt="" width="120" height="60">
       </router-link>
-
 
         <div class="text-end">
            <button type="button" class="btn btn-outline-secondary m-2">로그인</button>
@@ -30,15 +29,15 @@
           </ul>
          </li>
 
-        <li><a href="#" class="nav-link px-20 link-dark">오피니언</a>
+        <li>
+          <router-link to="/temp"  class="nav-link px-20 link-dark">
+            워드클라우드
+          </router-link>
         </li>
-        <li><a href="#" class="nav-link px-20 link-dark">정치</a>
-        </li>
-        <li><a href="#" class="nav-link px-20 link-dark">경제</a>
-        </li>
-        <li><a href="#" class="nav-link px-20 link-dark">국제</a>
-        </li>
-        <li><a href="#" class="nav-link px-20 link-dark">사회</a>
+        <li>
+          <router-link to="/tempchart"  class="nav-link px-20 link-dark">
+            차트
+          </router-link>
         </li>
         <li><a href="#" class="nav-link px-20 link-dark">문화</a>
         </li>

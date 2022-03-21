@@ -7,9 +7,10 @@
  <main>
     <h2 class="title--large main-title plan">Today's Issue</h2>
 
-    <div class="plan span--2 long--2" id="word-cloud">
-      
-      
+    <div class="plan span--2 long--2 ">
+       <h3>이슈 - 워드 클라우드</h3>
+      <div id="word-cloud">
+        </div>
     </div>
 
     <div class="plan span--2 long--2">
@@ -21,7 +22,8 @@
     </div>
 
     <div class="plan span--2 long--2">
-      <h2>통계자리</h2>
+       <h3>최고 빈도 키워드 뉴스</h3>
+       <bar-chart :data="chartData"></bar-chart>
     </div>
     
        <div class="plan span--2 long--2">
@@ -42,7 +44,7 @@
 
     <div class="item-with-image cssgrid-collection">
         <a class="cssgrid-collection__image" href="#" target="_blank"><img src=""/></a>
-      <h1>추가 할 컨텐츠 자리</h1>
+      <h1>임시 푸터 자리</h1>
       <div class="cssgrid-collection__content">
       </div>
     </div>
@@ -73,6 +75,17 @@ export default {
         {text : "bad", size : 36},
         
       ],
+      chartData: [
+          ['검색어 1', 422],
+          ['검색어 2', 1092],
+          ['검색어 3', 1192],
+          ['검색어 4', 1292],
+          ['검색어 5', 1392],
+          ['검색어 6', 1492],
+          ['검색어 7', 1552],
+          ['검색어 8', 1592],
+          ['검색어 9', 2692]
+        ]
     };
   },
   mounted() {
@@ -97,7 +110,7 @@ export default {
       const d3 = require("d3");
       const width = 400;
       const height = 180;
-      
+
       d3.select("#word-cloud")
       .append("svg")
       .attr("width", width)

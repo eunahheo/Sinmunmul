@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import MainView from '../views/main/Main.vue'
 import Temp from '../views/main/Temp.vue'
+
 const routes = [
   {
     path: '/',
@@ -21,8 +22,11 @@ const routes = [
     name: 'temp',
     component: Temp
   },
-
-
+  {
+    path: '/tempchart',
+    name: 'tempchart',
+    component: () => import('../views/main/TempChart.vue')
+  }
 
 ]
 
