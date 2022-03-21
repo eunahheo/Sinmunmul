@@ -1,4 +1,3 @@
-
 package com.newsbig.sinmunmul.entity;
 
 import javax.persistence.Column;
@@ -12,38 +11,36 @@ import javax.persistence.ManyToOne;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Builder
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 파라미터가 없는 기본 생성자를 생성한다. 접근 권한을 설정하여 어느 곳에서나 객체를 생성할 수 있는 상황을 막는다.
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
-public class Interest {
-	
+public class CommonCode {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "interest_seq")
-	private int interestSeq;
-	
-	@ManyToOne(fetch = FetchType.EAGER) // 즉시 로딩 : 데이터를 조회할 때 연관된 데이터까지 한번에 불러온다.
-	@JoinColumn(nullable = false, name = "user_seq")
-	private User user;
+	@Column(name = "code_seq")
+	private int codeSeq;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(nullable = false, name = "code_group")
 	private CommonCodeGroup commonCodeGroup;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(nullable = false, name = "code")
-	private CommonCode commonCode;
-
+	@Column(name = "code")
+	private int code;
+	
+	@Column(name = "value")
+	private String value;
+	
+	@Column(name = "code_order")
+	private int codeOrder;
+	
 	@Column(name = "del_yn")
 	private String delYn;
 	
