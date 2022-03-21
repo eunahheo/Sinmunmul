@@ -1,4 +1,4 @@
-package com.newsbig.util;
+package com.newsbig.sinmunmul.util;
 
 import java.time.LocalDateTime;
 
