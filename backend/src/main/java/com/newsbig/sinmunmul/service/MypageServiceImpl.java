@@ -16,7 +16,7 @@ import com.newsbig.sinmunmul.repository.CommonCodeRepositorySupport;
 import com.newsbig.sinmunmul.repository.InterestRepository;
 import com.newsbig.sinmunmul.repository.InterestRepositorySupport;
 import com.newsbig.sinmunmul.repository.UserRepository;
-import com.newsbig.util.TimeUtils;
+import com.newsbig.sinmunmul.util.TimeUtils;
 
 @Service("/mypageService")
 public class MypageServiceImpl implements MypageService {
