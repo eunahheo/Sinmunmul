@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+@Builder
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 파라미터가 없는 기본 생성자를 생성한다. 접근 권한을 설정하여 어느 곳에서나 객체를 생성할 수 있는 상황을 막는다.
 @Getter
@@ -35,15 +36,12 @@ public class Interest {
 	private User user;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(nullable = false, name = "code_group_seq")
+	@JoinColumn(nullable = false, name = "code_group")
 	private CommonCodeGroup commonCodeGroup;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(nullable = false, name = "code_seq")
+	@JoinColumn(nullable = false, name = "code")
 	private CommonCode commonCode;
-	
-	@Column(name = "user_pwd")
-	private String userPwd;
 
 	@Column(name = "del_yn")
 	private String delYn;
@@ -59,18 +57,4 @@ public class Interest {
 	
 	@Column(name = "mod_id")
 	private String modId;
-	
-	@Builder
-	public Interest(User user, CommonCodeGroup commonCodeGroup, CommonCode commonCode,
-			String delYn, String regDt, String regId, String modDt, String modId) {
-		super();
-		this.user = user;
-		this.commonCodeGroup = commonCodeGroup;
-		this.commonCode = commonCode;
-		this.delYn = delYn;
-		this.regDt = regDt;
-		this.regId = regId;
-		this.modDt = modDt;
-		this.modId = modId;
-	}
 }

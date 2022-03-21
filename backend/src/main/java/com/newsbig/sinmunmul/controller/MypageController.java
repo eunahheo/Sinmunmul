@@ -74,7 +74,7 @@ public class MypageController {
 			  @ApiResponse(code = 400, message = "존재하지 않는 유저입니다."),
 			  @ApiResponse(code = 500, message = "서버 오류")
 			})
-	public ResponseEntity<? extends BaseResponseBody> updateInterest(@PathVariable("user_seq") int userSeq, @RequestParam List<CodeDto> interests) {
+	public ResponseEntity<? extends BaseResponseBody> updateInterest(@PathVariable("user_seq") int userSeq, @RequestBody List<CodeDto> interests) {
 		mypageService.updateInterest(userSeq, interests);
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "관심사 수정 성공"));
 	}

@@ -29,7 +29,7 @@ public class CommonCode {
 	private int codeSeq;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(nullable = false, name = "code_group_seq")
+	@JoinColumn(nullable = false, name = "code_group")
 	private CommonCodeGroup commonCodeGroup;
 	
 	@Column(name = "code")
