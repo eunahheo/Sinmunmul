@@ -41,6 +41,9 @@ public class User {
 	@Column(name = "user_age")
 	private int userAge;
 	
+	@Column(name = "user_sgtype")
+	private String userSgtype;
+	
 	@Column(name = "del_yn")
 	private String delYn = "n";
 	
@@ -57,13 +60,14 @@ public class User {
 	private String modId;
 
 	@Builder
-	public User(String userEmail, String userPwd, String userGender, int userAge, String regDt, String regId,
+	public User(String userEmail, String userPwd, String userGender, int userAge, String userSgtype, String regDt, String regId,
 			String modDt, String modId) {
 		super();
 		this.userEmail = userEmail;
 		this.userPwd = userPwd;
 		this.userGender = userGender;
 		this.userAge = userAge;
+		this.userSgtype = userSgtype;
 		this.regDt = regDt;
 		this.regId = regId;
 		this.modDt = modDt;

@@ -43,6 +43,7 @@ public class UserServiceImpl implements UserService{
 				.userPwd(passwordEncoder.encode(user.getUserPwd()))
 				.userGender(user.getUserGender())
 				.userAge(user.getUserAge())
+				.userSgtype(user.getUserSgtype())
 				.regDt(user.getRegDt())
 				.regId(user.getUserEmail())
 				.modDt(user.getModDt())
@@ -51,9 +52,9 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public User getUserByEmail(String email) {
+	public User getUserByEmail(String email, String userSgtype) {
 		
-		User user = userRepository.findBydelYnAndUserEmail("n", email).orElseThrow(() -> new NotExistsUserException());
+		User user = userRepository.findBydelYnAndUserEmailAndUserSgtype("n", email, userSgtype).orElseThrow(() -> new NotExistsUserException());
 		
 		return user;
 	}
