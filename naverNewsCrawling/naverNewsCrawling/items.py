@@ -12,6 +12,7 @@ class NaverNewsCrawlingItem(scrapy.Item):
     link = scrapy.Field()
     press = scrapy.Field()
     author = scrapy.Field()
+    img = scrapy.Field()
     desc = scrapy.Field()
     date = scrapy.Field()
     topic1 = scrapy.Field()

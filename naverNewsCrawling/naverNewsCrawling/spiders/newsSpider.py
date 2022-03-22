@@ -11,12 +11,12 @@ class NewsUrlSpider(scrapy.Spider):
 
     def start_requests(self):
         urls = [
-            ['100', '264','265','268','266','267','269'],
-            ['101','259','258','261','771','260','262','310','263'],
-            ['102','249','250','251','254','252','59b','255','256','276','257'],
-            ['103','241','239','240','237','238','276','242','243','244','248','245'],
-            ['105','731','226','227','230','732','283','229','228'],
-            ['104','231','232','233','234','322'],
+            ['100','264',]#'265','268','266','267','269'],
+            # ['101','259','258','261','771','260','262','310','263'],
+            # ['102','249','250','251','254','252','59b','255','256','276','257'],
+            # ['103','241','239','240','237','238','276','242','243','244','248','245'],
+            # ['105','731','226','227','230','732','283','229','228'],
+            # ['104','231','232','233','234','322'],
         ]
         for url in urls:
             for i in range(1,len(url)):
@@ -42,10 +42,13 @@ class NewsUrlSpider(scrapy.Spider):
 
     def parse_news_detail(self, response):
         item = NaverNewsCrawlingItem()
+
         item['title'] = response.xpath('//*[@id="articleTitle"]/text()').extract()
         item['link'] = response.url
         item['press'] = response.xpath('//*[@id="main_content"]/div[1]/div[1]/a/img/@title').extract()
         item['author'] = response.xpath('//*[@id="articleBody"]/div[2]/p/text()').extract()
+        if(len(response.xpath('//*[@class="end_photo_org"]/img/@src').extract()) > 0):
+            item['img'] = response.xpath('//*[@class="end_photo_org"]/img/@src').extract()[0]
         item['desc'] = response.xpath('//*[@id="articleBodyContents"]/text()').extract()
         for i in item['desc']:
             i.replace('\t','')
