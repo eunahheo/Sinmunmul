@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.newsbig.sinmunmul.dto.CodeDto;
+import com.newsbig.sinmunmul.dto.InterestDto;
 import com.newsbig.sinmunmul.entity.Interest;
 import com.newsbig.sinmunmul.entity.User;
 import com.newsbig.sinmunmul.repository.CommonCodeGroupRepository;
@@ -92,6 +93,12 @@ public class MypageServiceImpl implements MypageService {
 						.modId(userRepository.getById(userSeq).getUserEmail()).build());
 			}
 		}
+	}
+	
+	// 관심사 조회
+	@Override
+	public InterestDto searchInterest(int userSeq) {
+		return interestRepositorySupport.searchInterest(userSeq);
 	}
 	
 	// 회원 탈퇴
