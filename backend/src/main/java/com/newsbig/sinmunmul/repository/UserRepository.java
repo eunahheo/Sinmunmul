@@ -13,5 +13,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	
 	public Optional<User> findBydelYnAndUserEmailAndUserSgtype(String delYn, String userEmail, String userSgtype);
 	
+	public Optional<User> findBydelYnAndUserEmail(String delYn, String userEmail);
+	
 	public Optional<User> findBydelYnAndUserSeq(String delYn, int userSeq);
 }

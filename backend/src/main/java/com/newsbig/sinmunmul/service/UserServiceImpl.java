@@ -52,9 +52,9 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public User getUserByEmail(String email, String userSgtype) {
+	public User getUserByEmail(String email) {
 		
-		User user = userRepository.findBydelYnAndUserEmailAndUserSgtype("n", email, userSgtype).orElseThrow(() -> new NotExistsUserException());
+		User user = userRepository.findBydelYnAndUserEmail("n", email).orElseThrow(() -> new NotExistsUserException());
 		
 		return user;
 	}
@@ -115,11 +115,5 @@ public class UserServiceImpl implements UserService{
 	       }
 		
 		return result;
-	}
-
-	@Override
-	public void signInKakao(User user) {
-		// TODO Auto-generated method stub
-		
 	}
 }
