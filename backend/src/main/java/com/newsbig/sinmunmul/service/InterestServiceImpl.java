@@ -10,6 +10,8 @@ import com.newsbig.sinmunmul.dto.CodeDto;
 import com.newsbig.sinmunmul.entity.Interest;
 import com.newsbig.sinmunmul.entity.User;
 import com.newsbig.sinmunmul.exception.NotExistsUserException;
+import com.newsbig.sinmunmul.repository.CommonCodeGroupRepositorySupport;
+import com.newsbig.sinmunmul.repository.CommonCodeRepositorySupport;
 import com.newsbig.sinmunmul.repository.InterestRepository;
 import com.newsbig.sinmunmul.repository.UserRepository;
 import com.newsbig.sinmunmul.util.TimeUtils;
@@ -21,6 +23,12 @@ public class InterestServiceImpl implements InterestService {
 	InterestRepository interestRepository;
 	
 	@Autowired
+	CommonCodeGroupRepositorySupport commonCodeGroupRepositorySupport;
+	
+	@Autowired
+	CommonCodeRepositorySupport commonCodeRepositorySupport;
+	
+	@Autowired
 	UserRepository userRepository;
 	
 	@Override
@@ -30,9 +38,9 @@ public class InterestServiceImpl implements InterestService {
 		User user = userRepository.findBydelYnAndUserSeq("n", userSeq).orElseThrow(() -> new NotExistsUserException());
 		for(CodeDto codeDto : list) {
 			interestRepository.save(Interest.builder()
-					.userSeq(userSeq)
-					.codeGroup(codeDto.getCodeGroup())
-					.code(codeDto.getCode())
+					.user(userRepository.getById(userSeq))
+					.commonCodeGroup(commonCodeGroupRepositorySupport.findByCodeGroup(codeDto.getCodeGroup()))
+					.commonCode(commonCodeRepositorySupport.findByCode(codeDto.getCodeGroup(), codeDto.getCode()))
 					.regDt(now)
 					.regId(user.getUserEmail())
 					.modDt(now)

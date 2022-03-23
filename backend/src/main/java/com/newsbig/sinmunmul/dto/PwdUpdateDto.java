@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @ApiModel("PwdUpdatePutRequest")
-public class PwdUpdateInfo {
+public class PwdUpdateDto {
 	@ApiModelProperty(name="변경 전 비밀번호", example="beforePwd!@#")
 	String userPwd;
 	@ApiModelProperty(name="변경 후 비밀번호", example="afterPwd!@#")

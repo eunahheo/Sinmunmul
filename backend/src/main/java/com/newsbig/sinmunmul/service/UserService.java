@@ -7,7 +7,12 @@ import java.util.Optional;
 import com.newsbig.sinmunmul.entity.User;
 
 public interface UserService {
-	public List<Map<String, Object>> userAllInfo();
+	// 이메일로 유저 정보 조회
 	public User getUserByEmail(String email);
-	public void signin(User user);
+	// 이메일 회원가입
+	public void signIn(User user);
+	// 카카오 서버에서 카카오 계정 정보 조회
+	public Map<String, String> getKakaoUserInfo(String accessToken);
+	// 카카오 회원가입
+	public void signInKakao(User user);
 }
