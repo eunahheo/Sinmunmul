@@ -1,21 +1,20 @@
 package com.newsbig.sinmunmul.service;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.newsbig.sinmunmul.dto.TodayNewsDto;
+import com.newsbig.sinmunmul.entity.News;
 import com.newsbig.sinmunmul.entity.Scrap;
 import com.newsbig.sinmunmul.entity.User;
 import com.newsbig.sinmunmul.repository.NewsRepository;
@@ -23,8 +22,6 @@ import com.newsbig.sinmunmul.repository.NewsRepositorySupport;
 import com.newsbig.sinmunmul.repository.ScrapRepository;
 import com.newsbig.sinmunmul.repository.UserRepository;
 import com.newsbig.sinmunmul.util.TimeUtils;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
  
 @Service
@@ -90,5 +87,30 @@ public class NewsServiceImpl implements NewsService {
 		*/
 
 		return jsonObject;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<JSONObject> searchNews(String keyword, int page, int size) {
+		List<JSONObject> result = new ArrayList<>();
+		PageRequest pageRequest = PageRequest.of(page - 1, size, Sort.by("newsRegDt").descending());
+		Page<News> pageNews = newsRepository.findBydelYnAndNewsTitleContainingOrNewsDescContaining("n", keyword, keyword, pageRequest);
+		
+		for (News news : pageNews) {
+			JSONObject obj = new JSONObject();
+
+			obj.put("news_seq", news.getNewsSeq());
+			obj.put("news_photo", news.getNewsPhoto());
+			obj.put("news_Title", news.getNewsTitle());
+			obj.put("news_desc", news.getNewsDesc());
+			
+			obj.put("pageable", pageNews.getPageable());
+			obj.put("totalPages", pageNews.getTotalPages());
+			obj.put("numberOfElements", pageNews.getNumberOfElements());
+			obj.put("totalElements", pageNews.getTotalElements());
+			
+			result.add(obj);
+			}
+		 
+		return result;
 	}
 }

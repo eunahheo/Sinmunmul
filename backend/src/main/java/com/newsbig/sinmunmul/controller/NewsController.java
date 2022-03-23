@@ -51,4 +51,15 @@ public class NewsController {
 	public ResponseEntity<? extends BaseResponseBody> todayNews() {
 		return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "오늘의 뉴스 현황 조회 성공", newsService.todayNews()));
 	}
+	
+	@GetMapping("/keyword")
+	@ApiOperation(value = "키워드로 뉴스 검색", notes = "워드 클라우드 키워드, 검색 키워드가 포함된 뉴스 기사를 반환한다.")
+	@ApiResponses(
+			{ @ApiResponse(code = 200, message = "뉴스 검색 성공"),
+			  @ApiResponse(code = 400, message = "잘못된 요청입니다."),
+			  @ApiResponse(code = 500, message = "서버 오류")
+			})
+	public ResponseEntity<? extends BaseResponseBody> searchNews(String keyword, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "size", defaultValue = "3") int size) {
+		return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "뉴스 검색 성공", newsService.searchNews(keyword, page, size)));
+	}
 }
