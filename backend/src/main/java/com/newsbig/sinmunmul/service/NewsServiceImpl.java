@@ -45,6 +45,7 @@ public class NewsServiceImpl implements NewsService {
 				Scrap.builder()
  					 .user(user)
 					 .news(newsRepository.getById(newsSeq))
+					 .delYn("n")
 					 .regDt(now)
 					 .regId(user.getUserEmail())
 					 .modDt(now)

@@ -4,11 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.newsbig.sinmunmul.repository.ScrapRepositorySupport;
 import com.newsbig.sinmunmul.response.AdvancedResponseBody;
 import com.newsbig.sinmunmul.response.BaseResponseBody;
 import com.newsbig.sinmunmul.service.NewsService;
@@ -26,8 +27,10 @@ public class NewsController {
 	
 	@Autowired
 	NewsService newsService;
+	@Autowired
+	ScrapRepositorySupport scrapRepositorySupport;
 	
-	@PutMapping("/{news_seq}/scrap")
+	@PostMapping("/{news_seq}/scrap")
 	@ApiImplicitParam(name = "news_seq", value = "news_seq")
 	@ApiOperation(value = "뉴스 스크랩", notes = "스크랩을 원하는 뉴스를 DB에 저장")
 	@ApiResponses(
@@ -36,6 +39,10 @@ public class NewsController {
 			  @ApiResponse(code = 500, message = "서버 오류")
 			})
 	public ResponseEntity<? extends BaseResponseBody> scrap(@PathVariable("news_seq") int newsSeq, @RequestParam("user_Seq") int userSeq) {
+		
+		if(scrapRepositorySupport.checkScrap(userSeq, newsSeq))
+			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "이미 존재하는 뉴스 스크랩 입니다."));
+		
 		newsService.scrap(newsSeq, userSeq);
 		
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "스크랩 성공"));

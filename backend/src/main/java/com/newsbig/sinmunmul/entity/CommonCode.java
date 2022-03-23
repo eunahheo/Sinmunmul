@@ -24,7 +24,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @AllArgsConstructor
-public class CommonCode implements Serializable{
+public class CommonCode implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
