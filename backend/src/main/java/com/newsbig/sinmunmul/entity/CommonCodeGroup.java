@@ -1,5 +1,7 @@
 package com.newsbig.sinmunmul.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,7 +21,9 @@ import lombok.ToString;
 @Setter
 @ToString
 @AllArgsConstructor
-public class CommonCodeGroup {
+public class CommonCodeGroup implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "code_group_seq")

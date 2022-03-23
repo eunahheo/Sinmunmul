@@ -14,4 +14,5 @@ public interface MypageService {
 	InterestDto searchInterest(int userSeq);
 	void deleteUser(int userSeq);
 	Page<Scrap> searchScrap(int userSeq, int page);
+	void deleteScrap(int userSeq, int newsSeq);
 }

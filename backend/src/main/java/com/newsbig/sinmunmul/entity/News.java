@@ -1,6 +1,8 @@
 
 package com.newsbig.sinmunmul.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -25,7 +27,8 @@ import lombok.ToString;
 @Setter
 @ToString
 @AllArgsConstructor
-public class News {
+public class News implements Serializable {
+	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,11 +66,11 @@ public class News {
 	private String newsPhoto;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(nullable = false, name = "code_group")
+	@JoinColumn(nullable = false, name = "code_group", referencedColumnName ="code_group")
 	private CommonCodeGroup commonCodeGroup;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(nullable = false, name = "code")
+	@JoinColumn(nullable = false, name = "code", referencedColumnName = "code")
 	private CommonCode commonCode;
 
 	@Column(name = "del_yn")

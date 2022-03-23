@@ -14,8 +14,6 @@ import com.newsbig.sinmunmul.entity.QCommonCode;
 import com.newsbig.sinmunmul.entity.QCommonCodeGroup;
 import com.newsbig.sinmunmul.entity.QInterest;
 import com.newsbig.sinmunmul.entity.QUser;
-import com.newsbig.sinmunmul.exception.NotExistsMyInterestException;
-import com.newsbig.sinmunmul.exception.NotExistsNotMyInterestException;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -63,8 +61,6 @@ public class InterestRepositorySupport {
 	public InterestDto searchInterest(int userSeq) {
 		List<CodeDto> myInterest = searchMyInterest(userSeq);
 		
-		if(myInterest.size() == 0) throw new NotExistsMyInterestException();
-		
 		List<CodeDto> notMyInterest = new ArrayList<>();
 		List<CommonCode> allInterests = commonCodeRepository.findAll();
 		
@@ -78,8 +74,6 @@ public class InterestRepositorySupport {
 			}
 			if(!exist) notMyInterest.add(new CodeDto(allInterests.get(i).getCommonCodeGroup().getCodeGroup(), allInterests.get(i).getCode()));
 		}
-		
-		if(notMyInterest.size() == 0) throw new NotExistsNotMyInterestException();
 		
 		return new InterestDto(myInterest, notMyInterest);
 	}
