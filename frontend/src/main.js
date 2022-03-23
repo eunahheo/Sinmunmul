@@ -7,4 +7,10 @@ import 'bootstrap'
 import VueChartkick from 'vue-chartkick'
 import 'chartkick/chart.js'
 
-createApp(App).use(store).use(VueChartkick).use(router).mount('#app')
+const app = createApp(App);
+
+app.use(store);
+app.use(router);
+app.use(VueChartkick);
+
+app.mount('#app');

@@ -39,7 +39,10 @@
             차트
           </router-link>
         </li>
-        <li><a href="#" class="nav-link px-20 link-dark">문화</a>
+        <li>
+          <router-link to="/tempgraph"  class="nav-link px-20 link-dark">
+            그래프
+          </router-link>
         </li>
         <li><a href="#" class="nav-link px-20 link-dark">연예</a>
         </li>

@@ -23,12 +23,14 @@
 
     <div class="plan span--2 long--2">
        <h3>최고 빈도 키워드 뉴스</h3>
-       <bar-chart :data="chartData"></bar-chart>
+       <!-- <bar-chart :data="chartData"></bar-chart> -->
+       <bar-chart :data="chartData" :colors="['#0b6e00', '#006ca2', '#10379c']"></bar-chart>
     </div>
     
        <div class="plan span--2 long--2">
 
-    <h2>키워드 언급량 추이 그래프</h2>
+    <h3>키워드 언급량 추이 그래프</h3>
+    <line-chart :data="lineData" ></line-chart>
     </div>
 
 
@@ -85,7 +87,21 @@ export default {
           ['검색어 7', 1552],
           ['검색어 8', 1592],
           ['검색어 9', 2692]
-        ]
+        ],
+      lineData : [
+          ['1월', 322],
+          ['2월', 122],
+          ['3월', 522],
+          ['4월', 222],
+          ['5월', 312],
+          ['6월', 222],
+          ['7월', 222],
+          ['8월', 522],
+          ['9월', 622],
+          ['10월', 782],
+          ['11월', 1222],
+          ['12월', 922]
+      ]
     };
   },
   mounted() {
@@ -154,6 +170,7 @@ spiral([spiral]): 단어를 위치시킬 떄 사용하는 나선형의 형태를
 padding([padding]): 각 단어의 padding을 결정. default는 1.
 random([random]): 내부적으로 단어를 초기 위치와 시계, 반시계 방향 각도를 결정할 때 사용하는 랜덤 숫자 생성기. 0 이상 1 미만 숫자가 들어가야하며 default는 Math.random
 canvas([canvas]): 캔버스 생성기
+
 <style scoped>
 :root {
   --font: "EB Garamond", serif;

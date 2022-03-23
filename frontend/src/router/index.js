@@ -26,6 +26,11 @@ const routes = [
     path: '/tempchart',
     name: 'tempchart',
     component: () => import('../views/main/TempChart.vue')
+  },
+  {
+    path: '/tempgraph',
+    name: 'tempgraph',
+    component: () => import('../views/main/TempGraph.vue')
   }
 
 ]
