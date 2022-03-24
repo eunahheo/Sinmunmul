@@ -34,11 +34,7 @@ public class MypageServiceImpl implements MypageService {
 	@Autowired
 	InterestRepositorySupport interestRepositorySupport;
 	@Autowired
-	CommonCodeRepository commonCodeRepository;
-	@Autowired
 	CommonCodeRepositorySupport commonCodeRepositorySupport;
-	@Autowired
-	CommonCodeGroupRepository commonCodeGroupRepository;
 	@Autowired
 	CommonCodeGroupRepositorySupport commonCodeGroupRepositorySupport;
 	@Autowired
@@ -48,12 +44,11 @@ public class MypageServiceImpl implements MypageService {
 	
 	// 비밀번호 수정
 	@Override
-	public void updatePassword(int userSeq, String userPwd) {
+	public void updatePassword(int userSeq, String newUserPwd) {
 		User user = userRepository.getById(userSeq);
 		
-		if(!userRepository.getById(userSeq).getUserPwd().equals(passwordEncoder.encode(userPwd)))
-			user.setUserPwd(passwordEncoder.encode(userPwd));
-
+		user.setUserPwd(passwordEncoder.encode(newUserPwd));
+		user.setModDt(TimeUtils.curTime());
 		userRepository.save(user);
 	}
 	
@@ -68,7 +63,7 @@ public class MypageServiceImpl implements MypageService {
 		for(int i = 0; i < nowInterests.size(); i++) {
 			boolean delete = true;
 			for(int j = 0; j < interests.size(); j++) {
-				if(nowInterests.get(i).getCommonCodeGroup().getCodeGroup()-99 == interests.get(j).getCodeGroup()
+				if(nowInterests.get(i).getCommonCodeGroup().getCodeGroup() == interests.get(j).getCodeGroup()
 					&& nowInterests.get(i).getCommonCode().getCode() == interests.get(j).getCode()) {
 					if(nowInterests.get(i).getDelYn().equals("y")) {
 						nowInterests.get(i).setDelYn("n");
@@ -121,9 +116,13 @@ public class MypageServiceImpl implements MypageService {
 	@Override
 	public Page<Scrap> searchScrap(int userSeq, int page) {
 		PageRequest pageable = PageRequest.of(page-1, 6);
-		
-		if(scrapRepositorySupport.findByUserSeq(userSeq).size() == 0) throw new NotExistsScrapException();
 
 		return scrapRepositorySupport.findByUserSeq(userSeq, pageable);
+	}
+	
+	// 스크랩 삭제
+	@Override
+	public void deleteScrap(int userSeq, int newsSeq) {
+		scrapRepositorySupport.deleteScrap(userSeq, newsSeq);
 	}
 }

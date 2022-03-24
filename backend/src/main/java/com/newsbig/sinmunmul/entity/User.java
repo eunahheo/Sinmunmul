@@ -89,8 +89,7 @@ public class User implements UserDetails {
 		this.modDt = modDt;
 		this.modId = modId;
 	}
-	
-	
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		ArrayList<GrantedAuthority> auth = new ArrayList<>();
@@ -133,5 +132,4 @@ public class User implements UserDetails {
 	}
 	
 	
-
 }

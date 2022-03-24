@@ -4,5 +4,13 @@ import router from './router'
 import store from './store'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap'
+import VueChartkick from 'vue-chartkick'
+import 'chartkick/chart.js'
 
-createApp(App).use(store).use(router).mount('#app')
+const app = createApp(App);
+
+app.use(store);
+app.use(router);
+app.use(VueChartkick);
+
+app.mount('#app');

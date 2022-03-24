@@ -112,14 +112,28 @@ public class MypageController {
 	
 	@GetMapping("/{user_seq}/searchScrap")
 	@ApiImplicitParam(name = "user_seq", value = "user_seq")
-	@ApiOperation(value = "스크랩한 뉴스 확인", notes = "스크랩 한 뉴스를 조회하여 확인")
+	@ApiOperation(value = "스크랩 조회", notes = "스크랩 한 뉴스 조회")
 	@ApiResponses(
-			{ @ApiResponse(code = 200, message = "스크랩 뉴스 조회 성공"),
-			  @ApiResponse(code = 400, message = "존재하지 않는 유저입니다."),
+			{ @ApiResponse(code = 200, message = "스크랩 조회 성공"),
+			  @ApiResponse(code = 400, message = "잘못된 요청입니다."),
 			  @ApiResponse(code = 500, message = "서버 오류")
 			})
 	public ResponseEntity<? extends BaseResponseBody> searchScrap(@PathVariable("user_seq") int userSeq,
 			@RequestParam(value = "page", defaultValue = "1") int page) {
-		return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "스크랩 뉴스 조회 성공", mypageService.searchScrap(userSeq, page)));
+		return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "스크랩 조회 성공", mypageService.searchScrap(userSeq, page)));
+	}
+	
+	@DeleteMapping("/{user_seq}/deleteScrap/{news_seq}")
+	@ApiImplicitParam(name = "user_seq", value = "user_seq")
+	@ApiOperation(value = "스크랩 삭제", notes = "스크랩 한 뉴스 삭제")
+	@ApiResponses(
+			{ @ApiResponse(code = 200, message = "스크랩 삭제 성공"),
+			  @ApiResponse(code = 400, message = "잘못된 요청입니다."),
+			  @ApiResponse(code = 500, message = "서버 오류")
+			})
+	public ResponseEntity<? extends BaseResponseBody> deleteScrap(@PathVariable("user_seq") int userSeq,
+			@RequestParam(value = "news_seq") int newsSeq) {
+		mypageService.deleteScrap(userSeq, newsSeq);
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "스크랩 삭제 성공"));
 	}
 }
