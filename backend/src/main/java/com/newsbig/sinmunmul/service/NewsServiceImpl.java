@@ -76,7 +76,7 @@ public class NewsServiceImpl implements NewsService {
 		for (TodayNewsDto news : newsList) {
 			JSONObject data = new JSONObject();
 		    data.put("count", news.getNum());
-		    data.put("percent", news.getNum()/allCount * 100);
+		    data.put("percent", news.getNum() / (float)allCount * 100);
 		    
 		    jsonObject.put(news.getCodeGroupValue(), data);
 		}
@@ -138,6 +138,17 @@ public class NewsServiceImpl implements NewsService {
 		result.put("newsCommonCodeGroupSeq",news.getCommonCodeGroup().getCodeGroupSeq());
 		result.put("newsCommonCode",news.getCommonCode().getCode());
 		result.put("newsCommonCodeSeq",news.getCommonCode().getCodeSeq());
+		
+		return result;
+	}
+
+	@Override
+	public List<Map<String, Object>> keywordTrend(String[] keywords) {
+		List<Map<String, Object>> result = new ArrayList<>();
+		
+		
+		
+		
 		
 		return result;
 	}
