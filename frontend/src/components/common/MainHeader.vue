@@ -3,7 +3,7 @@
 <div class="px-3 py-0 mb-0">
       <div class="container d-flex flex-wrap justify-content-center">
         <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto">
-          <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+          <input type="search" class="form-control" placeholder="Search..." aria-label="Search" v-model="searchWord" @keyup.enter="search">
         </form>
 
       <router-link to="/" class="navbar-brand col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto">
@@ -59,6 +59,43 @@
  </aside>
 
 </template>
+<script>
+import axios from 'axios'
+// const LOCAL_HOST = 'http://localhost:3030/api'
+const SERVER_HOST = 'https://j6a406.p.ssafy.io/api'
+
+export default {
+  data() {
+    return {
+      searchWord : null
+    }
+  },
+  methods : {
+    search(event) {
+      console.log("검색어 : "+this.searchWord);
+     
+      if(this.searchWord != null && this.searchWord !="") {
+        console.log("검색어 : "+this.searchWord + "url : "+`${SERVER_HOST}`);
+        axios.get(`${SERVER_HOST}/news/keyword`, {
+          params: {
+            keyword : this.searchWord,
+            page : 1,
+            size : 3
+          }
+        })
+        .then((res) =>{
+          console.log(res);
+        }).catch((err) => {
+            console.log("에러");
+            console.log(err);
+          })
+      }
+    }
+  }
+}
+
+</script>
+
 
 <style scoped>
 

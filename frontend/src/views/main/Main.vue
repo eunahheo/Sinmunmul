@@ -54,6 +54,7 @@
     <div class="sidebar">
       <h2 class="title--big">사이드 바</h2>
       <h3>필요한지는 모름</h3>
+      <h5> test text </h5>
     </div>
   </main>
 
@@ -61,6 +62,7 @@
 </template>
 
 <script>
+
 export default {
   data() {
     return {
@@ -174,6 +176,7 @@ export default {
     this.genLayout();
   },
   methods : {
+
     genLayout() {
       const cloud = require("d3-cloud");
       cloud()
@@ -197,7 +200,7 @@ export default {
       .append("svg")
       .attr("width", width)
       .attr("height", height)
-      //.attr("class", "span--2 long--2")
+      // .attr("class", "span--2 long--2")
       .style("background", "white")
       .append("g")
       .attr("transform", "translate(" + width /2 + "," +height /2 +")") //g를 중심으로 단어그림 svg 중심으로 이동
@@ -282,11 +285,7 @@ h1 {
   font: 50px/1 "Playfair Display SC";
   text-align: center;
 }
-@media (min-width: 700px) {
-  h1 {
-    font: 70px/1 "Playfair Display SC";
-  }
-}
+
 
 h3 {
   font: italic 20px var(--font-title);
@@ -383,10 +382,7 @@ main aside {
     grid-column: 5/6;
   }
 }
-main .social {
-  grid-column: 1/-2;
-  grid-row: 8/9;
-}
+
 main .article-bar-1 {
   grid-row: span 4;
 }
@@ -524,9 +520,7 @@ aside > div > div {
   .sidebar .slack-ui {
     border-top: 0;
   }
-  .sidebar .pie {
-    order: 3;
-  }
+ 
 }
 @media (min-width: 1024px) {
   .sidebar {
@@ -544,64 +538,6 @@ aside > div > div {
   margin-bottom: 0.8rem;
 }
 
-.hogwarts {
-  text-align: center;
-  height: 100%;
-  border: 2px solid transparent;
-  outline: 3px solid var(--black);
-  box-shadow: inset 0 0 0 1px var(--black);
-  width: calc(100% - 4px);
-  margin: 1.5rem auto;
-  overflow: hidden;
-}
-@media (min-width: 700px) {
-  .hogwarts {
-    margin: 0;
-  }
-}
-.hogwarts__title {
-  font: 800 24px/1 var(--font-sans-serif);
-  text-transform: uppercase;
-  background: var(--black);
-  color: var(--gray);
-  padding: 0.8rem 0.8rem 0.9rem;
-  transition: 0.2s ease;
-}
-@media (min-width: 700px) and (max-width: 1024px) {
-  .hogwarts__title {
-    font: 800 21px/1.2 var(--font-sans-serif);
-    padding: 1.5rem 0.5rem;
-  }
-}
-.hogwarts__image {
-  height: 100%;
-  position: relative;
-}
-.hogwarts__image img {
-  transform: rotate(60deg);
-  height: 150%;
-  position: absolute;
-  border: 0;
-  width: 250%;
-  left: -70%;
-  bottom: -35%;
-}
-@media (min-width: 700px) and (max-width: 1024px) {
-  .hogwarts__image img {
-    bottom: -20%;
-  }
-}
-.hogwarts__image span {
-  font-style: italic;
-  max-width: 110px;
-  position: absolute;
-  top: 7%;
-  left: 18%;
-  font-size: 22px;
-  line-height: 0.9;
-  transform: rotate(-5deg);
-}
-
 .terrarium {
   margin: 1.5rem 0;
 }
@@ -617,34 +553,6 @@ aside > div > div {
   height: 96%;
   object-fit: cover;
   object-position: right;
-}
-
-.pie {
-  line-height: 0;
-  color: var(--gray);
-  text-align: left;
-}
-.pie__image {
-  margin: 0;
-  border: 0;
-  max-height: 15rem;
-  object-fit: cover;
-}
-.pie__subtitle {
-  background: #999;
-  text-transform: uppercase;
-  line-height: 1;
-  padding: 0.4rem 1rem;
-  font: 14px var(--font-sans-serif);
-  color: var(--gray);
-}
-.pie__content {
-  background: #666;
-  padding: 1rem 1rem 1.2rem;
-  color: var(--gray);
-}
-.pie__content p {
-  margin-top: 0.5rem;
 }
 
 .sidebar-item {
@@ -710,8 +618,8 @@ aside > div > div {
 .cssgrid-collection {
   display: flex;
   align-content: stretch;
-  border-top: 1px solid;
-  padding-top: 1rem;
+  border-top: 2px solid;
+  padding-top: 0.5rem;
 }
 .cssgrid-collection h4 {
   margin: 0 0 0.8rem;
@@ -732,79 +640,6 @@ aside > div > div {
   border-bottom: 1px solid;
 }
 
-@media (min-width: 1024px) {
-  .captcha {
-    margin-top: 0;
-  }
-}
-
-.workout {
-  border: 2px solid transparent;
-  outline: 3px solid var(--black);
-  box-shadow: inset 0 0 0 1px var(--black);
-  width: calc(100% - 4px);
-  margin: 3rem auto 0.2rem;
-}
-.workout__image {
-  padding: 2px;
-}
-.workout__image img {
-  height: 16rem;
-  object-fit: cover;
-  object-position: left;
-  border: none;
-}
-@media (min-width: 1024px) {
-  .workout__image img {
-    height: 25rem;
-  }
-}
-.workout__blurb {
-  font: 22px/1.1 var(--font-sans-serif);
-  text-align: center;
-  padding: 0.5rem;
-  color: var(--black);
-  margin: -1rem 0.5rem 0.3rem;
-}
-.workout__title {
-  font: 18px/1.1 var(--font-sans-serif);
-  text-transform: uppercase;
-  text-align: center;
-  padding: 1rem;
-  background: var(--black);
-  color: var(--gray);
-  transition: 0.2s ease;
-}
-
-.social {
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-  grid-template-rows: max-content auto;
-  color: var(--gray);
-  text-align: left;
-}
-.social__image {
-  margin: 0;
-  border: 0;
-  grid-row: span 2;
-  height: 100%;
-  object-fit: cover;
-}
-.social__subtitle {
-  background: #999;
-  text-transform: uppercase;
-  line-height: 1;
-  padding: 0.4rem 1rem;
-  color: var(--gray);
-  font: 14px var(--font-sans-serif);
-}
-.social__content {
-  background: #666;
-  padding: 1rem;
-  color: var(--gray);
-  grid-column: 2;
-}
-
 .plan {
   padding-bottom: 1rem;
 }
@@ -821,25 +656,14 @@ aside > div > div {
 }
 
 .pie:hover img,
-.social:hover img,
 .menu:hover img,
 .terrarium:hover img,
 .plan:hover img,
 .toggles:hover img,
-.workout:hover img,
 .cssgrid-collection__image:hover img {
   filter: grayscale(0);
 }
 
-.workout:hover .workout__title {
-  background: transparent;
-  color: var(--black);
-}
-
-.hogwarts:hover .hogwarts__title {
-  background: transparent;
-  color: var(--black);
-}
 </style>
 
 
