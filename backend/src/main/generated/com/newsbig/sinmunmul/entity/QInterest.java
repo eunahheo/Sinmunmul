@@ -40,8 +40,6 @@ public class QInterest extends EntityPathBase<Interest> {
 
     public final QUser user;
 
-    public final StringPath userPwd = createString("userPwd");
-
     public QInterest(String variable) {
         this(Interest.class, forVariable(variable), INITS);
     }
