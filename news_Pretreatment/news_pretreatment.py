@@ -27,40 +27,53 @@ if __name__ == '__main__':
     now = datetime.now()
 
     # 폴더 생성
-    directory_path = '/home/ubuntu/Workspace/bigdata/data' + now.strftime("%Y%M%D")
-    createFolder(directory_path)
+    directory = '/home/ubuntu/Workspace/bigdata/data/'
+    # createFolder(directory_path)
+
+    try:
+        # 해당 경로에 폴더가 존재하지 않으면 폴더 생성
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+    except OSError:
+        print ('Error: Creating directory. ' +  directory)
 
     # 년월일시 20220323-13 : 2022년 03월 23일 13시
-    file_name_template = now.strftime("%Y%M%D-%H")
-
+    file_date = now.strftime("%Y%m%d%H")
+    file_name_template = file_date
+    # print("temp", file_name_template)
+    # print(now)
     # 한 시간 단위
-    start_time = now.strftime("%Y-%M-%D %H") + ":00:00"
+     # 한 시간 단위
+    # start_time = str(now.year) + "-" + str(now.month) + "-" + str(now.day) + " " + str(now.hour) + ":" + str(now.minute) + ":" + str(now.second)
+    start_time = str(now.strftime('%Y-%m-%d %H')) + ":00:00"
 
-    for index, code_group in code_group_num:
+    i = 0
+    for code_group in code_group_num:
         # 코드 그룹에 따른 sql 문
         # 현재 시각 hour를 기준으로 hour ~ hour + 1, ex) 13시 ~ 14시 사이의 기사를 가져온다.
         # news_reg_dt or reg_dt
-        if code_group == 0 :
-             sql = "SELECT news_title, news_desc FROM news WHERE del_yn='n' AND reg_dt  >= DATE_ADD('" + start_time + "', INTERVAL +1 HOUR);"
+        if i == 0 :
+             sql = "SELECT news_title, news_desc FROM news WHERE del_yn='n' And news_reg_dt between '" + start_time + "' AND DATE_ADD('" + start_time + "', INTERVAL +1 HOUR);"
         else:
-             sql = "SELECT news_title, news_desc FROM news WHERE del_yn='n' AND code_group=" + code_group + " AND reg_dt >= DATE_ADD('" + start_time + "', INTERVAL +1 HOUR);"
+             sql = "SELECT news_title, news_desc FROM news WHERE del_yn='n' AND code_group=" + str(code_group) + " And news_reg_dt between '" + start_time + "' AND DATE_ADD('" + start_time + "', INTERVAL +1 HOUR);"
 
         # sql 문 실행
         curs.execute(sql)
 
         # sql 결과
         rows = curs.fetchall()
-   
+
         # KoNLPy 형태소 분석기
         hannanum = Okt()
 
         # 파일 이름
         # politics-20220323-13
         # 대분류-년월일-시
-        file_name = code_group_value[i] + "-" + file_name_template + ".txt"
-
+        file_name = code_group_value[i] + "_" + file_name_template + ".txt"
+        print(file_name)
+        i = i + 1
         # 현재 디렉터리에 텍스트 파일 생성, 쓰기 모드
-        f = open(file_name, "w")
+        f = open(directory + file_name, "w")
 
         # row 하나씩 돌기
         # 뉴스 기사 텍스트 전처리
@@ -73,23 +86,12 @@ if __name__ == '__main__':
             data_pretreatment = hannanum.nouns(desc)
 
             # 단어 리스트 문자열로 변환
-            # " ".join() : " "를 구분자로 한다. **배열 안의 요소가 String형이 아니면 에러 발생  
-            news_desc = ' '.join(data_pretreatment)            
+            # " ".join() : " "를 구분자로 한다. **배열 안의 요소가 String형이 아니면 에러 발생
+            news_desc = ' '.join(data_pretreatment)
 
             # 파일 쓰기
             f.write(news_desc)
             f.write(" ")
-        
+
         # 쓰기 모드 닫기
         f.close()
-
-    # 폴더 생성 함수
-    def createFolder(directory):
-        try:
-            # 해당 경로에 폴더가 존재하지 않으면 폴더 생성
-            if not os.path.exists(directory):
-                os.makedirs(directory)
-        except OSError:
-            print ('Error: Creating directory. ' +  directory)
-
-    print("DB 연결 성공")
