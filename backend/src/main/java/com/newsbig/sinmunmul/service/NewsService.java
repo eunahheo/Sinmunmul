@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.json.simple.JSONObject;
 
+import com.newsbig.sinmunmul.dto.KeywordTrendMonth;
 import com.newsbig.sinmunmul.dto.KeywordTrendWeek;
 
 public interface NewsService {
@@ -17,5 +18,7 @@ public interface NewsService {
 	
 	public Map<String, Object> newsDetail(long newsSeq);
 	
-	public List<KeywordTrendWeek> keywordTrend(String keyword);
+	public List<KeywordTrendWeek> keywordTrendWeek(String keyword);
+	
+	public List<KeywordTrendMonth> keywordTrendMonth(String keyword);
 }

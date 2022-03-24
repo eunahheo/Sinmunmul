@@ -20,6 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.newsbig.sinmunmul.dto.KeywordTrendMonth;
 import com.newsbig.sinmunmul.dto.KeywordTrendWeek;
 import com.newsbig.sinmunmul.dto.TodayNewsDto;
 import com.newsbig.sinmunmul.entity.News;
@@ -31,8 +32,6 @@ import com.newsbig.sinmunmul.repository.NewsRepositorySupport;
 import com.newsbig.sinmunmul.repository.ScrapRepository;
 import com.newsbig.sinmunmul.repository.UserRepository;
 import com.newsbig.sinmunmul.util.TimeUtils;
-
-
  
 @Service
 public class NewsServiceImpl implements NewsService {
@@ -152,9 +151,9 @@ public class NewsServiceImpl implements NewsService {
 		return result;
 	}
 
-	// 일 별 언급량
+	// 주 별 언급량
 	@Override
-	public List<KeywordTrendWeek> keywordTrend(String keyword) {
+	public List<KeywordTrendWeek> keywordTrendWeek(String keyword) {
 //		List<Object> list = newsRepository.keywordWeekTrend("n", keyword, keyword);
 		
 		String q = "SELECT DATE_FORMAT(DATE_SUB(n.news_reg_dt, INTERVAL (DAYOFWEEK(n.news_reg_dt)-1) DAY), '%Y/%m/%d') as start, "
@@ -168,6 +167,22 @@ public class NewsServiceImpl implements NewsService {
         JpaResultMapper result = new JpaResultMapper();
         Query query = entityManager.createNativeQuery(q);
         List<KeywordTrendWeek> list = result.list(query, KeywordTrendWeek.class);	
+		
+		return list;
+	}
+
+	@Override
+	public List<KeywordTrendMonth> keywordTrendMonth(String keyword) {
+
+		String q = "SELECT MONTH(n.news_reg_dt) AS 'month', "
+				+"count(*) AS count "
+				+"FROM news n "
+				+"WHERE n.del_yn='n' and n.news_title like '%"+keyword+"%' OR n.news_desc like '%"+keyword+"%' "
+				+"GROUP BY month LIMIT 6";
+        
+        JpaResultMapper result = new JpaResultMapper();
+        Query query = entityManager.createNativeQuery(q);
+        List<KeywordTrendMonth> list = result.list(query, KeywordTrendMonth.class);	
 		
 		return list;
 	}
