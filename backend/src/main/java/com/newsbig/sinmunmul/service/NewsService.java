@@ -15,5 +15,5 @@ public interface NewsService {
 	
 	public List<JSONObject> searchNews(String keyword, int page, int cnt);
 	
-	public Map<String, String> newsDetail(long newsSeq);
+	public Map<String, Object> newsDetail(long newsSeq);
 }

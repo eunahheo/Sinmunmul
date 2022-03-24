@@ -119,11 +119,11 @@ public class NewsServiceImpl implements NewsService {
 	}
 
 	@Override
-	public Map<String, String> newsDetail(long newsSeq) {
-		Map<String, String> result = new HashMap<>();
+	public Map<String, Object> newsDetail(long newsSeq) {
+		Map<String, Object> result = new HashMap<>();
 		News news = newsRepository.findBydelYnAndNewsSeq("n", newsSeq).orElseThrow(() -> new NotExistsNewsException());
 
-		result.put("newsSeq",news.getNewsSeq()+"");
+		result.put("newsSeq",news.getNewsSeq());
 		result.put("newsTitle",news.getNewsTitle());
 		result.put("newsLink",news.getNewsLink());
 		result.put("newsPress",news.getNewsPress());
@@ -134,10 +134,10 @@ public class NewsServiceImpl implements NewsService {
 		result.put("newsRegDt",news.getNewsRegDt());
 		result.put("newsModDt",news.getNewsModDt());
 		result.put("newsPhoto",news.getNewsPhoto());
-		result.put("newsCommonCodeGroup",news.getCommonCodeGroup().getCodeGroup()+"");
-		result.put("newsCommonCodeGroupSeq",news.getCommonCodeGroup().getCodeGroupSeq()+"");
-		result.put("newsCommonCode",news.getCommonCode().getCode()+"");
-		result.put("newsCommonCodeSeq",news.getCommonCode().getCodeSeq()+"");
+		result.put("newsCommonCodeGroup",news.getCommonCodeGroup().getCodeGroup());
+		result.put("newsCommonCodeGroupSeq",news.getCommonCodeGroup().getCodeGroupSeq());
+		result.put("newsCommonCode",news.getCommonCode().getCode());
+		result.put("newsCommonCodeSeq",news.getCommonCode().getCodeSeq());
 		
 		return result;
 	}

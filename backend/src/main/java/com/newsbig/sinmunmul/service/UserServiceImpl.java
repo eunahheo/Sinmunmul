@@ -54,11 +54,20 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public User getUserByEmail(String email) {
+	public Map<String, Object> getUserByEmail(String email) {
+		Map<String, Object> result = new HashMap<>();
 		
 		User user = userRepository.findBydelYnAndUserEmail("n", email).orElseThrow(() -> new NotExistsUserException());
 		
-		return user;
+		result.put("userSeq", user.getUserSeq());
+		result.put("userEmail", user.getUserEmail());
+		result.put("userPwd", user.getUserPwd());
+		result.put("userGender", user.getUserGender());
+		result.put("userAge", user.getUserAge());
+		result.put("userSgType", user.getUserSgtype());
+		result.put("userRegDt", user.getRegDt());
+		
+		return result;
 	}
 
 	@Override
