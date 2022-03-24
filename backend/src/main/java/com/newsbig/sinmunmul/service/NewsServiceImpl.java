@@ -4,7 +4,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import com.newsbig.sinmunmul.dto.TodayNewsDto;
 import com.newsbig.sinmunmul.entity.News;
 import com.newsbig.sinmunmul.entity.Scrap;
 import com.newsbig.sinmunmul.entity.User;
+import com.newsbig.sinmunmul.exception.NotExistsNewsException;
 import com.newsbig.sinmunmul.repository.NewsRepository;
 import com.newsbig.sinmunmul.repository.NewsRepositorySupport;
 import com.newsbig.sinmunmul.repository.ScrapRepository;
@@ -36,8 +39,8 @@ public class NewsServiceImpl implements NewsService {
 	@Autowired
 	NewsRepositorySupport newsRepositorySupport;
 
-	@Override
-	public void scrap(int newsSeq, int userSeq) {
+	@Override 
+	public void scrap(long newsSeq, int userSeq) {
 		String now = TimeUtils.curTime();
 		User user = userRepository.getById(userSeq);
 
@@ -112,6 +115,30 @@ public class NewsServiceImpl implements NewsService {
 			result.add(obj);
 			}
 		 
+		return result;
+	}
+
+	@Override
+	public Map<String, String> newsDetail(long newsSeq) {
+		Map<String, String> result = new HashMap<>();
+		News news = newsRepository.findBydelYnAndNewsSeq("n", newsSeq).orElseThrow(() -> new NotExistsNewsException());
+
+		result.put("newsSeq",news.getNewsSeq()+"");
+		result.put("newsTitle",news.getNewsTitle());
+		result.put("newsLink",news.getNewsLink());
+		result.put("newsPress",news.getNewsPress());
+		result.put("newsAuthor",news.getNewsAuthor());
+		result.put("newsAuthorEmail",news.getNewsAuthorEmail());
+		result.put("newsDesc",news.getNewsDesc());
+		result.put("newsSummary",news.getNewsSummary());
+		result.put("newsRegDt",news.getNewsRegDt());
+		result.put("newsModDt",news.getNewsModDt());
+		result.put("newsPhoto",news.getNewsPhoto());
+		result.put("newsCommonCodeGroup",news.getCommonCodeGroup().getCodeGroup()+"");
+		result.put("newsCommonCodeGroupSeq",news.getCommonCodeGroup().getCodeGroupSeq()+"");
+		result.put("newsCommonCode",news.getCommonCode().getCode()+"");
+		result.put("newsCommonCodeSeq",news.getCommonCode().getCodeSeq()+"");
+		
 		return result;
 	}
 }
