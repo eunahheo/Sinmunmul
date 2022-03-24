@@ -8,13 +8,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
 import org.json.simple.JSONObject;
+import org.qlrm.mapper.JpaResultMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.newsbig.sinmunmul.dto.KeywordTrendWeek;
 import com.newsbig.sinmunmul.dto.TodayNewsDto;
 import com.newsbig.sinmunmul.entity.News;
 import com.newsbig.sinmunmul.entity.Scrap;
@@ -25,6 +31,7 @@ import com.newsbig.sinmunmul.repository.NewsRepositorySupport;
 import com.newsbig.sinmunmul.repository.ScrapRepository;
 import com.newsbig.sinmunmul.repository.UserRepository;
 import com.newsbig.sinmunmul.util.TimeUtils;
+
 
  
 @Service
@@ -38,6 +45,9 @@ public class NewsServiceImpl implements NewsService {
 	NewsRepository newsRepository;
 	@Autowired
 	NewsRepositorySupport newsRepositorySupport;
+	
+	@PersistenceContext
+    EntityManager entityManager;
 
 	@Override 
 	public void scrap(long newsSeq, int userSeq) {
@@ -142,14 +152,23 @@ public class NewsServiceImpl implements NewsService {
 		return result;
 	}
 
+	// 일 별 언급량
 	@Override
-	public List<Map<String, Object>> keywordTrend(String[] keywords) {
-		List<Map<String, Object>> result = new ArrayList<>();
+	public List<KeywordTrendWeek> keywordTrend(String keyword) {
+//		List<Object> list = newsRepository.keywordWeekTrend("n", keyword, keyword);
 		
+		String q = "SELECT DATE_FORMAT(DATE_SUB(n.news_reg_dt, INTERVAL (DAYOFWEEK(n.news_reg_dt)-1) DAY), '%Y/%m/%d') as start, "
+				+"DATE_FORMAT(DATE_SUB(n.news_reg_dt, INTERVAL (DAYOFWEEK(n.news_reg_dt)-7) DAY), '%Y/%m/%d') as end, "
+				+ "DATE_FORMAT(n.news_reg_dt, '%Y%u') AS 'date', "
+				+"count(*) AS count "
+				+"FROM news n "
+				+"WHERE n.del_yn='n' and n.news_title like '%"+keyword+"%' OR n.news_desc like '%"+keyword+"%' "
+				+"GROUP BY date LIMIT 6";
+        
+        JpaResultMapper result = new JpaResultMapper();
+        Query query = entityManager.createNativeQuery(q);
+        List<KeywordTrendWeek> list = result.list(query, KeywordTrendWeek.class);	
 		
-		
-		
-		
-		return result;
+		return list;
 	}
 }

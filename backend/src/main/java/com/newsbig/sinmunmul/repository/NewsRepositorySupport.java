@@ -32,7 +32,23 @@ public class NewsRepositorySupport {
 		for (int i = 0; i < todayNews.size(); i++) {
 			result.add(new TodayNewsDto(todayNews.get(i).get(qCommonCodeGroup.cgValue).toString(), Integer.parseInt(todayNews.get(i).get(qNews.count()).toString())));
 		}
-		
 		return result;
 	}
+	
+//	public int keywordTrend(String start, String end) {
+//		List<Tuple> keywordTrend = jpaQueryFactory
+//				.select(qCommonCodeGroup.cgValue, qNews.count())
+//				.from(qNews)
+//				
+//				.where(qNews.delYn.eq("n"), qNews.newsRegDt.between(start, end)).groupBy(qNews.commonCodeGroup).fetch();
+//	
+//		
+//		
+//		List<TodayNewsDto> result = new ArrayList<>();
+//		for (int i = 0; i < keywordTrend.size(); i++) {
+//			result.add(new TodayNewsDto(keywordTrend.get(i).get(qCommonCodeGroup.cgValue).toString(), Integer.parseInt(todayNews.get(i).get(qNews.count()).toString())));
+//		}
+//		return 0;
+//	}
+	
 }
