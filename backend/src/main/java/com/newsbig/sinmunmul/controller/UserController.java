@@ -98,13 +98,13 @@ public class UserController {
 	}
 	
 	@GetMapping("/cert")
-	@ApiOperation(value = "이메일 인증 코드 생성", notes = "이메일 인증코드를 생성하고, 사용자가 입력한 이메일로 이메일 인증코드를 보낸다.", response = AdvancedResponseBody.class)
+	@ApiOperation(value = "이메일 인증 코드 생성", notes = "이메일 인증코드를 생성하고, 사용자가 입력한 이메일로 이메일 인증코드를 보낸다.", response = BaseResponseBody.class)
 	@ApiResponses(
 			{ @ApiResponse(code = 200, message = "이메일 인증 코드 생성 성공"),
 			  @ApiResponse(code = 400, message = "잘못된 요청입니다."),
 			  @ApiResponse(code = 500, message = "서버 오류")
 			})
-	public ResponseEntity<? extends AdvancedResponseBody> emailCertify(@RequestParam String email) {
+	public ResponseEntity<? extends BaseResponseBody> emailCertify(@RequestParam String email) {
 		Map<String, String> result = new HashMap<>();
 		
 		String certKey = mailService.generateKey();
@@ -117,28 +117,26 @@ public class UserController {
 	}
 	
 	@PostMapping("/info")
-	@ApiOperation(value = "이메일로 사용자 정보 조회", notes = "입력한 이메일로 가입된 정보가 있는지 확인한다.", response = AdvancedResponseBody.class)
+	@ApiOperation(value = "이메일로 사용자 정보 조회", notes = "입력한 이메일로 가입된 정보가 있는지 확인한다.", response = BaseResponseBody.class)
 	@ApiResponses(
 			{ @ApiResponse(code = 200, message = "회원정보 조회 성공"),
 			  @ApiResponse(code = 400, message = "잘못된 요청입니다."),
 			  @ApiResponse(code = 500, message = "서버 오류"),
 			  @ApiResponse(code = 202, message = "회원정보가 존재하지 않습니다.")
 			})
-	public ResponseEntity<? extends AdvancedResponseBody> getUserInfo(@RequestHeader("Authorization") String accessToken,
-			@RequestBody String email) {	
-		User user = null;
+	public ResponseEntity<? extends BaseResponseBody> getUserInfo(@RequestBody String email) {	
 		try {
-			user = userService.getUserByEmail(email);
+			Map<String, Object> result = userService.getUserByEmail(email);
+			return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "회원정보 조회 성공", result));
 		}
 		catch(NotExistsUserException e) {
-			return ResponseEntity.status(202).body(AdvancedResponseBody.of(202, "회원정보가 존재하지 않습니다.", user));
+			return ResponseEntity.status(202).body(BaseResponseBody.of(202, "회원정보가 존재하지 않습니다."));
 		}
-		return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "회원정보 조회 성공", user));
 	}
 	
 	
 	@PostMapping("/kakao/login")
-	@ApiOperation(value = "카카오 계정으로 로그인", notes = "AccessToken을 활용해 카카오 서버에서 사용자 정보를 받아오고, DB에 가입 정보가 있으면 로그인한다.", response = AdvancedResponseBody.class)
+	@ApiOperation(value = "카카오 계정으로 로그인", notes = "AccessToken을 활용해 카카오 서버에서 사용자 정보를 받아오고, DB에 가입 정보가 있으면 로그인한다.", response = BaseResponseBody.class)
 	@ApiResponses(
 			{ @ApiResponse(code = 200, message = "카카오 계정 로그인 성공"),
 			  @ApiResponse(code = 400, message = "잘못된 요청입니다."),
@@ -147,7 +145,7 @@ public class UserController {
 			  @ApiResponse(code = 501, message = "카카오 계정 정보 제공 비동의로 정보 조회를 할 수 없는 경우"),
 			  @ApiResponse(code = 202, message = "해당 카카오 계정으로 가입된 회원 정보가 없습니다.")
 			})
-	public ResponseEntity<? extends AdvancedResponseBody> getKakaoUserInfo(@RequestHeader @ApiParam(value = "카카오 인가토드로 발급받은 accessToken") String accessToken) {
+	public ResponseEntity<? extends BaseResponseBody> getKakaoUserInfo(@RequestHeader @ApiParam(value = "카카오 인가코드로 발급받은 accessToken") String accessToken) {
 		Map<String, String> result = new HashMap<>();
 		
 		try {
@@ -158,13 +156,13 @@ public class UserController {
 				return ResponseEntity.status(400).body(AdvancedResponseBody.of(400, "잘못된 요청입니다.", result));
 			
 			try {
-				User user = userService.getUserByEmail(result.get("email"));
+				Map<String, Object> obj = userService.getUserByEmail(result.get("email"));
 		        List<String> auth = new ArrayList<>();
 		        auth.add("ROLE_USER");
-		        return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "로그인 성공", jwtTokenProvider.createToken(user.getUsername(),auth)));
+		        return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "로그인 성공", jwtTokenProvider.createToken(obj.get("userEmail").toString(),auth)));
 			}
 			catch(NotExistsUserException e) {
-				return ResponseEntity.status(202).body(AdvancedResponseBody.of(202, "가입 정보가 없습니다.", ""));
+				return ResponseEntity.status(202).body(AdvancedResponseBody.of(202, "가입 정보가 없습니다.", result));
 			}
 		}
 		catch(NullPointerException e){
@@ -173,7 +171,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/login")
-	@ApiOperation(value = "로그인", notes = "입력한 이메일과 비밀번호로 로그인을 진행하고, accessToken을 반환한다.", response = AdvancedResponseBody.class)
+	@ApiOperation(value = "로그인", notes = "입력한 이메일과 비밀번호로 로그인을 진행하고, accessToken을 반환한다.", response = BaseResponseBody.class)
 	@ApiResponses(
 			{ @ApiResponse(code = 200, message = "로그인 성공"),
 			  @ApiResponse(code = 400, message = "잘못된 요청입니다."),
@@ -181,15 +179,15 @@ public class UserController {
 			  @ApiResponse(code = 202, message = "가입된 회원 정보가 없습니다."),
 			  @ApiResponse(code = 206, message = "비밀 번호가 일치하지 않습니다.")
 			})
-	public ResponseEntity<? extends AdvancedResponseBody> login(@RequestBody LoginDto loginDto) {
+	public ResponseEntity<? extends BaseResponseBody> login(@RequestBody LoginDto loginDto) {
 		try {
-			User user = userService.getUserByEmail(loginDto.getUserEmail());
-	        if (!passwordEncoder.matches(loginDto.getUserPwd(), user.getPassword())) {
+			Map<String, Object> obj = userService.getUserByEmail(loginDto.getUserEmail());
+	        if (!passwordEncoder.matches(loginDto.getUserPwd(), obj.get("userPwd").toString())) {
 	            throw new IllegalArgumentException();
 	        }
 	        List<String> auth = new ArrayList<>();
 	        auth.add("ROLE_USER");
-	        return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "로그인 성공", jwtTokenProvider.createToken(user.getUsername(),auth)));
+	        return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "로그인 성공", jwtTokenProvider.createToken(obj.get("userEmail").toString(),auth)));
 		}
 		catch(NotExistsUserException e) {
 			return ResponseEntity.status(202).body(AdvancedResponseBody.of(202, "가입 정보가 없습니다.", ""));
