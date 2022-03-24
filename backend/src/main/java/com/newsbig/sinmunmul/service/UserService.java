@@ -11,4 +11,6 @@ public interface UserService {
 	public void signIn(User user);
 	// 카카오 서버에서 카카오 계정 정보 조회
 	public Map<String, String> getKakaoUserInfo(String accessToken);
+	// 비밀번호 찾기를 통한 임시 비밀번호로 변경
+	public String changePassword(String email);
 }

@@ -98,17 +98,22 @@ public class UserController {
 	}
 	
 	@GetMapping("/cert")
-	@ApiOperation(value = "이메일 인증 코드 생성", notes = "이메일 인증코드를 생성하고, 사용자가 입력한 이메일로 이메일 인증코드를 보낸다.", response = String.class)
-	public ResponseEntity<Map<String, String>> emailCertify(@RequestParam String email) {
+	@ApiOperation(value = "이메일 인증 코드 생성", notes = "이메일 인증코드를 생성하고, 사용자가 입력한 이메일로 이메일 인증코드를 보낸다.", response = AdvancedResponseBody.class)
+	@ApiResponses(
+			{ @ApiResponse(code = 200, message = "이메일 인증 코드 생성 성공"),
+			  @ApiResponse(code = 400, message = "잘못된 요청입니다."),
+			  @ApiResponse(code = 500, message = "서버 오류")
+			})
+	public ResponseEntity<? extends AdvancedResponseBody> emailCertify(@RequestParam String email) {
 		Map<String, String> result = new HashMap<>();
 		
 		String certKey = mailService.generateKey();
-		String message = mailContentBuilder.build(certKey);
-		mailService.sendMail(new EmailDto(email, "[신문물] 이메일 인증", message));
+		String message = mailContentBuilder.certBuild(certKey);
+		mailService.sendCertMail(new EmailDto(email, "[신문물] 이메일 인증", message));
 		
 		result.put("certKey", certKey);
 		
-		return new ResponseEntity<Map<String,String>>(result, HttpStatus.OK);
+		return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "인증 코드 발급 성공", certKey));
 	}
 	
 	@PostMapping("/info")
@@ -132,14 +137,15 @@ public class UserController {
 	}
 	
 	
-	@PostMapping("/kakao/info")
-	@ApiOperation(value = "카카오 계정 사용자 정보 반환", notes = "AccessToken을 활용해 카카오 서버에서 사용자 정보를 받아온다.", response = AdvancedResponseBody.class)
+	@PostMapping("/kakao/login")
+	@ApiOperation(value = "카카오 계정으로 로그인", notes = "AccessToken을 활용해 카카오 서버에서 사용자 정보를 받아오고, DB에 가입 정보가 있으면 로그인한다.", response = AdvancedResponseBody.class)
 	@ApiResponses(
-			{ @ApiResponse(code = 200, message = "카카오 계정 정보 조회 성공"),
+			{ @ApiResponse(code = 200, message = "카카오 계정 로그인 성공"),
 			  @ApiResponse(code = 400, message = "잘못된 요청입니다."),
 			  @ApiResponse(code = 500, message = "서버 오류"),
 			  @ApiResponse(code = 401, message = "토큰이 잘못되었거나, 만료되어 유효하지 않아 발생하는 오류"),
-			  @ApiResponse(code = 501, message = "카카오 계정 정보 제공 비동의로 정보 조회를 할 수 없는 경우")
+			  @ApiResponse(code = 501, message = "카카오 계정 정보 제공 비동의로 정보 조회를 할 수 없는 경우"),
+			  @ApiResponse(code = 202, message = "해당 카카오 계정으로 가입된 회원 정보가 없습니다.")
 			})
 	public ResponseEntity<? extends AdvancedResponseBody> getKakaoUserInfo(@RequestHeader @ApiParam(value = "카카오 인가토드로 발급받은 accessToken") String accessToken) {
 		Map<String, String> result = new HashMap<>();
@@ -150,7 +156,16 @@ public class UserController {
 				return ResponseEntity.status(401).body(AdvancedResponseBody.of(401, "만료된 토큰입니다.", result));
 			if(result.get("responseCode").equals("400")) 
 				return ResponseEntity.status(400).body(AdvancedResponseBody.of(400, "잘못된 요청입니다.", result));
-			return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "회원정보 조회 성공", result));
+			
+			try {
+				User user = userService.getUserByEmail(result.get("email"));
+		        List<String> auth = new ArrayList<>();
+		        auth.add("ROLE_USER");
+		        return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "로그인 성공", jwtTokenProvider.createToken(user.getUsername(),auth)));
+			}
+			catch(NotExistsUserException e) {
+				return ResponseEntity.status(202).body(AdvancedResponseBody.of(202, "가입 정보가 없습니다.", ""));
+			}
 		}
 		catch(NullPointerException e){
 			return ResponseEntity.status(501).body(AdvancedResponseBody.of(501, "카카오 계정 정보를 읽어올 수 없습니다.", result));
@@ -160,11 +175,11 @@ public class UserController {
 	@PostMapping("/login")
 	@ApiOperation(value = "로그인", notes = "입력한 이메일과 비밀번호로 로그인을 진행하고, accessToken을 반환한다.", response = AdvancedResponseBody.class)
 	@ApiResponses(
-			{ @ApiResponse(code = 200, message = "카카오 계정 정보 조회 성공"),
+			{ @ApiResponse(code = 200, message = "로그인 성공"),
 			  @ApiResponse(code = 400, message = "잘못된 요청입니다."),
 			  @ApiResponse(code = 500, message = "서버 오류"),
-			  @ApiResponse(code = 401, message = "토큰이 잘못되었거나, 만료되어 유효하지 않아 발생하는 오류"),
-			  @ApiResponse(code = 501, message = "카카오 계정 정보 제공 비동의로 정보 조회를 할 수 없는 경우")
+			  @ApiResponse(code = 202, message = "가입된 회원 정보가 없습니다."),
+			  @ApiResponse(code = 206, message = "비밀 번호가 일치하지 않습니다.")
 			})
 	public ResponseEntity<? extends AdvancedResponseBody> login(@RequestBody LoginDto loginDto) {
 		try {
@@ -174,7 +189,31 @@ public class UserController {
 	        }
 	        List<String> auth = new ArrayList<>();
 	        auth.add("ROLE_USER");
-	        return ResponseEntity.status(200).body(AdvancedResponseBody.of(202, "로그인 성공", jwtTokenProvider.createToken(user.getUsername(),auth)));
+	        return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "로그인 성공", jwtTokenProvider.createToken(user.getUsername(),auth)));
+		}
+		catch(NotExistsUserException e) {
+			return ResponseEntity.status(202).body(AdvancedResponseBody.of(202, "가입 정보가 없습니다.", ""));
+		}
+		catch(IllegalArgumentException e) {
+			return ResponseEntity.status(206).body(AdvancedResponseBody.of(206, "패스워드를 확인해주세요.", ""));
+		}
+	}
+	
+	@GetMapping("/find/pwd")
+	@ApiOperation(value = "비밀번호 찾기", notes = "입력한 이메일에 임시 비밀번호를 발급하고, 비밀번호를 임시 비밀번호로 변경한다.", response = BaseResponseBody.class)
+	@ApiResponses(
+			{ @ApiResponse(code = 200, message = "임시 비밀번호 변경 성공"),
+			  @ApiResponse(code = 400, message = "잘못된 요청입니다."),
+			  @ApiResponse(code = 500, message = "서버 오류"),
+			  @ApiResponse(code = 202, message = "해당 이메일로 가입된 회원 정보가 없습니다.")
+			})
+	public ResponseEntity<? extends BaseResponseBody> login(@RequestParam String email) {
+		try {
+			
+			String message = mailContentBuilder.passBuild(userService.changePassword(email));
+			mailService.sendPwdMail(new EmailDto(email, "[신문물] 임시 비밀번호 발급", message));
+			
+	        return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "임시 비밀번호 발급 성공"));
 		}
 		catch(NotExistsUserException e) {
 			return ResponseEntity.status(202).body(AdvancedResponseBody.of(202, "가입 정보가 없습니다.", ""));

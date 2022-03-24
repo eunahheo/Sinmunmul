@@ -47,7 +47,28 @@ public class MailServiceImpl implements MailService {
 
 	@Async
 	@Override
-	public void sendMail(EmailDto email) {
+	public void sendCertMail(EmailDto email) {
+		MimeMessagePreparator messagePreparator = mimeMessage -> {
+			MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+			messageHelper.setFrom("admin@sinmunmul.com");
+			messageHelper.setTo(email.getRecipient());
+			messageHelper.setSubject(email.getSubject());
+			messageHelper.setText(email.getBody(), true);
+		};
+
+		try {
+			mailSender.send(messagePreparator);
+			log.info("이메일 인증 링크를 보냈습니다.");
+		} catch (MailException e) {
+			log.error(String.valueOf(e));
+			e.printStackTrace();
+//            throw new CustomException("메일을 여기로 보내는 중 에러 발생 :  " + email.getRecipient());
+		}
+	}
+	
+	@Async
+	@Override
+	public void sendPwdMail(EmailDto email) {
 		MimeMessagePreparator messagePreparator = mimeMessage -> {
 			MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 			messageHelper.setFrom("admin@sinmunmul.com");

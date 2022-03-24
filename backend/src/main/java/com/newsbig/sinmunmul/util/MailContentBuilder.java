@@ -12,15 +12,15 @@ public class MailContentBuilder {
 
 	private final TemplateEngine templateEngine;
 
-	public String build(String certKey) {
+	public String certBuild(String certKey) {
 		Context context = new Context();
 		context.setVariable("certKey", certKey);
 		return templateEngine.process("mailTemplate", context);
 	}
 
-	public String passBuild(String temp) {
+	public String passBuild(String pwd) {
 		Context context = new Context();
-		context.setVariable("temp", temp);
-		return templateEngine.process("mailTemplatePass", context);
+		context.setVariable("pwd", pwd);
+		return templateEngine.process("mailTemplatePwd", context);
 	}
 }
