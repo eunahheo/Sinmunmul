@@ -42,6 +42,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	  protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable()
+		.cors().configurationSource(corsConfigurationSource())
+		.and()
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		.and()
 		.authorizeRequests()
@@ -50,8 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //		.antMatchers("/user/info").hasRole("USER")
 		.anyRequest().permitAll() // 그 외에는 모두 인증을 거치지 않아도 됨
 		.and()
-		.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
-                UsernamePasswordAuthenticationFilter.class)
+		.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
 		.exceptionHandling();
 	  }
 	
