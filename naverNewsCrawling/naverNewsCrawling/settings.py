@@ -63,7 +63,9 @@ LOG_LEVEL='ERROR'
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 # ITEM_PIPELINES = {'naverNewsCrawling.pipelines.JsonPipeline': 300,}
-ITEM_PIPELINES = {'naverNewsCrawling.pipelines.CsvPipeline': 300, }
+# ITEM_PIPELINES = {'naverNewsCrawling.pipelines.CsvPipeline': 300, }
+# ITEM_PIPELINES = {'naverNewsCrawling.pipelines.msqltestPipeline': 300, }
+ITEM_PIPELINES = {'naverNewsCrawling.pipelines.MysqlPipeline': 300, }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html

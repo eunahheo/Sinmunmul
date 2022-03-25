@@ -33,7 +33,7 @@ public class News implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "news_seq")
-	private int newsSeq;
+	private long newsSeq;
 	
 	@Column(name = "news_title")
 	private String newsTitle;

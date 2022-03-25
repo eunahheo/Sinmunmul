@@ -1,5 +1,8 @@
 package com.newsbig.sinmunmul.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.newsbig.sinmunmul.exception.NotExistsNewsException;
 import com.newsbig.sinmunmul.repository.ScrapRepositorySupport;
 import com.newsbig.sinmunmul.response.AdvancedResponseBody;
 import com.newsbig.sinmunmul.response.BaseResponseBody;
@@ -68,5 +72,25 @@ public class NewsController {
 			})
 	public ResponseEntity<? extends BaseResponseBody> searchNews(String keyword, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "size", defaultValue = "3") int size) {
 		return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "뉴스 검색 성공", newsService.searchNews(keyword, page, size)));
+	}
+	
+	@GetMapping("/detail")
+	@ApiOperation(value = "뉴스 상세정보 조회", notes = "워드 클라우드 키워드, 검색 키워드가 포함된 뉴스 기사를 반환한다.")
+	@ApiResponses(
+			{ @ApiResponse(code = 200, message = "뉴스 검색 성공"),
+			  @ApiResponse(code = 400, message = "잘못된 요청입니다."),
+			  @ApiResponse(code = 500, message = "서버 오류"),
+			  @ApiResponse(code = 202, message = "뉴스 시퀀스 오류"),
+			})
+	public ResponseEntity<? extends BaseResponseBody> detailNews(@RequestParam(value = "뉴스 번호") long newsSeq) {
+		Map<String, Object> result = new HashMap<>();
+		
+		try {
+			result = newsService.newsDetail(newsSeq);
+			return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "뉴스 검색 성공", result));
+		}
+		catch(NotExistsNewsException e) {
+			return ResponseEntity.status(202).body(BaseResponseBody.of(202, "존재하지 않는 뉴스 번호입니다."));
+		}
 	}
 }
