@@ -37,7 +37,7 @@ public class ScrapRepositorySupport {
 		return new PageImpl<>(scraps, pageable, scraps.size());
 	}
 	
-	public boolean checkScrap(int userSeq, int newsSeq) {
+	public boolean checkScrap(int userSeq, long newsSeq) {
 		try {
 			jpaQueryFactory.select(qScrap)
 				.from(qScrap)
@@ -51,7 +51,7 @@ public class ScrapRepositorySupport {
 		return true;
 	}
 	
-	public void deleteScrap(int userSeq, int newsSeq) {
+	public void deleteScrap(int userSeq, long newsSeq) {
 		List<Scrap> scraps = jpaQueryFactory.select(qScrap)
 				.from(qScrap)
 					.leftJoin(qUser).on(qUser.userSeq.eq(qScrap.user.userSeq))
