@@ -17,4 +17,5 @@ public class SigninDto {
 	private String userPwd;
 	private String userGender;
 	private int userAge;
+	private String usersgType;
 }

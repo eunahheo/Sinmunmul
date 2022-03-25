@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +45,7 @@ public class UserServiceImpl implements UserService{
 				.userPwd(passwordEncoder.encode(user.getUserPwd()))
 				.userGender(user.getUserGender())
 				.userAge(user.getUserAge())
+				.userSgtype(user.getUserSgtype())
 				.regDt(user.getRegDt())
 				.regId(user.getUserEmail())
 				.modDt(user.getModDt())
@@ -51,11 +54,20 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public User getUserByEmail(String email) {
+	public Map<String, Object> getUserByEmail(String email) {
+		Map<String, Object> result = new HashMap<>();
 		
 		User user = userRepository.findBydelYnAndUserEmail("n", email).orElseThrow(() -> new NotExistsUserException());
 		
-		return user;
+		result.put("userSeq", user.getUserSeq());
+		result.put("userEmail", user.getUserEmail());
+		result.put("userPwd", user.getUserPwd());
+		result.put("userGender", user.getUserGender());
+		result.put("userAge", user.getUserAge());
+		result.put("userSgType", user.getUserSgtype());
+		result.put("userRegDt", user.getRegDt());
+		
+		return result;
 	}
 
 	@Override
@@ -117,8 +129,34 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public void signInKakao(User user) {
-		// TODO Auto-generated method stub
+	public String changePassword(String email) {
+		String password = getRandomPassword(10);
 		
+		User user = userRepository.findBydelYnAndUserEmail("n", email).orElseThrow(() -> new NotExistsUserException());
+		user.setUserPwd(passwordEncoder.encode(password));
+		user.setModId(email);
+		user.setModDt(TimeUtils.curTime());
+		userRepository.save(user);
+		
+		return password;
 	}
+
+	// 임시 비밀번호 발급
+	public String getRandomPassword(int size) {
+	    char[] charSet = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
+	            'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a',
+	            'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+	            'w', 'x', 'y', 'z', '!', '@', '#', '$', '%', '^', '&' ,'*'};
+	    StringBuffer sb = new StringBuffer();
+	    SecureRandom sr = new SecureRandom();
+	    sr.setSeed(new Date().getTime());
+	    int idx = 0;
+	    int len = charSet.length;
+	    for (int i = 0; i < size; i++) {
+	        idx = sr.nextInt(len);
+	        sb.append(charSet[idx]);
+		}
+		return sb.toString();
+	}
+	
 }
