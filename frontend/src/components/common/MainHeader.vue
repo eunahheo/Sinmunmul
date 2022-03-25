@@ -80,11 +80,12 @@ export default {
           params: {
             keyword : this.searchWord,
             page : 1,
-            size : 3
+            size : 4
           }
         })
         .then((res) =>{
           console.log(res);
+          //메인페이지 이동
         }).catch((err) => {
             console.log("에러");
             console.log(err);
