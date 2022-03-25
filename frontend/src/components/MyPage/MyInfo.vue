@@ -44,7 +44,8 @@ export default {
       text: '비밀번호를 입력하세요', // alert창의 글자
       alertState: 'alert alert-danger',
       alertStyle: {
-        visibility: 'hidden'
+        visibility: 'hidden',
+        width: '600px'
       }
     }
   },
@@ -112,10 +113,9 @@ export default {
 <style scoped>
 
 #password-form{
-  padding: 30px;
-  position:absolute;
-  top:30%;
-  left: 40%;
+  margin-left: 260px;
+  padding: 40px;
+  margin-top:150px;
   max-width: 680px;
   height: 450px;
   -webkit-border-radius: 10px;
