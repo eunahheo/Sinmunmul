@@ -32,7 +32,9 @@ public class ScrapRepositorySupport {
 				.from(qScrap)
 					.leftJoin(qUser).on(qUser.userSeq.eq(qScrap.user.userSeq))
 					.leftJoin(qNews).on(qNews.newsSeq.eq(qScrap.news.newsSeq))
-				.where(qScrap.user.userSeq.eq(userSeq), qScrap.delYn.eq("n")).fetch();
+				.where(qScrap.user.userSeq.eq(userSeq), qScrap.delYn.eq("n"))
+				.offset(pageable.getOffset()).limit(pageable.getPageSize()).orderBy(qScrap.regDt.desc())
+				.fetch();
 	
 		return new PageImpl<>(scraps, pageable, scraps.size());
 	}
