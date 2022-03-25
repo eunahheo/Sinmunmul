@@ -1,0 +1,1 @@
+docker exec -it hadoop sh -c "cd ~/skeleton-hadoop-maven && /bin/bash"
