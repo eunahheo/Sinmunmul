@@ -27,7 +27,7 @@ import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping("/interest")
-@Api("사용자 컨트롤러 API")
+@Api("관심사 컨트롤러 API")
 public class InterestController {
 	
 	@Autowired

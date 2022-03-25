@@ -1,11 +1,22 @@
 package com.newsbig.sinmunmul.entity;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -21,7 +32,8 @@ import lombok.ToString;
 @Setter
 @ToString
 @AllArgsConstructor
-public class User {
+@Builder
+public class User implements UserDetails {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // PK, Auto_Increment로 설정해서 직접 할당 방식이 아니라, 자동으로 생성되도록 하기 위한
@@ -41,6 +53,9 @@ public class User {
 	@Column(name = "user_age")
 	private int userAge;
 	
+	@Column(name = "user_sgtype")
+	private String userSgtype;
+	
 	@Column(name = "del_yn")
 	private String delYn = "n";
 	
@@ -55,21 +70,66 @@ public class User {
 	
 	@Column(name = "mod_id")
 	private String modId;
-
+	
+//	@ElementCollection(fetch = FetchType.EAGER)
+//    @Builder.Default
+//    private List<String> roles = new ArrayList<>();
+	
 	@Builder
-	public User(String userEmail, String userPwd, String userGender, int userAge, String regDt, String regId,
+	public User(String userEmail, String userPwd, String userGender, int userAge, String userSgtype, String regDt, String regId,
 			String modDt, String modId) {
 		super();
 		this.userEmail = userEmail;
 		this.userPwd = userPwd;
 		this.userGender = userGender;
 		this.userAge = userAge;
+		this.userSgtype = userSgtype;
 		this.regDt = regDt;
 		this.regId = regId;
 		this.modDt = modDt;
 		this.modId = modId;
 	}
-	
-	
 
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		ArrayList<GrantedAuthority> auth = new ArrayList<>();
+		auth.add(new SimpleGrantedAuthority("ROLE_USER"));
+		return auth;
+		
+//		return this.roles.stream()
+//                .map(SimpleGrantedAuthority::new)
+//                .collect(Collectors.toList());
+	}
+
+	@Override
+	public String getPassword() {
+		return userPwd;
+	}
+
+	@Override
+	public String getUsername() {
+		return userEmail;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
+	
+	
 }

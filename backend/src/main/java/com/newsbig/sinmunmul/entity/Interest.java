@@ -1,11 +1,16 @@
+
 package com.newsbig.sinmunmul.entity;
+
+import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -15,31 +20,35 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+@Builder
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 파라미터가 없는 기본 생성자를 생성한다. 접근 권한을 설정하여 어느 곳에서나 객체를 생성할 수 있는 상황을 막는다.
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
-public class Interest {
+public class Interest implements Serializable {
+	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY) // PK, Auto_Increment로 설정해서 직접 할당 방식이 아니라, 자동으로 생성되도록 하기 위한
-														// 어노테이션
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "interest_seq")
 	private int interestSeq;
 	
-	@Column(name = "user_seq")
-	private int userSeq;
+	@ManyToOne(fetch = FetchType.EAGER) // 즉시 로딩 : 데이터를 조회할 때 연관된 데이터까지 한번에 불러온다.
+	@JoinColumn(nullable = false, name = "user_seq")
+	private User user;
 	
-	@Column(name = "code_group")
-	private int codeGroup;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(nullable = false, name = "code_group", referencedColumnName = "code_group")
+	private CommonCodeGroup commonCodeGroup;
 	
-	@Column(name = "code")
-	private int code;
-	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(nullable = false, name = "code", referencedColumnName = "code")
+	private CommonCode commonCode;
+
 	@Column(name = "del_yn")
-	private String delYn = "n";
+	private String delYn;
 	
 	@Column(name = "reg_dt")
 	private String regDt;
@@ -52,19 +61,4 @@ public class Interest {
 	
 	@Column(name = "mod_id")
 	private String modId;
-
-	@Builder
-	public Interest(int userSeq, int codeGroup, int code, String regDt, String regId, String modDt, String modId) {
-		super();
-		this.userSeq = userSeq;
-		this.codeGroup = codeGroup;
-		this.code = code;
-		this.regDt = regDt;
-		this.regId = regId;
-		this.modDt = modDt;
-		this.modId = modId;
-	}
-	
-	
-
 }
