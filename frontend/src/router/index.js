@@ -55,16 +55,7 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   },
-  {
-    path: '/landing',
-    name: 'landing',
-    component: () => import('../views/LandingView.vue')
-  },
-  {
-    path: '/login',
-    name: 'login',
-    component: () => import('../views/LoginView.vue')
-  },
+
   {
     path: '/temp',
     name: 'temp',
@@ -79,7 +70,17 @@ const routes = [
     path: '/tempgraph',
     name: 'tempgraph',
     component: () => import('../views/main/TempGraph.vue')
-  }
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('../views/LoginView.vue')
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: () => import('../views/RegisterView.vue')
+  },
 ]
 
 const router = createRouter({

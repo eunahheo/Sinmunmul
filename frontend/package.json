@@ -10,6 +10,7 @@
   "dependencies": {
     "@blackywkl/vuewordcloud": "^1.1.4",
     "@popperjs/core": "^2.11.4",
+    "axios": "^0.26.1",
     "bootstrap": "^5.1.3",
     "bootstrap-vue": "^2.21.2",
     "chart.js": "^3.7.1",
@@ -17,19 +18,19 @@
     "core-js": "^3.8.3",
     "d3": "^7.3.0",
     "d3-cloud": "^1.2.5",
+    "dotenv": "^16.0.0",
     "echarts": "^5.3.1",
     "echarts-wordcloud": "^2.0.0",
     "hchs-vue-charts": "^1.2.8",
+    "vue": "^3.2.13",
     "vue-chartjs": "^3.5.1",
     "vue-chartkick": "^1.1.0",
     "vue-d3-cloud": "^0.2.0",
     "vue-echarts-v3": "^2.0.1",
-    "axios": "^0.26.1",
-    "dotenv": "^16.0.0",
-    "vue": "^3.2.13",
     "vue-router": "^4.0.3",
     "vue-wordcloud": "^1.1.1",
-    "vuex": "^4.0.0"
+    "vuex": "^4.0.0",
+    "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

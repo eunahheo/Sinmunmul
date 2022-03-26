@@ -4,15 +4,17 @@
         <h1>신문물</h1>
         <h2 style="height:50px"></h2>
         <div>
-            <span>login</span>
+            <h2>login</h2>
 
             <form>
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <input type="text" name="email" placeholder="email">
-                <input type="password" name="password" placeholder="password">
+                <div>
+                    <input type="text" name="email" v-model="emailData" placeholder="email">
+                    <input type="password" name="password" v-model="pswdData" placeholder="password">
+                </div>
                 <input type="submit" value="login">
 
-                <!-- <a href="/register">register</a> -->
+                <router-link to="/register">register</router-link>
                 <!-- social login -->
                 <div class="social-login">
                     <section>
@@ -26,9 +28,19 @@
 </template>
 
 <script>
- /* eslint-disable */
+/* eslint-disable */
+import axios from 'axios'
+const API_SERVER = 'https://j6a406.p.ssafy.io/api'
+
 export default {
     name: "login",
+    data() {
+        return{
+            emailData: '',
+            pswdData: '',
+            kakaoToken: '',
+        }
+    },
     methods: {
         kakaoLogin:function() {
             window.Kakao.init('864650259e852266a14e98b75eedc985')

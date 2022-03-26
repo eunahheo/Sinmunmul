@@ -11,8 +11,12 @@
       </router-link>
 
         <div class="text-end">
-           <button type="button" class="btn btn-outline-secondary m-2">로그인</button>
-          <button type="button" class="btn btn-outline-secondary m-2">회원가입</button>
+          <button type="button" class="btn btn-outline-secondary m-2">
+            <router-link to="/login">로그인</router-link>
+          </button>
+          <button type="button" class="btn btn-outline-secondary m-2">
+            <router-link to="/register">회원가입</router-link>
+          </button>
           <button type="button" class="btn btn-outline-secondary m-2"> 
             <router-link to="/mypage">마이페이지</router-link>
             </button>
