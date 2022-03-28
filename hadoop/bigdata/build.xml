@@ -65,7 +65,7 @@
   <target name="ssafy-works" depends="compile-works">
     <jar jarfile="${build.dir}/ssafy.jar" basedir="${build.works}">
       <manifest>
-        <attribute name="Main-Class" value="ssafy/Driver"/>
+        <attribute name="Main-Class" value="sinmunmul/Driver"/>
       </manifest>
     </jar>
   </target>
