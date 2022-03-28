@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.simple.JSONArray;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -122,7 +124,7 @@ public class NewsController {
 	@PostMapping("/keyword/trend/month")
 	@ApiOperation(value = "월간 키워드 언급 기사량 조회", notes = "월간 키워드 언급 기사량을 조회한다.")
 	@ApiResponses(
-			{ @ApiResponse(code = 200, message = "월간 키워드 언급 기사량을 조회 성공"),
+			{ @ApiResponse(code = 200, message = "월간 키워드 언급 기사량 조회 성공"),
 			  @ApiResponse(code = 400, message = "잘못된 요청입니다."),
 			  @ApiResponse(code = 500, message = "서버 오류"),
 			})
@@ -137,6 +139,25 @@ public class NewsController {
 			trendList.add(map);
 		}
 		return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "월간 키워드 언급 기사량 조회 성공", trendList));
+	}
+	
+	@PostMapping("/main/wordcloud")
+	@ApiOperation(value = "메인 페이지 워드클라우드 ", notes = "codeGroup - 0 : 전체, 100 : 정치, 101 : 경제, 102 : 사회, 103 : 생활/문화, 104 : 세계, 105 : IT/과학")
+	@ApiResponses(
+			{ @ApiResponse(code = 200, message = "메인 페이지 워드클라우드 조회 성공"),
+			  @ApiResponse(code = 400, message = "잘못된 요청입니다."),
+			  @ApiResponse(code = 500, message = "서버 오류"),
+			})
+	public ResponseEntity<? extends BaseResponseBody> mainWordcloud(@RequestParam (required = true) int codeGroup) {
+		JSONArray wordcloud = null;
+		try {
+			wordcloud = newsService.mainWordcloud(codeGroup);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(500).body(BaseResponseBody.of(500, "서버 오류입니다."));
+		}
+		 
+		return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "메인 페이지 워드클라우드 조회 성공", wordcloud));
 	}
 	
 }
