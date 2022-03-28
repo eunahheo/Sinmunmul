@@ -7,13 +7,13 @@
  <main>
     <h2 class="title--large main-title plan">Today's Issue</h2>
 
-    <div class="plan span--2 long--2 ">
+    <div class="plan span--2 long--2 m-3 ">
        <h3>이슈 - 워드 클라우드</h3>
       <div id="word-cloud">
         </div>
     </div>
 
-    <div class="plan span--2 long--2">
+    <div class="plan span--2 long--2 m-3">
     <a class="terrarium" href="" target="_blank">
       <figure><img src=""/>
         <figcaption>해당 토픽에 대한 관련 기사 자리</figcaption>
@@ -21,27 +21,24 @@
     </a>
     </div>
 
-    <div class="plan span--2 long--2">
+    <div class="plan span--2 long--2 ">
        <h3>최고 빈도 키워드 뉴스</h3>
        <!-- <bar-chart :data="chartData"></bar-chart> -->
        <bar-chart :data="chartData" :colors="['#0b6e00', '#006ca2', '#10379c']"></bar-chart>
     </div>
     
-       <div class="plan span--2 long--2">
-
-    <h3>키워드 언급량 추이 그래프</h3>
-    <line-chart :data="lineData" ></line-chart>
+    <div class="plan span--2 long--2 ">
+      <h3>키워드 언급량 추이 그래프</h3>
+      <line-chart :data="lineData" ></line-chart>
     </div>
 
 
-       <div class="span--2 long--2">
-
-    <h2>추천 기사 자리 1</h2>
+    <div class="span--2 long--2">
+      <h2>추천 기사 자리 1</h2>
     </div>
 
-           <div class="span--2 long--2">
-
-    <h2>추천기사 자리 2</h2>
+    <div class="span--2 long--2">
+      <h2>추천기사 자리 2</h2>
     </div>
 
     <div class="item-with-image cssgrid-collection">
@@ -241,45 +238,7 @@ random([random]): 내부적으로 단어를 초기 위치와 시계, 반시계 �
 canvas([canvas]): 캔버스 생성기
 
 <style scoped>
-:root {
-  --font: "EB Garamond", serif;
-  --font-title: "Playfair Display", serif;
-  --font-sans-serif: "Manrope", sans-serif;
-  --black: #1c1f33;
-  --black--acc: #222;
-  --gray: #eee;
-  --gray-1: #ededed;
-}
 
-* {
-  box-sizing: border-box;
-}
-
-body {
-  font-size: 1.1rem;
-  background: var(--preview-bg);
-  font-family: var(--font);
-  color: var(--black);
-  background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/567707/paper_fibers.png) repeat;
-  padding: 4rem 2rem;
-  line-height: 1.3;
-  text-align: justify;
-  column-break-inside: avoid;
-}
-
-a {
-  text-decoration: none;
-  display: block;
-  color: var(--black);
-}
-a:hover, a:focus, a:active, a:visited {
-  color: var(--black--acc);
-}
-
-.main__wrapper {
-  max-width: 1135px;
-  margin: auto;
-}
 
 h1 {
   font: 50px/1 "Playfair Display SC";
@@ -308,10 +267,6 @@ p a {
   display: inline;
 }
 
-em {
-  font-style: italic;
-}
-
 .title--large {
   text-align: center;
   font-family: var(--font-title);
@@ -320,6 +275,7 @@ em {
   /* text-align: left; */
   margin-bottom: 0.8rem;
 }
+
 @media (min-width: 700px) {
   .title--large {
     font-size: 42px;
@@ -386,17 +342,7 @@ main aside {
 main .article-bar-1 {
   grid-row: span 4;
 }
-@media (min-width: 700px) {
-  main .hogwarts {
-    grid-row: span 3;
-  }
-}
-@media (min-width: 1024px) {
-  main .hogwarts {
-    grid-column: 3;
-    grid-row: span 2;
-  }
-}
+
 @media (min-width: 700px) {
   main .menu {
     grid-column: 1/-1;
@@ -591,11 +537,6 @@ aside > div > div {
 .item-with-image:not(.cssgrid-collection):hover h4 {
   color: white !important;
   background: var(--black);
-}
-.magazine {
-  border: 1px solid;
-  border-width: 1px 0;
-  padding-bottom: 1rem;
 }
 
 .menu {

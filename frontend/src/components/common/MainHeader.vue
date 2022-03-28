@@ -2,12 +2,21 @@
 <nav class="py-2">
 <div class="px-3 py-0 mb-0">
       <div class="container d-flex flex-wrap justify-content-center">
-        <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto">
-          <input type="search" class="form-control" placeholder="Search..." aria-label="Search" v-model="searchWord" @keyup.enter="search">
-        </form>
+          
+         <div class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto">
+          <input type="search" class="form-control" placeholder="Search..." aria-label="Search" v-model="searchWord" @keyup.enter="moveDetail" v-if="showSearch">  
+        </div> 
 
-      <router-link to="/" class="navbar-brand col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto">
+        <!-- <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto" @submit.prevent="moveDetail">
+          <input type="search" class="form-control" placeholder="Search..." aria-label="Search" v-model="searchWord" v-if="showSearch">
+        </form> -->        
+
+      <!-- <router-link to="/" class="navbar-brand col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto">
       <img src="@/assets/img/titleLogo.png" alt="" width="120" height="60">
+      </router-link> -->
+      
+      <router-link to="/" v-on:click="renew" class="navbar-brand col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto" >
+         <img src="@/assets/img/titleLogo.png" alt="" width="120" height="60">
       </router-link>
 
         <div class="text-end">
@@ -60,42 +69,35 @@
 
 </template>
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 // const LOCAL_HOST = 'http://localhost:3030/api'
-const SERVER_HOST = 'https://j6a406.p.ssafy.io/api'
+// const SERVER_HOST = 'https://j6a406.p.ssafy.io/api'
 
 export default {
   data() {
     return {
+      showSearch : true,
       searchWord : null
     }
   },
+  mounted() {
+    this.showSearch = true;
+  },
   methods : {
-    search(event) {
+    renew() {
+      this.searchWord=null;
+      this.showSearch=true;
+      this.$router.push({name : 'home'});
+    },
+    moveDetail() {
       console.log("검색어 : "+this.searchWord);
-     
-      if(this.searchWord != null && this.searchWord !="") {
-        axios.get(`${SERVER_HOST}/news/keyword`, {
-          params: {
-            keyword : this.searchWord,
-            page : 1,
-            size : 4
-          }
-        })
-        .then((res) =>{
-          //메인페이지 이동
-          console.log(res);
-          this.$router.push({
-            name: 'search',
-            query: { result : res }
-            });
+      this.showSearch=false;
+      this.$router.push({
+        name: 'search',
+        params: { searchWord : this.searchWord }
+        });
+    },
 
-        }).catch((err) => {
-            console.log("에러");
-            console.log(err);
-          })
-      }
-    }
   }
 }
 
