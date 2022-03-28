@@ -57,14 +57,16 @@ class NewsUrlSpider(scrapy.Spider):
 
         if t_email.find(' ') > 3:
             t_email = t_email.split(' ')[1]
-            
+
         while True:
-            if len(t_email) == 0: break
-            if ('a' <= t_email[0] <= 'z' or 'A' <= t_email[0] <= 'Z' or '0' <= t_email[0] <= '9'):
+            if (len(t_email) < 2):
+                break
+            elif ('a' > t_email[0] or t_email[0] > 'z' or 'A' > t_email[0] or t_email[0] > 'Z' or '0' > t_email[0] or t_email[0] > '9'):
                 t_email = t_email[1:]
         while True:
-            if len(t_email) == 0: break
-            if ('a' <= t_email[-1] <= 'z' or 'A' <= t_email[-1] <= 'Z'):
+            if (len(t_email) < 2):
+                break
+            elif ('a' > t_email[0] or t_email[0] > 'z' or 'A' > t_email[0] or t_email[0] > 'Z'):
                 t_email = t_email[:-1]
 
         if len(t_email) < 5:
