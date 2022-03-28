@@ -14,6 +14,7 @@ import com.newsbig.sinmunmul.entity.QScrap;
 import com.newsbig.sinmunmul.entity.QUser;
 import com.newsbig.sinmunmul.entity.Scrap;
 import com.newsbig.sinmunmul.util.TimeUtils;
+import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 @Repository
@@ -28,13 +29,20 @@ public class ScrapRepositorySupport {
 	QNews qNews = QNews.news;
 	
 	public Page<Scrap> findByUserSeq(int userSeq, Pageable pageable) {
-		List<Scrap> scraps = jpaQueryFactory.select(qScrap)
+		
+		QueryResults <Scrap> queryResults = jpaQueryFactory.select(qScrap)
 				.from(qScrap)
 					.leftJoin(qUser).on(qUser.userSeq.eq(qScrap.user.userSeq))
 					.leftJoin(qNews).on(qNews.newsSeq.eq(qScrap.news.newsSeq))
-				.where(qScrap.user.userSeq.eq(userSeq), qScrap.delYn.eq("n")).fetch();
+				.where(qScrap.user.userSeq.eq(userSeq), qScrap.delYn.eq("n"))
+				.offset(pageable.getOffset()).limit(pageable.getPageSize()).orderBy(qScrap.regDt.desc())
+				.fetchResults();
 	
-		return new PageImpl<>(scraps, pageable, scraps.size());
+		
+		List<Scrap> scraps=queryResults.getResults();
+				long total=queryResults.getTotal();
+				
+		return new PageImpl<>(scraps, pageable, total);
 	}
 	
 	public boolean checkScrap(int userSeq, int newsSeq) {
