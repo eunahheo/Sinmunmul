@@ -19,7 +19,7 @@ class NewsUrlSpider(scrapy.Spider):
             ['105','731','226','227','230','732','283','229','228'],
             ['104','231','232','233','234','322'],
         ]
-        dateList = ['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24']
+        dateList = ['12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31']
         for a in dateList:
             for url in urls:
                 for i in range(1,len(url)):
@@ -37,10 +37,7 @@ class NewsUrlSpider(scrapy.Spider):
         return response.xpath('//*[@id="main_content"]/div[3]/strong/text()').extract()
 
     def parse_news(self, response):
-        # print(response.xpath('//*[@id="main_content"]/div[2]/ul').getall()) # title parse
-        # print(response.xpath('//*[@id="main_content"]/div[1]/ul/li/dl/dd').extract()) # desc parse
         for sel in response.xpath('//*[@id="main_content"]/div[2]/ul/li'):
-            # print(sel.xpath('dt[1]/a/@href').extract())
             request = scrapy.Request(sel.xpath('dl/dt/a/@href').extract()[-1], callback=self.parse_news_detail)
             yield request
             time.sleep(0.7)
@@ -57,11 +54,17 @@ class NewsUrlSpider(scrapy.Spider):
             t_email = ''.join(response.xpath('//*[@id="articleBody"]/div[2]/p/text()').extract())[13:-5].split(',')[0]
         else:
             t_email = ''.join(response.xpath('//*[@id="articleBody"]/div[2]/p/text()').extract())[13:-5]
+
+        if t_email.find(' ') > 0:
+            t_email = t_email.split(' ')[0]
+
         if len(t_email) < 2:
             item['author_email'] = 'None'
         else:
             while not ('a' <= t_email[0] <= 'z' or 'A' <= t_email[0] <= 'Z' or '0' <= t_email[0] <= '9' or len(t_email) == 0):
                 t_email = t_email[1:]
+            while not ('a' <= t_email[-1] <= 'z' or 'A' <= t_email[-1] <= 'Z' or len(t_email) == 0):
+                t_email = t_email[:-1]
             item['author_email'] = t_email
         # parse img_link
         if(len(response.xpath('//*[@class="end_photo_org"]/img/@src').extract()) > 0):
@@ -76,8 +79,8 @@ class NewsUrlSpider(scrapy.Spider):
             f_reg_dt = '2022' + (''.join(response.xpath('//*[@id="main_content"]/div[1]/div[3]/div/span/text()').extract())).split('2022')[1]
             f_mod_dt = '2022' + (''.join(response.xpath('//*[@id="main_content"]/div[1]/div[3]/div/span/text()').extract())).split('2022')[2]
         
-            d_reg_dt = f_reg_dt.split(' ')[0]
-            d_mod_dt = f_mod_dt.split(' ')[0]
+            d_reg_dt = (f_reg_dt.split(' ')[0])[:-1].replace('.','-')
+            d_mod_dt = (f_mod_dt.split(' ')[0])[:-1].replace('.','-')
 
             ap_reg_dt = f_reg_dt.split(' ')[1]
             ap_mod_dt = f_mod_dt.split(' ')[1]
@@ -96,11 +99,11 @@ class NewsUrlSpider(scrapy.Spider):
         else:
             temp_dt = ''.join(response.xpath('//*[@id="main_content"]/div[1]/div[3]/div/span/text()').extract())
             if(temp_dt[0] == '2'):
-                d_dt = temp_dt.split(' ')[0]
+                d_dt = (temp_dt.split(' ')[0])[:-1].replace('.','-')
                 ap_dt = temp_dt.split(' ')[1]
                 t_dt = temp_dt.split(' ')[2]
             else:
-                d_dt = temp_dt.split(' ')[1]
+                d_dt = (temp_dt.split(' ')[1])[:-1].replace('.','-')
                 ap_dt = temp_dt.split(' ')[2]
                 t_dt = temp_dt.split(' ')[3]
             while not (d_dt[0] == '2' and d_dt[1] == '0'):
