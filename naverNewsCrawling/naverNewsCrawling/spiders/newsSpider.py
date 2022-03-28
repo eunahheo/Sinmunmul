@@ -55,7 +55,7 @@ class NewsUrlSpider(scrapy.Spider):
         else:
             t_email = ''.join(response.xpath('//*[@id="articleBody"]/div[2]/p/text()').extract())[13:-5]
 
-        if t_email.find(' ') > 0:
+        if t_email.find(' ') > 3:
             t_email = t_email.split(' ')[0]
 
         if len(t_email) < 2:
@@ -98,22 +98,31 @@ class NewsUrlSpider(scrapy.Spider):
                 item['dateMod'] = d_mod_dt + ' ' + t_mod_dt.split(':')[0].zfill(2) + ':' + t_mod_dt.split(':')[1].zfill(2) + ':00'
         else:
             temp_dt = ''.join(response.xpath('//*[@id="main_content"]/div[1]/div[3]/div/span/text()').extract())
-            if(temp_dt[0] == '2'):
+            if(temp_dt[0] == '2' and (temp_dt.find('오전') == -1 or temp_dt.find('오후') == -1)):
                 d_dt = (temp_dt.split(' ')[0])[:-1].replace('.','-')
                 ap_dt = temp_dt.split(' ')[1]
                 t_dt = temp_dt.split(' ')[2]
+            elif(temp_dt[0] == '2'):
+                d_dt = (temp_dt.split(' ')[1])[:-1].replace('.','-')
+                ap_dt = temp_dt.split(' ')[2]
+                t_dt = temp_dt.split(' ')[3]
             else:
                 d_dt = (temp_dt.split(' ')[1])[:-1].replace('.','-')
                 ap_dt = temp_dt.split(' ')[2]
                 t_dt = temp_dt.split(' ')[3]
+                
             while not (d_dt[0] == '2' and d_dt[1] == '0'):
                 d_dt = d_dt[1:]
+
             if(ap_dt == '오후'):
                 item['dateReg'] = d_dt + ' ' + str(int(t_dt.split(':')[0])+12).zfill(2) + ':' + t_dt.split(':')[1].zfill(2) + ':00'
                 item['dateMod'] = d_dt + ' ' + str(int(t_dt.split(':')[0])+12).zfill(2) + ':' + t_dt.split(':')[1].zfill(2) + ':00'
-            else:
+            elif(ap_dt == '오전'):
                 item['dateReg'] = d_dt + ' ' + t_dt.split(':')[0].zfill(2) + ':' + t_dt.split(':')[1].zfill(2) + ':00'
                 item['dateMod'] = d_dt + ' ' + t_dt.split(':')[0].zfill(2) + ':' + t_dt.split(':')[1].zfill(2) + ':00'
+            else:
+                item['dateReg'] = d_dt + ' ' + t_dt
+                item['dateMod'] = d_dt + ' ' + t_dt
         # parse topic1 code
         item['topic1'] = self.now_topic1
         # parse topic2 code
