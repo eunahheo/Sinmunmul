@@ -100,12 +100,11 @@ public class NewsController {
 	}
 	
 	@PostMapping("/keyword/trend/week")
-	@ApiOperation(value = "주간 키워드 언급 기사량 조회", notes = "주별 키워드 언급 기사량을 조회한다.")
+	@ApiOperation(value = "주간 키워드 언급 기사량 조회", notes = "주간 키워드 언급 기사량을 조회한다.")
 	@ApiResponses(
-			{ @ApiResponse(code = 200, message = "키워드 언급 기사량 조회 성공"),
+			{ @ApiResponse(code = 200, message = "주간 키워드 언급 기사량 조회 성공"),
 			  @ApiResponse(code = 400, message = "잘못된 요청입니다."),
 			  @ApiResponse(code = 500, message = "서버 오류"),
-//			  @ApiResponse(code = 202, message = "뉴스 시퀀스 오류"),
 			})
 	public ResponseEntity<? extends BaseResponseBody> keywordTrendWeek(@RequestBody (required = true) String[] keywords) {
 		List<Map<String, Object>> trendList = new ArrayList<>();
@@ -113,25 +112,19 @@ public class NewsController {
 		for (String keyword : keywords) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			List<KeywordTrendWeek> list = newsService.keywordTrendWeek(keyword);
-			map.put(keyword, list);
+			map.put("keyword", keyword);
+			map.put("stat", list);
 			trendList.add(map);
 		}
-		
-//		try {
-		return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "키워드 언급 기사량 조회 성공", trendList));
-//		}
-//		catch(NotExistsNewsException e) {
-//			return ResponseEntity.status(202).body(BaseResponseBody.of(202, "존재하지 않는 뉴스 번호입니다."));
-//		}
+		return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "주간 키워드 언급 기사량 조회 성공", trendList));
 	}
 	
 	@PostMapping("/keyword/trend/month")
-	@ApiOperation(value = "월간 키워드 언급 기사량 조회", notes = "월별 키워드 언급 기사량을 조회한다.")
+	@ApiOperation(value = "월간 키워드 언급 기사량 조회", notes = "월간 키워드 언급 기사량을 조회한다.")
 	@ApiResponses(
-			{ @ApiResponse(code = 200, message = "월별 키워드 언급 기사량을 조회 성공"),
+			{ @ApiResponse(code = 200, message = "월간 키워드 언급 기사량을 조회 성공"),
 			  @ApiResponse(code = 400, message = "잘못된 요청입니다."),
 			  @ApiResponse(code = 500, message = "서버 오류"),
-//			  @ApiResponse(code = 202, message = "뉴스 시퀀스 오류"),
 			})
 	public ResponseEntity<? extends BaseResponseBody> keywordTrendMonth(@RequestBody (required = true) String[] keywords) {
 		List<Map<String, Object>> trendList = new ArrayList<>();
@@ -139,16 +132,11 @@ public class NewsController {
 		for (String keyword : keywords) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			List<KeywordTrendMonth> list = newsService.keywordTrendMonth(keyword);
-			map.put(keyword, list);
+			map.put("keyword", keyword);
+			map.put("stat", list);
 			trendList.add(map);
 		}
-		
-//		try {
-		return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "키워드 언급 기사량 조회 성공", trendList));
-//		}
-//		catch(NotExistsNewsException e) {
-//			return ResponseEntity.status(202).body(BaseResponseBody.of(202, "존재하지 않는 뉴스 번호입니다."));
-//		}
+		return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "월간 키워드 언급 기사량 조회 성공", trendList));
 	}
 	
 }

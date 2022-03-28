@@ -6,15 +6,17 @@ import lombok.Data;
 
 @Data
 public class KeywordTrendWeek {
-	private String start;
+	private String label;
 	private String end;
 	private String date;
 	private BigInteger count;
-	public KeywordTrendWeek(String start, String end, String date, BigInteger count) {
+
+	public KeywordTrendWeek(String label, String end, String date, BigInteger count) {
 		super();
-		this.start = start;
+		this.label = label;
 		this.end = end;
 		this.date = date;
 		this.count = count;
 	}
+
 }

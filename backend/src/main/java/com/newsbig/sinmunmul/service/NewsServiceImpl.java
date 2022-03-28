@@ -156,13 +156,13 @@ public class NewsServiceImpl implements NewsService {
 	public List<KeywordTrendWeek> keywordTrendWeek(String keyword) {
 //		List<Object> list = newsRepository.keywordWeekTrend("n", keyword, keyword);
 		
-		String q = "SELECT DATE_FORMAT(DATE_SUB(n.news_reg_dt, INTERVAL (DAYOFWEEK(n.news_reg_dt)-1) DAY), '%Y/%m/%d') as start, "
-				+"DATE_FORMAT(DATE_SUB(n.news_reg_dt, INTERVAL (DAYOFWEEK(n.news_reg_dt)-7) DAY), '%Y/%m/%d') as end, "
+		String q = "SELECT DATE_FORMAT(DATE_SUB(n.news_reg_dt, INTERVAL (DAYOFWEEK(n.news_reg_dt)-1) DAY), '%Y/%m/%d') as label, "
+				+ "DATE_FORMAT(DATE_SUB(n.news_reg_dt, INTERVAL (DAYOFWEEK(n.news_reg_dt)-7) DAY), '%Y/%m/%d') as end, "
 				+ "DATE_FORMAT(n.news_reg_dt, '%Y%u') AS 'date', "
-				+"count(*) AS count "
-				+"FROM news n "
-				+"WHERE n.del_yn='n' and n.news_title like '%"+keyword+"%' OR n.news_desc like '%"+keyword+"%' "
-				+"GROUP BY date LIMIT 6";
+				+ "count(*) AS count "
+				+ "FROM news n "
+				+ "WHERE n.del_yn='n' and n.news_title like '%"+keyword+"%' OR n.news_desc like '%"+keyword+"%' "
+				+ "GROUP BY date ORDER BY date DESC LIMIT 6";
         
         JpaResultMapper result = new JpaResultMapper();
         Query query = entityManager.createNativeQuery(q);
@@ -174,11 +174,11 @@ public class NewsServiceImpl implements NewsService {
 	@Override
 	public List<KeywordTrendMonth> keywordTrendMonth(String keyword) {
 
-		String q = "SELECT MONTH(n.news_reg_dt) AS 'month', "
-				+"count(*) AS count "
-				+"FROM news n "
-				+"WHERE n.del_yn='n' and n.news_title like '%"+keyword+"%' OR n.news_desc like '%"+keyword+"%' "
-				+"GROUP BY month LIMIT 6";
+		String q = "SELECT date_format(n.news_reg_dt, '%Y-%m') AS 'label', "
+				+ "count(*) AS count "
+				+ "FROM news n "
+				+ "WHERE n.del_yn='n' and n.news_title like '%"+keyword+"%' OR n.news_desc like '%"+keyword+"%' "
+				+ "GROUP BY label ORDER BY label desc LIMIT 6";
         
         JpaResultMapper result = new JpaResultMapper();
         Query query = entityManager.createNativeQuery(q);
