@@ -22,17 +22,19 @@
     </div>
 
 </div>
-
+<interest-modal v-bind:visible="visible" @close='visible=init()'></interest-modal>
 </div>
 </template>
 
 <script>
 import axios from 'axios'
+import InterestModal from './InterestModal.vue'
 const SERVER_HOST = process.env.VUE_APP_SERVER_HOST
 export default {
   name: 'MyInterest',
   data: function () {
     return {
+      visible: false,
       hashMap: new Map(),
       state: [
         { name: '정치', data: [] }, // 정치
@@ -112,6 +114,9 @@ export default {
       ]
     }
   },
+  components: {
+    InterestModal
+  },
   created () {
     axios({
       method: 'get',
@@ -163,12 +168,12 @@ export default {
       })
         .then((res) => {
           console.log(res)
+          this.modalView()
         })
         .catch(err => console.log(err)
         )
     },
     change: function (item) {
-      window.alert(item.state)
       if (item.state) {
         item.state = false
       } else {
@@ -181,6 +186,13 @@ export default {
           return a.code - b.code
         })
       }
+    },
+    modalView: function () {
+      this.visible = !this.visible
+    },
+    init: function () {
+      this.visible = false
+      this.updateData.length = 0
     }
   }
 }
@@ -212,4 +224,5 @@ export default {
   color: white;
   background-color: #0d6efd;
 }
+
 </style>
