@@ -1,4 +1,3 @@
-from konlpy.tag import Okt
 import pymysql
 import json
 from datetime import datetime
@@ -26,7 +25,7 @@ if __name__ == '__main__':
 
     # 현재시간 가져오기
     # 2022-03-23 00:53:10.181418
-    now = datetime.now() 
+    now = datetime.now()
 
     # 년월일시 20220323-13 : 2022년 03월 23일 13시
     # file_date = now.strftime("%Y%m%d%H")
@@ -36,30 +35,40 @@ if __name__ == '__main__':
     start_time = str(now.strftime('%Y-%m-%d %H')) + ":00:00"
     print(start_time)
     i = 0
+
     for code_group in code_group_num:
         # 파일 이름
         # politics-20220323-13
         # 대분류-년월일-시
         file_name = code_group_value[i] + "_" + "2022032723"
-        path = 'wordcount/output/' + file_name + "/*"
+        path = 'wordcount/output/' + file_name + "/part-r-00000"
 
         # Connecting to Webhdfs by providing hdfs host ip and webhdfs port (50070 by default)
         client_hdfs = InsecureClient('http://172.26.4.211:9870')
         # 사용자 명을 지정하여 연결`
         client_hdfs = InsecureClient('http://172.26.4.211:9870', user='j6a406')
 
-        with client_hdfs.read(path) as rawdata:
-            data = rawdata.read()
-            rawdata.close()
+        encType = 'utf-8'
+        with client_hdfs.read(path, encoding = encType) as reader:
+            data = pd.read_csv(reader, header=None, engine='python', encoding = 'utf-8', on_bad_lines='skip')
+            reader.close()
 
-        for line in data:
-            print(line)
+        wordcloud = []
+        for k in range(len(data)):
+            #print(data.iloc[k][0].split("\t"))
+            row = data.iloc[k][0].split("\t")
+            keyword = row[0]
+            count = row[1]
+            wordcloud.append({'keyword' : keyword, 'count' : count})
+            #keyword_dict[keyword] = count
 
-        # sql = "INSERT INTO news_wordcloud (code_group, wordcloud, del_yn, reg_dt, reg_id, mod_dt, mod_id) values (%s, %s, %s, %s, %s, %s, %s)"
-         
+        #sorted_dict = sorted(keyword_dict.items(), key = lambda item: item[1], reverse = True)
+        wordcloud.sort(key = lambda object:object["count"], reverse = True)
+
+        curtime = now.strftime('%Y-%m-%d %H:%M:%2S')
+        sql = "INSERT INTO news_wordcloud (code_group, wordcloud, del_yn, reg_dt, reg_id, mod_dt, mod_id) values (%s, %s, %s, %s, %s, %s, %s)"
+
         # sql 문 실행
-        # curs.execute(sql, )
-       
-        i = i + 1 
+        curs.execute(sql, (code_group_num[i], json.dumps(wordcloud, ensure_ascii=False), 'n', curtime, 'admin', curtime, 'admin'))
 
- 
+        i = i + 1
