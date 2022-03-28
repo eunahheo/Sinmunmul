@@ -75,7 +75,6 @@ export default {
       console.log("검색어 : "+this.searchWord);
      
       if(this.searchWord != null && this.searchWord !="") {
-        console.log("검색어 : "+this.searchWord + "url : "+`${SERVER_HOST}`);
         axios.get(`${SERVER_HOST}/news/keyword`, {
           params: {
             keyword : this.searchWord,
@@ -84,8 +83,13 @@ export default {
           }
         })
         .then((res) =>{
-          console.log(res);
           //메인페이지 이동
+          console.log(res);
+          this.$router.push({
+            name: 'search',
+            query: { result : res }
+            });
+
         }).catch((err) => {
             console.log("에러");
             console.log(err);
