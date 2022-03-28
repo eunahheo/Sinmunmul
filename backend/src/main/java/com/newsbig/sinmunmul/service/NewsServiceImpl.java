@@ -12,7 +12,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.qlrm.mapper.JpaResultMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,6 +27,7 @@ import com.newsbig.sinmunmul.dto.KeywordTrendMonth;
 import com.newsbig.sinmunmul.dto.KeywordTrendWeek;
 import com.newsbig.sinmunmul.dto.TodayNewsDto;
 import com.newsbig.sinmunmul.entity.News;
+import com.newsbig.sinmunmul.entity.NewsWordcloud;
 import com.newsbig.sinmunmul.entity.Scrap;
 import com.newsbig.sinmunmul.entity.User;
 import com.newsbig.sinmunmul.exception.NotExistsNewsException;
@@ -185,5 +189,18 @@ public class NewsServiceImpl implements NewsService {
         List<KeywordTrendMonth> list = result.list(query, KeywordTrendMonth.class);	
 		
 		return list;
+	}
+
+	@Override
+	public JSONArray mainWordcloud(int codeGroup) throws ParseException {
+		NewsWordcloud newsWordcloud = newsRepositorySupport.mainWordcloud(codeGroup);
+		
+		// String -> JSONArray 변환
+		// news_wordcloud가 JSON 타입이므로
+		JSONParser jsonParser = new JSONParser();
+		Object obj = jsonParser.parse(newsWordcloud.getWordcloud());
+		JSONArray jsonArr = (JSONArray) obj;
+
+		return jsonArr;
 	}
 }
