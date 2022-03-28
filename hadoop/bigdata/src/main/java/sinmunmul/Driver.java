@@ -1,4 +1,4 @@
-package ssafy;
+package sinmunmul;
 
 import org.apache.hadoop.util.ProgramDriver;
 

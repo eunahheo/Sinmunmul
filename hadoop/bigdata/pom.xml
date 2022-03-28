@@ -48,6 +48,13 @@
 			<version>4.13.2</version>
 			<scope>test</scope>
 		</dependency>
+		
+		<!-- JSON-SIMPLE -->
+		<dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>1.1.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>
