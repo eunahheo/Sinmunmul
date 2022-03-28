@@ -9,20 +9,12 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
-import org.apache.hadoop.mapreduce.Partitioner;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 
 public class Wordcount {
-	//  count 많은 순으로 정렬
-	public static class MyPartitioner extends Partitioner<Text, IntWritable> {
-		@Override
-		public int getPartition(Text key, IntWritable value, int numPartitions) {
-			return -numPartitions;
-		}
-	}
 
 	public static class TokenizerMapper
 			extends Mapper<Object,Text,Text,IntWritable> {
@@ -82,7 +74,6 @@ public class Wordcount {
 		// let hadoop know my map and reduce classes
 		job.setMapperClass(TokenizerMapper.class);
 		job.setReducerClass(IntSumReducer.class);
-		job.setPartitionerClass(MyPartitioner.class);
 
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(IntWritable.class);
