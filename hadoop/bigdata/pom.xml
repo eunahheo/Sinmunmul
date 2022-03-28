@@ -75,7 +75,7 @@
 					<configuration>
 						<archive>
 							<manifest>
-								<mainClass>ssafy.Driver</mainClass>
+								<mainClass>sinmunmul.Driver</mainClass>
 							</manifest>
 						</archive>
 					</configuration>
