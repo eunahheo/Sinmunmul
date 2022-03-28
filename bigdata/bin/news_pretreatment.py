@@ -3,8 +3,6 @@ import pymysql
 import json
 from datetime import datetime
 import os
-import pandas as pd
-from hdfs import InsecureClient
 
 # DB 연결 정보
 class db_conn:
@@ -28,10 +26,11 @@ if __name__ == '__main__':
     # 2022-03-23 00:53:10.181418
     now = datetime.now()
 
+    if(len(str))
     # 폴더 생성
     directory = '/home/ubuntu/Workspace/bigdata/data/'
     # createFolder(directory_path)
-    
+
     try:
         # 해당 경로에 폴더가 존재하지 않으면 폴더 생성
         if not os.path.exists(directory):
@@ -42,20 +41,20 @@ if __name__ == '__main__':
     # 년월일시 20220323-13 : 2022년 03월 23일 13시
     file_date = now.strftime("%Y%m%d%H")
     file_name_template = file_date
-
+    # print("temp", file_name_template)
+    # print(now)
     # 한 시간 단위
-    start_time = str(now.strftime('%Y-%m-%d %H')) + ":00:00"
-    print(start_time)
+    start_time = now.strftime("%Y-%M-%D %H") + ":00:00"
+
     i = 0
     for code_group in code_group_num:
         # 코드 그룹에 따른 sql 문
         # 현재 시각 hour를 기준으로 hour ~ hour + 1, ex) 13시 ~ 14시 사이의 기사를 가져온다.
         # news_reg_dt or reg_dt
-        if i == 0 :
-             sql = "SELECT news_title, news_desc FROM news WHERE del_yn='n' And news_reg_dt between '" + start_time + "' AND DATE_ADD('" + start_time + "', INTERVAL +1 HOUR);"
+        if code_group == 0 :
+             sql = "SELECT news_title, news_desc FROM news WHERE del_yn='n' AND reg_dt  >= DATE_ADD('" + start_time + "', INTERVAL +1 HOUR);"
         else:
-             sql = "SELECT news_title, news_desc FROM news WHERE del_yn='n' AND code_group=" + str(code_group) + " And news_reg_dt between '" + start_time + "' AND DATE_ADD('" + start_time + "', INTERVAL +1 HOUR);"
-        print(sql)
+             sql = "SELECT news_title, news_desc FROM news WHERE del_yn='n' AND code_group=" + str(code_group) + " AND reg_dt >= DATE_ADD('" + start_time + "', INTERVAL +1 HOUR);"
 
         # sql 문 실행
         curs.execute(sql)
@@ -75,17 +74,9 @@ if __name__ == '__main__':
         # 현재 디렉터리에 텍스트 파일 생성, 쓰기 모드
         f = open(directory + file_name, "w")
 
-        # Connecting to Webhdfs by providing hdfs host ip and webhdfs port (50070 by default)
-        client_hdfs = InsecureClient('http://172.26.4.211:9870')
-        # 사용자 명을 지정하여 연결`
-        client_hdfs = InsecureClient('http://172.26.4.211:9870', user='j6a406')
-
-        path = 'wordcount/input/'
         # row 하나씩 돌기
         # 뉴스 기사 텍스트 전처리
         # " "를 구분자로 하는 단어 문자열을 파일에 쓰기
-        data =""
-
         for news in rows:
             title = news['news_title']
             desc = news['news_desc']
@@ -97,16 +88,22 @@ if __name__ == '__main__':
             # " ".join() : " "를 구분자로 한다. **배열 안의 요소가 String형이 아니면 에러 발생
             news_desc = ' '.join(data_pretreatment)
 
-            data = data + news_desc + ","
-
             # 파일 쓰기
             f.write(news_desc)
             f.write(" ")
 
-        # 하둡 클러스터 hdfs에 업로드
-        path =  'wordcount/input/' + code_group_value[i] + "_" + file_name_template
-        client_hdfs.upload(path, directory+file_name)
-
         # 쓰기 모드 닫기
         f.close()
-        i = i + 1
+
+    #       # 폴더 생성 함수
+    # def createFolder(directory):
+    #     try:
+    #         # 해당 경로에 폴더가 존재하지 않으면 폴더 생성
+    #         if not os.path.exists(directory):
+    #             os.makedirs(directory)
+    #     except OSError:
+    #         print ('Error: Creating directory. ' +  directory)
+
+
+
+

@@ -55,16 +55,24 @@ class NewsUrlSpider(scrapy.Spider):
         else:
             t_email = ''.join(response.xpath('//*[@id="articleBody"]/div[2]/p/text()').extract())[13:-5]
 
-        if t_email.find(' ') > 0:
-            t_email = t_email.split(' ')[0]
+        if t_email.find(' ') > 3:
+            t_email = t_email.split(' ')[1]
 
-        if len(t_email) < 2:
-            item['author_email'] = 'None'
-        else:
-            while not ('a' <= t_email[0] <= 'z' or 'A' <= t_email[0] <= 'Z' or '0' <= t_email[0] <= '9' or len(t_email) == 0):
+        while True:
+            if (len(t_email) < 2):
+                break
+            elif ('a' > t_email[0] or t_email[0] > 'z' or 'A' > t_email[0] or t_email[0] > 'Z' or '0' > t_email[0] or t_email[0] > '9'):
                 t_email = t_email[1:]
-            while not ('a' <= t_email[-1] <= 'z' or 'A' <= t_email[-1] <= 'Z' or len(t_email) == 0):
+        while True:
+            if (len(t_email) < 2):
+                break
+            elif ('a' > t_email[0] or t_email[0] > 'z' or 'A' > t_email[0] or t_email[0] > 'Z'):
                 t_email = t_email[:-1]
+
+        if len(t_email) < 5:
+            item['author_email'] = 'None'
+        else:                
+            # print(t_email)
             item['author_email'] = t_email
         # parse img_link
         if(len(response.xpath('//*[@class="end_photo_org"]/img/@src').extract()) > 0):
@@ -72,9 +80,11 @@ class NewsUrlSpider(scrapy.Spider):
         else:
             item['img'] = ''
         # parse desc
-        item['desc'] = ''.join(response.xpath('//*[@id="articleBodyContents"]/text()').extract())[11:]
+        t_desc = '\n'.join(response.xpath('//*[@id="articleBodyContents"]/text()').extract())[11:]
+        while t_desc[0] == " ":
+            t_desc = t_desc[1:]
+        item['desc'] = t_desc
         # parse datetime
-        print(''.join(response.xpath('//*[@id="main_content"]/div[1]/div[3]/div/span/text()').extract()))
         if(len(''.join(response.xpath('//*[@id="main_content"]/div[1]/div[3]/div/span/text()').extract())) > 34):
             f_reg_dt = '2022' + (''.join(response.xpath('//*[@id="main_content"]/div[1]/div[3]/div/span/text()').extract())).split('2022')[1]
             f_mod_dt = '2022' + (''.join(response.xpath('//*[@id="main_content"]/div[1]/div[3]/div/span/text()').extract())).split('2022')[2]
@@ -89,31 +99,61 @@ class NewsUrlSpider(scrapy.Spider):
             t_mod_dt = f_mod_dt.split(' ')[2]
 
             if(ap_reg_dt == '오후'):
-                item['dateReg'] = d_reg_dt + ' ' + str(int(t_reg_dt.split(':')[0])+12).zfill(2) + ':' + t_reg_dt.split(':')[1].zfill(2) + ':00'
+                if t_reg_dt[0] == '12':
+                    item['reg_dt'] = d_reg_dt + ' ' + '12' + ':' + t_reg_dt.split(':')[1].zfill(2) + ':00'
+                else:
+                    item['dateReg'] = d_reg_dt + ' ' + str(int(t_reg_dt.split(':')[0])+12).zfill(2) + ':' + t_reg_dt.split(':')[1].zfill(2) + ':00'
             else:
-                item['dateReg'] = d_reg_dt + ' ' + t_reg_dt.split(':')[0].zfill(2) + ':' + t_reg_dt.split(':')[1].zfill(2) + ':00'
+                if(ap_reg_dt == '오전' and t_reg_dt.split(':')[0] == '12'):
+                    item['dateReg'] = d_reg_dt + ' ' + '00' + ':' + t_reg_dt.split(':')[1].zfill(2) + ':00'
+                else:
+                    item['dateReg'] = d_reg_dt + ' ' + t_reg_dt.split(':')[0].zfill(2) + ':' + t_reg_dt.split(':')[1].zfill(2) + ':00'
             if(ap_mod_dt == '오후'):
-                item['dateMod'] = d_mod_dt + ' ' + str(int(t_mod_dt.split(':')[0])+12).zfill(2) + ':' + t_mod_dt.split(':')[1].zfill(2) + ':00'
+                if t_mod_dt[0] == '12':
+                    item['mod_dt'] = d_mod_dt + ' ' + '12' + ':' + t_mod_dt.split(':')[1].zfill(2) + ':00'
+                else:
+                    item['dateMod'] = d_mod_dt + ' ' + str(int(t_mod_dt.split(':')[0])+12).zfill(2) + ':' + t_mod_dt.split(':')[1].zfill(2) + ':00'
             else:
-                item['dateMod'] = d_mod_dt + ' ' + t_mod_dt.split(':')[0].zfill(2) + ':' + t_mod_dt.split(':')[1].zfill(2) + ':00'
+                if(ap_mod_dt == '오전' and t_mod_dt.split(':')[0] == '12'):
+                    item['dateMod'] = d_mod_dt + ' ' + '00' + ':' + t_mod_dt.split(':')[1].zfill(2) + ':00'
+                else:
+                    item['dateMod'] = d_mod_dt + ' ' + t_mod_dt.split(':')[0].zfill(2) + ':' + t_mod_dt.split(':')[1].zfill(2) + ':00'
         else:
             temp_dt = ''.join(response.xpath('//*[@id="main_content"]/div[1]/div[3]/div/span/text()').extract())
-            if(temp_dt[0] == '2'):
+            if(temp_dt[0] == '2' and (temp_dt.find('오전') == -1 or temp_dt.find('오후') == -1)):
                 d_dt = (temp_dt.split(' ')[0])[:-1].replace('.','-')
                 ap_dt = temp_dt.split(' ')[1]
                 t_dt = temp_dt.split(' ')[2]
+            elif(temp_dt[0] == '2'):
+                d_dt = (temp_dt.split(' ')[1])[:-1].replace('.','-')
+                ap_dt = temp_dt.split(' ')[2]
+                t_dt = temp_dt.split(' ')[3]
             else:
                 d_dt = (temp_dt.split(' ')[1])[:-1].replace('.','-')
                 ap_dt = temp_dt.split(' ')[2]
                 t_dt = temp_dt.split(' ')[3]
+
             while not (d_dt[0] == '2' and d_dt[1] == '0'):
                 d_dt = d_dt[1:]
+
             if(ap_dt == '오후'):
-                item['dateReg'] = d_dt + ' ' + str(int(t_dt.split(':')[0])+12).zfill(2) + ':' + t_dt.split(':')[1].zfill(2) + ':00'
-                item['dateMod'] = d_dt + ' ' + str(int(t_dt.split(':')[0])+12).zfill(2) + ':' + t_dt.split(':')[1].zfill(2) + ':00'
+                if t_dt.split(':')[0] == '12':
+                    item['dateReg'] = d_dt + ' ' + '00' + ':' + t_dt.split(':')[1].zfill(2) + ':00'
+                    item['dateMod'] = d_dt + ' ' + '00' + ':' + t_dt.split(':')[1].zfill(2) + ':00'
+                else:
+                    item['dateReg'] = d_dt + ' ' + str(int(t_dt.split(':')[0])+12).zfill(2) + ':' + t_dt.split(':')[1].zfill(2) + ':00'
+                    item['dateMod'] = d_dt + ' ' + str(int(t_dt.split(':')[0])+12).zfill(2) + ':' + t_dt.split(':')[1].zfill(2) + ':00'
+            elif(ap_dt == '오전'):
+                if(int(t_dt.split(':')[0]) == 12):
+                    item['dateReg'] = d_dt + ' ' + '00' + ':' + t_dt.split(':')[1].zfill(2) + ':00'
+                    item['dateMod'] = d_dt + ' ' + '00' + ':' + t_dt.split(':')[1].zfill(2) + ':00'
+                else:
+                    item['dateReg'] = d_dt + ' ' + t_dt.split(':')[0].zfill(2) + ':' + t_dt.split(':')[1].zfill(2) + ':00'
+                    item['dateMod'] = d_dt + ' ' + t_dt.split(':')[0].zfill(2) + ':' + t_dt.split(':')[1].zfill(2) + ':00'
             else:
-                item['dateReg'] = d_dt + ' ' + t_dt.split(':')[0].zfill(2) + ':' + t_dt.split(':')[1].zfill(2) + ':00'
-                item['dateMod'] = d_dt + ' ' + t_dt.split(':')[0].zfill(2) + ':' + t_dt.split(':')[1].zfill(2) + ':00'
+                item['dateReg'] = d_dt + ' ' + t_dt
+                item['dateMod'] = d_dt + ' ' + t_dt
+
         # parse topic1 code
         item['topic1'] = self.now_topic1
         # parse topic2 code

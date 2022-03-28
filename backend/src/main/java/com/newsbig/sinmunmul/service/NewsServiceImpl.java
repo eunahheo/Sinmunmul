@@ -8,15 +8,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.qlrm.mapper.JpaResultMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.newsbig.sinmunmul.dto.KeywordTrendMonth;
+import com.newsbig.sinmunmul.dto.KeywordTrendWeek;
 import com.newsbig.sinmunmul.dto.TodayNewsDto;
 import com.newsbig.sinmunmul.entity.News;
+import com.newsbig.sinmunmul.entity.NewsWordcloud;
 import com.newsbig.sinmunmul.entity.Scrap;
 import com.newsbig.sinmunmul.entity.User;
 import com.newsbig.sinmunmul.exception.NotExistsNewsException;
@@ -25,7 +36,6 @@ import com.newsbig.sinmunmul.repository.NewsRepositorySupport;
 import com.newsbig.sinmunmul.repository.ScrapRepository;
 import com.newsbig.sinmunmul.repository.UserRepository;
 import com.newsbig.sinmunmul.util.TimeUtils;
-
  
 @Service
 public class NewsServiceImpl implements NewsService {
@@ -38,6 +48,9 @@ public class NewsServiceImpl implements NewsService {
 	NewsRepository newsRepository;
 	@Autowired
 	NewsRepositorySupport newsRepositorySupport;
+	
+	@PersistenceContext
+    EntityManager entityManager;
 
 	@Override 
 	public void scrap(long newsSeq, int userSeq) {
@@ -76,7 +89,7 @@ public class NewsServiceImpl implements NewsService {
 		for (TodayNewsDto news : newsList) {
 			JSONObject data = new JSONObject();
 		    data.put("count", news.getNum());
-		    data.put("percent", news.getNum()/allCount * 100);
+		    data.put("percent", news.getNum() / (float)allCount * 100);
 		    
 		    jsonObject.put(news.getCodeGroupValue(), data);
 		}
@@ -140,5 +153,54 @@ public class NewsServiceImpl implements NewsService {
 		result.put("newsCommonCodeSeq",news.getCommonCode().getCodeSeq());
 		
 		return result;
+	}
+
+	// 주 별 언급량
+	@Override
+	public List<KeywordTrendWeek> keywordTrendWeek(String keyword) {
+//		List<Object> list = newsRepository.keywordWeekTrend("n", keyword, keyword);
+		
+		String q = "SELECT DATE_FORMAT(DATE_SUB(n.news_reg_dt, INTERVAL (DAYOFWEEK(n.news_reg_dt)-1) DAY), '%Y/%m/%d') as label, "
+				+ "DATE_FORMAT(DATE_SUB(n.news_reg_dt, INTERVAL (DAYOFWEEK(n.news_reg_dt)-7) DAY), '%Y/%m/%d') as end, "
+				+ "DATE_FORMAT(n.news_reg_dt, '%Y%u') AS 'date', "
+				+ "count(*) AS count "
+				+ "FROM news n "
+				+ "WHERE n.del_yn='n' and n.news_title like '%"+keyword+"%' OR n.news_desc like '%"+keyword+"%' "
+				+ "GROUP BY date ORDER BY date DESC LIMIT 6";
+        
+        JpaResultMapper result = new JpaResultMapper();
+        Query query = entityManager.createNativeQuery(q);
+        List<KeywordTrendWeek> list = result.list(query, KeywordTrendWeek.class);	
+		
+		return list;
+	}
+
+	@Override
+	public List<KeywordTrendMonth> keywordTrendMonth(String keyword) {
+
+		String q = "SELECT date_format(n.news_reg_dt, '%Y-%m') AS 'label', "
+				+ "count(*) AS count "
+				+ "FROM news n "
+				+ "WHERE n.del_yn='n' and n.news_title like '%"+keyword+"%' OR n.news_desc like '%"+keyword+"%' "
+				+ "GROUP BY label ORDER BY label desc LIMIT 6";
+        
+        JpaResultMapper result = new JpaResultMapper();
+        Query query = entityManager.createNativeQuery(q);
+        List<KeywordTrendMonth> list = result.list(query, KeywordTrendMonth.class);	
+		
+		return list;
+	}
+
+	@Override
+	public JSONArray mainWordcloud(int codeGroup) throws ParseException {
+		NewsWordcloud newsWordcloud = newsRepositorySupport.mainWordcloud(codeGroup);
+		
+		// String -> JSONArray 변환
+		// news_wordcloud가 JSON 타입이므로
+		JSONParser jsonParser = new JSONParser();
+		Object obj = jsonParser.parse(newsWordcloud.getWordcloud());
+		JSONArray jsonArr = (JSONArray) obj;
+
+		return jsonArr;
 	}
 }
