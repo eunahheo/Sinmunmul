@@ -101,14 +101,14 @@ public class NewsController {
 		}
 	}
 	
-	@PostMapping("/keyword/trend/week")
+	@GetMapping("/keyword/trend/week")
 	@ApiOperation(value = "주간 키워드 언급 기사량 조회", notes = "주간 키워드 언급 기사량을 조회한다.")
 	@ApiResponses(
 			{ @ApiResponse(code = 200, message = "주간 키워드 언급 기사량 조회 성공"),
 			  @ApiResponse(code = 400, message = "잘못된 요청입니다."),
 			  @ApiResponse(code = 500, message = "서버 오류"),
 			})
-	public ResponseEntity<? extends BaseResponseBody> keywordTrendWeek(@RequestBody (required = true) String[] keywords) {
+	public ResponseEntity<? extends BaseResponseBody> keywordTrendWeek(@RequestParam (required = true) String[] keywords) {
 		List<Map<String, Object>> trendList = new ArrayList<>();
 		
 		for (String keyword : keywords) {
@@ -121,14 +121,14 @@ public class NewsController {
 		return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "주간 키워드 언급 기사량 조회 성공", trendList));
 	}
 	
-	@PostMapping("/keyword/trend/month")
+	@GetMapping("/keyword/trend/month")
 	@ApiOperation(value = "월간 키워드 언급 기사량 조회", notes = "월간 키워드 언급 기사량을 조회한다.")
 	@ApiResponses(
 			{ @ApiResponse(code = 200, message = "월간 키워드 언급 기사량 조회 성공"),
 			  @ApiResponse(code = 400, message = "잘못된 요청입니다."),
 			  @ApiResponse(code = 500, message = "서버 오류"),
 			})
-	public ResponseEntity<? extends BaseResponseBody> keywordTrendMonth(@RequestBody (required = true) String[] keywords) {
+	public ResponseEntity<? extends BaseResponseBody> keywordTrendMonth(@RequestParam (required = true) String[] keywords) {
 		List<Map<String, Object>> trendList = new ArrayList<>();
 		
 		for (String keyword : keywords) {
@@ -141,7 +141,7 @@ public class NewsController {
 		return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "월간 키워드 언급 기사량 조회 성공", trendList));
 	}
 	
-	@PostMapping("/main/wordcloud")
+	@GetMapping("/main/wordcloud")
 	@ApiOperation(value = "메인 페이지 워드클라우드 ", notes = "codeGroup - 0 : 전체, 100 : 정치, 101 : 경제, 102 : 사회, 103 : 생활/문화, 104 : 세계, 105 : IT/과학")
 	@ApiResponses(
 			{ @ApiResponse(code = 200, message = "메인 페이지 워드클라우드 조회 성공"),
