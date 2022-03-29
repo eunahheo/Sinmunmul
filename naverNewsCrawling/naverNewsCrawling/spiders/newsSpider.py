@@ -60,14 +60,13 @@ class NewsUrlSpider(scrapy.Spider):
         while True:
             if (len(t_email) < 2):
                 break
-            elif ('a' > t_email[0] or t_email[0] > 'z' or 'A' > t_email[0] or t_email[0] > 'Z' or '0' > t_email[0] or t_email[0] > '9'):
+            elif not (('a' <= t_email[0] <= 'z') or ('A' <= t_email[0] <= 'Z') or ('0' <= t_email[0] <= '9')):
                 t_email = t_email[1:]
-        while True:
-            if (len(t_email) < 2):
-                break
-            elif ('a' > t_email[0] or t_email[0] > 'z' or 'A' > t_email[0] or t_email[0] > 'Z'):
+            elif not (('a' <= t_email[-1] <= 'z') or ('A' <= t_email[-1] <= 'Z')):
                 t_email = t_email[:-1]
-
+            else:
+                break
+            
         if len(t_email) < 5:
             item['author_email'] = 'None'
         else:                
