@@ -79,7 +79,7 @@ public class Wordcount {
 		job.setOutputValueClass(IntWritable.class);
 
 		// set number of reduces
-		job.setNumReduceTasks(2);
+		job.setNumReduceTasks(1);
 
 		// set input and output directories
 		FileInputFormat.addInputPath(job,new Path(otherArgs[0]));
