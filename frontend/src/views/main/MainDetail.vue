@@ -72,12 +72,11 @@ export default {
          
           // console.log(res.data);
           this.searchedData = res.data;
-          console.log(this.searchedData);
-          console.log("=========================");
-          //console.log(this.searchedData.data);
+          // console.log(this.searchedData);
+          // console.log("=========================");
+          console.log(this.searchedData.data);
 
-          console.log("길이 ? : "+this.searchedData.length);
-
+          
         }).catch((err) => {
             console.log("에러");
             console.log(err);

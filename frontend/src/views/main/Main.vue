@@ -5,8 +5,15 @@
     </aside>
 
  <main>
-    <h2 class="title--large main-title plan">Today's Issue</h2>
-
+   <div class="title--large main-title plan"> 
+     <h2 class="title--large main-title">오늘의 뉴스 현황 &nbsp&nbsp&nbsp {{todayNews}}
+     </h2>
+  
+     
+   </div>
+    
+     
+       
     <div class="plan span--2 long--2 m-3 ">
        <h3>이슈 - 워드 클라우드</h3>
       <div id="word-cloud">
@@ -59,6 +66,9 @@
 </template>
 
 <script>
+import axios from 'axios'
+// const LOCAL_HOST = 'http://localhost:3030/api'
+const SERVER_HOST = 'https://j6a406.p.ssafy.io/api'
 
 export default {
   data() {
@@ -166,14 +176,21 @@ export default {
       '11월': 746,
       '12월': 846
       }}
-]
-    };
-  },
+  ], //line data
+
+    todayNewsData : [],
+    todayNews : null,
+    };//return
+
+  },//data
+
   mounted() {
     this.genLayout();
-  },
-  methods : {
+    this.getTodayNews();
 
+  }, //mounted
+
+  methods : {
     genLayout() {
       const cloud = require("d3-cloud");
       cloud()
@@ -211,7 +228,34 @@ export default {
       .attr("transform", (d)=>{return "translate(" + [d.x, d.y] +") rotate (" +d.rotate +")";})
       .text((d)=>d.text);
     },
-  },
+
+    getTodayNews() {
+      axios.get(`${SERVER_HOST}/news/today`)
+        .then((res) =>{
+          //console.log(res.data.data);
+          this.todayNewsData = res.data.data;
+
+          var keys = Object.keys(this.todayNewsData);
+          var values = Object.values( this.todayNewsData);
+          var news ="";
+          for(var i=0; i < keys.length-1; i++) {
+            
+            news += keys[i];
+            const per = values[i].percent;
+            news += " "+per.toFixed(1)+"% ";
+          }
+
+          this.todayNews = news;
+
+          
+          
+        }).catch((err) => {
+            console.log("에러");
+            console.log(err);
+        });
+    },
+  }, //methods
+
 };
 </script>
 
@@ -271,15 +315,28 @@ p a {
   text-align: center;
   font-family: var(--font-title);
   font-size: 32px;
-  font-style: italic;
-  /* text-align: left; */
+  font-style: normal;
   margin-bottom: 0.8rem;
 }
+/* .category {
+  text-align: right;
+} */
 
 @media (min-width: 700px) {
   .title--large {
-    font-size: 42px;
+    font-size: 36px;
     margin: 0;
+  }
+}
+
+@media (min-width: 700px) {
+  main .main-title {
+    grid-column: 1/-1;
+  }
+}
+@media (min-width: 1024px) {
+  main .main-title {
+    grid-column: 1/-2;
   }
 }
 
@@ -295,16 +352,7 @@ main h1,
 main aside {
   grid-column: 1/-1;
 }
-@media (min-width: 700px) {
-  main .main-title {
-    grid-column: 1/-1;
-  }
-}
-@media (min-width: 1024px) {
-  main .main-title {
-    grid-column: 1/-2;
-  }
-}
+
 @media (min-width: 700px) {
   main .terrarium {
     grid-column: 1/-1;
