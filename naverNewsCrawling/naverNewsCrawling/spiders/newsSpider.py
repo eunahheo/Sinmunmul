@@ -19,18 +19,22 @@ class NewsUrlSpider(scrapy.Spider):
             ['105','731','226','227','230','732','283','229','228'],
             ['104','231','232','233','234','322'],
         ]
-        curDate = str(datetime.datetime.now().day).zfill(2)
+        if(datetime.datetime.now().hour < 1):
+            if (datetimme.datetime.now().day - 1) < 1:
+                curDate = str(30+((datetime.datetime.now().month) % 2))
+            else:
+                curDate = str(datetimme.datetime.now().day - 1).zfill(2)
+        else:
+            curDate = str(datetime.datetime.now().day).zfill(2)
         
         for url in urls:
             for i in range(1,len(url)):
-                # maxNum = scrapy.Request(url=f'https://news.naver.com/main/list.naver?mode=LS2D&mid=shm&sid1={url[0]}&sid2={url[i]}&page=100', callback=self.parse_page)
-                # print(maxNum)
                 self.now_topic1 = url[0]
                 self.now_topic2 = url[i]
-                for topicPage in range(1,3):
+                for topicPage in range(1,8):
                     yield scrapy.Request(url=f'https://news.naver.com/main/list.naver?mode=LS2D&mid=shm&sid1={url[0]}&sid2={url[i]}&page={topicPage}&date=202203{curDate}', callback=self.parse_news)
                     # yield scrapy.Request(url=f'https://news.naver.com/main/list.naver?mode=LS2D&mid=shm&sid1={url[0]}&sid2={url[i]}&page={topicPage}', callback=self.parse_news)
-                    time.sleep(1)
+                    time.sleep(0.5)
 
     def parse_page(self, response):
         return response.xpath('//*[@id="main_content"]/div[3]/strong/text()').extract()
@@ -39,7 +43,7 @@ class NewsUrlSpider(scrapy.Spider):
         for sel in response.xpath('//*[@id="main_content"]/div[2]/ul/li'):
             request = scrapy.Request(sel.xpath('dl/dt/a/@href').extract()[-1], callback=self.parse_news_detail)
             yield request
-            time.sleep(0.7)
+            time.sleep(0.5)
 
     def parse_news_detail(self, response):
         item = NaverNewsCrawlingItem()
@@ -97,7 +101,7 @@ class NewsUrlSpider(scrapy.Spider):
             t_mod_dt = f_mod_dt.split(' ')[2]
 
             if(ap_reg_dt == '오후'):
-                if t_reg_dt[0] == '12':
+                if (t_reg_dt.split(':')[0] == '12'):
                     item['reg_dt'] = d_reg_dt + ' ' + '12' + ':' + t_reg_dt.split(':')[1].zfill(2) + ':00'
                 else:
                     item['dateReg'] = d_reg_dt + ' ' + str(int(t_reg_dt.split(':')[0])+12).zfill(2) + ':' + t_reg_dt.split(':')[1].zfill(2) + ':00'
@@ -106,8 +110,9 @@ class NewsUrlSpider(scrapy.Spider):
                     item['dateReg'] = d_reg_dt + ' ' + '00' + ':' + t_reg_dt.split(':')[1].zfill(2) + ':00'
                 else:
                     item['dateReg'] = d_reg_dt + ' ' + t_reg_dt.split(':')[0].zfill(2) + ':' + t_reg_dt.split(':')[1].zfill(2) + ':00'
+
             if(ap_mod_dt == '오후'):
-                if t_mod_dt[0] == '12':
+                if (t_mod_dt.split(':')[0] == '12'):
                     item['mod_dt'] = d_mod_dt + ' ' + '12' + ':' + t_mod_dt.split(':')[1].zfill(2) + ':00'
                 else:
                     item['dateMod'] = d_mod_dt + ' ' + str(int(t_mod_dt.split(':')[0])+12).zfill(2) + ':' + t_mod_dt.split(':')[1].zfill(2) + ':00'
@@ -118,6 +123,10 @@ class NewsUrlSpider(scrapy.Spider):
                     item['dateMod'] = d_mod_dt + ' ' + t_mod_dt.split(':')[0].zfill(2) + ':' + t_mod_dt.split(':')[1].zfill(2) + ':00'
         else:
             temp_dt = ''.join(response.xpath('//*[@id="main_content"]/div[1]/div[3]/div/span/text()').extract())
+            
+            while not (temp_dt[0] == '2' and temp_dt[1] == '0'):
+                temp_dt = temp_dt[1:]
+
             if(temp_dt[0] == '2' and (temp_dt.find('오전') == -1 or temp_dt.find('오후') == -1)):
                 d_dt = (temp_dt.split(' ')[0])[:-1].replace('.','-')
                 ap_dt = temp_dt.split(' ')[1]
@@ -131,18 +140,15 @@ class NewsUrlSpider(scrapy.Spider):
                 ap_dt = temp_dt.split(' ')[2]
                 t_dt = temp_dt.split(' ')[3]
 
-            while not (d_dt[0] == '2' and d_dt[1] == '0'):
-                d_dt = d_dt[1:]
-
             if(ap_dt == '오후'):
-                if t_dt.split(':')[0] == '12':
+                if (t_dt.split(':')[0] == '12'):
                     item['dateReg'] = d_dt + ' ' + '00' + ':' + t_dt.split(':')[1].zfill(2) + ':00'
                     item['dateMod'] = d_dt + ' ' + '00' + ':' + t_dt.split(':')[1].zfill(2) + ':00'
                 else:
                     item['dateReg'] = d_dt + ' ' + str(int(t_dt.split(':')[0])+12).zfill(2) + ':' + t_dt.split(':')[1].zfill(2) + ':00'
                     item['dateMod'] = d_dt + ' ' + str(int(t_dt.split(':')[0])+12).zfill(2) + ':' + t_dt.split(':')[1].zfill(2) + ':00'
             elif(ap_dt == '오전'):
-                if(int(t_dt.split(':')[0]) == 12):
+                if (t_dt.split(':')[0] == '12'):
                     item['dateReg'] = d_dt + ' ' + '00' + ':' + t_dt.split(':')[1].zfill(2) + ':00'
                     item['dateMod'] = d_dt + ' ' + '00' + ':' + t_dt.split(':')[1].zfill(2) + ':00'
                 else:
