@@ -91,7 +91,7 @@ public class NewsServiceImpl implements NewsService {
 		    data.put("count", news.getNum());
 		    data.put("percent", news.getNum() / (float)allCount * 100);
 		    
-		    jsonObject.put(news.getCodeGroupValue(), data);
+		    jsonObject.put(codeGroupValueKR(news.getCodeGroupValue()), data);
 		}
 		
 		/* 예시
@@ -202,5 +202,36 @@ public class NewsServiceImpl implements NewsService {
 		JSONArray jsonArr = (JSONArray) obj;
 
 		return jsonArr;
+	}
+	
+	static String codeGroupValueKR(String valueEN) {
+		String str = "";
+		switch (valueEN) {
+		case "all":
+			str = "전체";
+			break;
+		case "politics":
+			str = "정치";
+			break;
+		case "economy":
+			str = "경제";
+			break;
+		case "society":
+			str = "사회";
+			break;
+		case "life_culture":
+			str = "생활/문화";
+			break;
+		case "international":
+			str = "세계";
+			break;
+		case "it_science":
+			str = "IT/과학";
+			break;
+
+		default:
+			break;
+		}
+		return str;
 	}
 }
