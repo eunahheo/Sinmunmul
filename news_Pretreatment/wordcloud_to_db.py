@@ -55,7 +55,7 @@ if __name__ == '__main__':
 
         wordcloud = []
         for k in range(len(data)):
-            #print(data.iloc[k][0].split("\t"))
+            #print(data.iloc[k][0].split("\t")) 
             row = data.iloc[k][0].split("\t")
             keyword = row[0]
             count = row[1]
