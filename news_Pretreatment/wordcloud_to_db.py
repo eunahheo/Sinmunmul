@@ -28,22 +28,17 @@ if __name__ == '__main__':
     now = datetime.now()
 
     # 년월일시 20220323-13 : 2022년 03월 23일 13시
-    # file_date = now.strftime("%Y%m%d%H")
-    # file_name_template = file_date
-
-    # 한 시간 단위
-    start_time = str(now.strftime('%Y-%m-%d %H')) + ":00:00"
-    print(start_time)
+    file_date = str(now.strftime("%Y%m%d%H"))
+ 
     i = 0
-
     for code_group in code_group_num:
         # 파일 이름
-        # politics-20220323-13
+        # politics-2022032313
         # 대분류-년월일-시
-        file_name = code_group_value[i] + "_" + "2022032723"
+        file_name = code_group_value[i] + "_" + file_date
         path = 'wordcount/output/' + file_name + "/part-r-00000"
 
-        # Connecting to Webhdfs by providing hdfs host ip and webhdfs port (50070 by default)
+        # Connecting to Webhdfs by providing hdfs host ip and webhdfs port (9870 by default)
         client_hdfs = InsecureClient('http://172.26.4.211:9870')
         # 사용자 명을 지정하여 연결`
         client_hdfs = InsecureClient('http://172.26.4.211:9870', user='j6a406')
@@ -55,14 +50,11 @@ if __name__ == '__main__':
 
         wordcloud = []
         for k in range(len(data)):
-            #print(data.iloc[k][0].split("\t")) 
             row = data.iloc[k][0].split("\t")
             keyword = row[0]
             count = row[1]
             wordcloud.append({'keyword' : keyword, 'count' : count})
-            #keyword_dict[keyword] = count
 
-        #sorted_dict = sorted(keyword_dict.items(), key = lambda item: item[1], reverse = True)
         wordcloud.sort(key = lambda object:object["count"], reverse = True)
 
         curtime = now.strftime('%Y-%m-%d %H:%M:%2S')
@@ -70,5 +62,4 @@ if __name__ == '__main__':
 
         # sql 문 실행
         curs.execute(sql, (code_group_num[i], json.dumps(wordcloud, ensure_ascii=False), 'n', curtime, 'admin', curtime, 'admin'))
-
         i = i + 1
