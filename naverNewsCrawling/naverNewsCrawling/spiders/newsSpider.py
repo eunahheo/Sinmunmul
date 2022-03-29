@@ -19,19 +19,18 @@ class NewsUrlSpider(scrapy.Spider):
             ['105','731','226','227','230','732','283','229','228'],
             ['104','231','232','233','234','322'],
         ]
-        dateList = ['12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31']
-        for a in dateList:
-            for url in urls:
-                for i in range(1,len(url)):
-                    # maxNum = scrapy.Request(url=f'https://news.naver.com/main/list.naver?mode=LS2D&mid=shm&sid1={url[0]}&sid2={url[i]}&page=100', callback=self.parse_page)
-                    # print(maxNum)
-                    self.now_topic1 = url[0]
-                    self.now_topic2 = url[i]
-                    for topicPage in range(1,30):
-                    # topicPage = 1 
-                        yield scrapy.Request(url=f'https://news.naver.com/main/list.naver?mode=LS2D&mid=shm&sid1={url[0]}&sid2={url[i]}&page={topicPage}&date=202203{a}', callback=self.parse_news)
-                        # yield scrapy.Request(url=f'https://news.naver.com/main/list.naver?mode=LS2D&mid=shm&sid1={url[0]}&sid2={url[i]}&page={topicPage}', callback=self.parse_news)
-                        time.sleep(1)
+        curDate = str(datetime.datetime.now().day).zfill(2)
+        
+        for url in urls:
+            for i in range(1,len(url)):
+                # maxNum = scrapy.Request(url=f'https://news.naver.com/main/list.naver?mode=LS2D&mid=shm&sid1={url[0]}&sid2={url[i]}&page=100', callback=self.parse_page)
+                # print(maxNum)
+                self.now_topic1 = url[0]
+                self.now_topic2 = url[i]
+                for topicPage in range(1,3):
+                    yield scrapy.Request(url=f'https://news.naver.com/main/list.naver?mode=LS2D&mid=shm&sid1={url[0]}&sid2={url[i]}&page={topicPage}&date=202203{curDate}', callback=self.parse_news)
+                    # yield scrapy.Request(url=f'https://news.naver.com/main/list.naver?mode=LS2D&mid=shm&sid1={url[0]}&sid2={url[i]}&page={topicPage}', callback=self.parse_news)
+                    time.sleep(1)
 
     def parse_page(self, response):
         return response.xpath('//*[@id="main_content"]/div[3]/strong/text()').extract()
