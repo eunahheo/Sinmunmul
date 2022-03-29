@@ -1,5 +1,6 @@
 # 크롤링 스크립트 실행
-scrapy crawl /var/lib/jenkins/workspace/sinmunmul/naverNewsCraling/naverNewsCraling
+cd /var/lib/jenkins/workspace/sinmunmul/naverNewsCrawling/naverNewsCrawling
+scrapy crawl naverNewsCrawling
 
 
 # 크롤링 한 데이터 전처리 -> 하둡 클러스터 hdfs에 저장
