@@ -41,6 +41,6 @@ echo "워드카운트 완료 "${today}
 ### 원래 서버
 # wordcount_to_db.py 실행
 echo "워드클라우드 DB에 넣기 시작"
-python3 /var/lib/jenkins/workspace/sinmunmul/news_Pretreatment/wordcount_to_db.py
+python3 /var/lib/jenkins/workspace/sinmunmul/news_Pretreatment/wordcloud_to_db.py
 echo "워드클라우드 DB에 넣기 완료"
 
