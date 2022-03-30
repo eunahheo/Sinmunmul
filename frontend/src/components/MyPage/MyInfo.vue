@@ -37,10 +37,12 @@ export default {
   name: 'MyInfo',
   data: function () {
     return {
+      flag: false,
+      delay: 3000,
       password: '',
       newpassword: '',
       newpasswordcon: '',
-      seq: '', // 유저의 기본키
+      seq: 13, // 유저의 기본키
       text: '비밀번호를 입력하세요', // alert창의 글자
       alertState: 'alert alert-danger',
       alertStyle: {
@@ -73,11 +75,16 @@ export default {
           // window.alert('새 비밀번호와 비밀번호 확인이 일치하지 않습니다')
           this.newpasswordcon = ''
         } else {
-          // 모든 조건이 충족하면 새로운 비밀번호 변경을 서버에 요청한다  (토큰 추가 )
+          // 모든 조건이 충족하면 새로운 비밀번호 변경을 서버에 요청한다  (토큰 추가?? )
           axios({
             method: 'put',
             // /mypage/{user_seq}/updatePassword
-            url: `${SERVER_HOST}/${this.seq}/updatePassword`
+            url: `${SERVER_HOST}/mypage/${this.seq}/updatePassword`,
+            data: {
+              newUserPwd: this.newpassword,
+              userPwd: this.password
+            }
+
           }).then((res) => {
             this.alertChange('비밀번호 변경 완료', 'visible', 'alert alert-primary')
             this.password = ''
@@ -98,11 +105,12 @@ export default {
       this.text = text
       this.alertStyle.visibility = visibility
       this.alertState = alertState
+      this.flag = true
+      clearTimeout(this.delay) //  버튼이 다시 눌리면 기존 실행 중지 후 다시 3초 시작
       this.init()
     },
     init: function () {
-    // 이런식으로 사라지게 하는게 맞는방식인가?
-      setTimeout(() => {
+      this.delay = setTimeout(() => {
         this.alertStyle.visibility = 'hidden'
       }, 3000)
     }
