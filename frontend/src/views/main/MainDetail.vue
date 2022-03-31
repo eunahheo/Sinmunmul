@@ -49,20 +49,14 @@
       <!-- <button @click="detail">자세히 보기 </button> -->
       <!-- <a :href="detail" class="btn btn-primary" style="display:block; width:100%; height:100%; vertical-align: middle;">자세히 보기</a> -->
 
-      <button @click="detail" class="btn btn-info" 
+      <button @click="detail(news.news_seq)" class="btn btn-info" 
       style="display:block; width:100%; height:100%; vertical-align: middle;"
-      v-bind:value="news.news_seq"
       >자세히 보기</button>
     </div>
 
   </div>
  
 </div>
-
-
-
-
-
   <nav aria-label="..." class="d-flex justify-content-center mb-4 ">
       <ul class="pagination d-flex justify-content-between">
         <li v-if="start" class="page-item">
@@ -99,12 +93,14 @@
         </li>
       </ul>
     </nav>
+    <news-modal v-bind:visible="newsVisible" :news="newsData" @close='visible=newsInit()'></news-modal>
 </div>
 
 </div>
 </template>
 <script>
 import img from '@/assets/default.png'
+import newsModal from './newsModal.vue'
 import axios from 'axios'
 // const LOCAL_HOST = 'http://localhost:3030/api'
 const SERVER_HOST = 'https://j6a406.p.ssafy.io/api'
@@ -113,6 +109,8 @@ export default {
   data() {
     return {
       searchWord : null,
+      newsData : {},
+      newsVisible: false,
       searchedData : [],
       pageNumbers: [1, 2, 3, 4, 5],
       page: 1, // 기본 1페이지
@@ -127,12 +125,37 @@ export default {
       end: false
     }
   },
+    components: {
+    newsModal
+  },
   created() {
       this.searchWord = this.$route.params.searchWord;
       this.search();
   },
 
   methods: {
+      detail (seq) {
+      console.log("검색 시퀀스 : "+seq);
+      
+       axios.get(`${SERVER_HOST}/news/detail`, {
+          params: {
+            newsSeq : seq,           
+          }
+        })
+        .then((res) =>{
+            //  console.log(res.data.data);
+            this.newsData = res.data.data;
+            this.newsVisible = !this.newsVisible;
+
+        }).catch((err) => {
+            console.log("에러");
+            console.log(err);
+          });
+
+    },
+    newsInit: function () {
+       this.newsVisible = false;
+    },
     search() {
       console.log("검색 키워드 확인 : "+this.searchWord);
       if(this.searchWord != null && this.searchWord !="") {
@@ -146,7 +169,6 @@ export default {
         .then((res) =>{
          
           console.log(res.data);
-
           this.searchedData = res.data.data;
           const totalElements = res.data.data[0].totalElements;
           this.pagination(totalElements);
@@ -205,11 +227,6 @@ export default {
 
     replaceDefault: function (e) {
       e.target.src = img
-    },
-    detail () {
-      var value = this.value;
-      console.log('모달창 띄우기 뉴스 시퀀스 : '+value);
-
     },
 
   }
