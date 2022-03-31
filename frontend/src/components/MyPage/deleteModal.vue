@@ -12,7 +12,7 @@
 
       <!-- Modal body -->
       <div class="modal-body">
-        변경 완료
+        삭제 완료
       </div>
 
       <!-- Modal footer -->
@@ -28,7 +28,7 @@
 
 <script>
 export default {
-  name: 'InterestModal',
+  name: 'deleteModal',
   props: ['visible']
 }
 </script>
@@ -47,5 +47,6 @@ transform: translate(-50%, -50%);
   position: fixed;
   top:0; left: 0; bottom: 0; right: 0;
   background: rgba(0, 0, 0, 0.8);
+  z-index:6;
 }
 </style>

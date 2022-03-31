@@ -15,7 +15,7 @@ class db_conn:
     char = 'utf8'
 
 if __name__ == '__main__':
-     # DB를 연결할때 autocommit 부분을 True로 설정해주면, 별도의 커밋없이 자동으로 커밋
+     # autocommit : True, 별도의 커밋없이 자동으로 커밋된다.
     conn = pymysql.connect(host=db_conn.host, user=db_conn.user, password=db_conn.pwd, db=db_conn.db, charset=db_conn.char, autocommit=True)
     curs = conn.cursor(pymysql.cursors.DictCursor)
 
@@ -39,22 +39,22 @@ if __name__ == '__main__':
     except OSError:
         print ('Error: Creating directory. ' +  directory)
 
-    # 년월일시 20220323-13 : 2022년 03월 23일 13시
+    # 년월일시 2022032313 : 2022년 03월 23일 13시
     file_date = now.strftime("%Y%m%d%H")
     file_name_template = file_date
 
     # 한 시간 단위
     start_time = str(now.strftime('%Y-%m-%d %H')) + ":00:00"
-    print(start_time)
+
     i = 0
     for code_group in code_group_num:
         # 코드 그룹에 따른 sql 문
-        # 현재 시각 hour를 기준으로 hour ~ hour + 1, ex) 13시 ~ 14시 사이의 기사를 가져온다.
+        # 현재 시각 hour를 기준으로 hour - 1 ~ hour, ex) 현재 14시이면, 13시 ~ 14시 사이에 등록된 기사들을 가져온다.
         # news_reg_dt or reg_dt
-        if i == 0 :
-             sql = "SELECT news_title, news_desc FROM news WHERE del_yn='n' And news_reg_dt between '" + start_time + "' AND DATE_ADD('" + start_time + "', INTERVAL +1 HOUR);"
+       if i == 0 :
+             sql = "SELECT news_title, news_desc FROM news WHERE del_yn='n' And news_reg_dt between DATE_ADD('" + start_time + "', INTERVAL -1 HOUR) AND '" + start_time + "';"
         else:
-             sql = "SELECT news_title, news_desc FROM news WHERE del_yn='n' AND code_group=" + str(code_group) + " And news_reg_dt between '" + start_time + "' AND DATE_ADD('" + start_time + "', INTERVAL +1 HOUR);"
+             sql = "SELECT news_title, news_desc FROM news WHERE del_yn='n' AND code_group=" + str(code_group) + " And news_reg_dt between DATE_ADD('" + start_time + "', INTERVAL -1 HOUR) AND '" + start_time + "';"
         print(sql)
 
         # sql 문 실행
@@ -66,12 +66,12 @@ if __name__ == '__main__':
         # KoNLPy 형태소 분석기
         hannanum = Okt()
 
-        # 파일 이름
+         # 파일 이름
         # politics-20220323-13
         # 대분류-년월일-시
         file_name = code_group_value[i] + "_" + file_name_template + ".txt"
         print(file_name)
-        i = i + 1
+
         # 현재 디렉터리에 텍스트 파일 생성, 쓰기 모드
         f = open(directory + file_name, "w")
 
@@ -92,6 +92,12 @@ if __name__ == '__main__':
 
             # 단어만 뽑아내기
             data_pretreatment = hannanum.nouns(desc)
+
+            # 한 글자인 명사 제외
+            for i,v in reversed(list((enumerate(data_pretreatment)))):
+                if(len(v)<2):
+                    data_pretreatment.pop(i)
+
 
             # 단어 리스트 문자열로 변환
             # " ".join() : " "를 구분자로 한다. **배열 안의 요소가 String형이 아니면 에러 발생
