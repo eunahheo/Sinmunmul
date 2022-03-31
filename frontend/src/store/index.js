@@ -12,7 +12,7 @@ export default createStore({
   actions: {
   },
   modules: {
-    token: AuthToken,
+    token: 'authToken',
   },
   plugins: [
     createPersistedState({
