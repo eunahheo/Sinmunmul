@@ -34,7 +34,7 @@ device = torch.device("cpu")
 # device = torch.device("cuda:0")
 
 import pandas as pd
-data = pd.read_excel('/content/감성대화말뭉치1.xlsx')
+data = pd.read_excel('감성대화말뭉치1.xlsx')
 
 data.loc[(data['감정_대분류'] == "기쁨"), '감정_대분류'] = 0
 data.loc[(data['감정_대분류'] == "기쁨 "), '감정_대분류'] = 0
