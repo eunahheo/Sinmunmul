@@ -127,36 +127,33 @@ class NewsUrlSpider(scrapy.Spider):
             while not (temp_dt[0] == '2' and temp_dt[1] == '0'):
                 temp_dt = temp_dt[1:]
 
-            if(temp_dt[0] == '2' and (temp_dt.find('오전') == -1 or temp_dt.find('오후') == -1)):
+            if(temp_dt.find('오전') == -1 and temp_dt.find('오후') == -1):
+                d_dt = (temp_dt.split(' ')[0])[:-1].replace('.','-')
+                t_dt = temp_dt.split(' ')[1]
+                
+                item['dateReg'] = d_dt + ' ' + t_dt
+                item['dateMod'] = d_dt + ' ' + t_dt
+
+            else:
                 d_dt = (temp_dt.split(' ')[0])[:-1].replace('.','-')
                 ap_dt = temp_dt.split(' ')[1]
                 t_dt = temp_dt.split(' ')[2]
-            elif(temp_dt[0] == '2'):
-                d_dt = (temp_dt.split(' ')[1])[:-1].replace('.','-')
-                ap_dt = temp_dt.split(' ')[2]
-                t_dt = temp_dt.split(' ')[3]
-            else:
-                d_dt = (temp_dt.split(' ')[1])[:-1].replace('.','-')
-                ap_dt = temp_dt.split(' ')[2]
-                t_dt = temp_dt.split(' ')[3]
-
-            if(ap_dt == '오후'):
-                if (t_dt.split(':')[0] == '12'):
-                    item['dateReg'] = d_dt + ' ' + '00' + ':' + t_dt.split(':')[1].zfill(2) + ':00'
-                    item['dateMod'] = d_dt + ' ' + '00' + ':' + t_dt.split(':')[1].zfill(2) + ':00'
-                else:
-                    item['dateReg'] = d_dt + ' ' + str(int(t_dt.split(':')[0])+12).zfill(2) + ':' + t_dt.split(':')[1].zfill(2) + ':00'
-                    item['dateMod'] = d_dt + ' ' + str(int(t_dt.split(':')[0])+12).zfill(2) + ':' + t_dt.split(':')[1].zfill(2) + ':00'
-            elif(ap_dt == '오전'):
-                if (t_dt.split(':')[0] == '12'):
-                    item['dateReg'] = d_dt + ' ' + '00' + ':' + t_dt.split(':')[1].zfill(2) + ':00'
-                    item['dateMod'] = d_dt + ' ' + '00' + ':' + t_dt.split(':')[1].zfill(2) + ':00'
-                else:
-                    item['dateReg'] = d_dt + ' ' + t_dt.split(':')[0].zfill(2) + ':' + t_dt.split(':')[1].zfill(2) + ':00'
-                    item['dateMod'] = d_dt + ' ' + t_dt.split(':')[0].zfill(2) + ':' + t_dt.split(':')[1].zfill(2) + ':00'
-            else:
-                item['dateReg'] = d_dt + ' ' + t_dt
-                item['dateMod'] = d_dt + ' ' + t_dt
+                
+                print(d_dt, ap_dt, t_dt)
+                if(ap_dt == '오후'):
+                    if (t_dt.split(':')[0] == '12'):
+                        item['dateReg'] = d_dt + ' ' + '00' + ':' + t_dt.split(':')[1].zfill(2) + ':00'
+                        item['dateMod'] = d_dt + ' ' + '00' + ':' + t_dt.split(':')[1].zfill(2) + ':00'
+                    else:
+                        item['dateReg'] = d_dt + ' ' + str(int(t_dt.split(':')[0])+12).zfill(2) + ':' + t_dt.split(':')[1].zfill(2) + ':00'
+                        item['dateMod'] = d_dt + ' ' + str(int(t_dt.split(':')[0])+12).zfill(2) + ':' + t_dt.split(':')[1].zfill(2) + ':00'
+                elif(ap_dt == '오전'):
+                    if (t_dt.split(':')[0] == '12'):
+                        item['dateReg'] = d_dt + ' ' + '00' + ':' + t_dt.split(':')[1].zfill(2) + ':00'
+                        item['dateMod'] = d_dt + ' ' + '00' + ':' + t_dt.split(':')[1].zfill(2) + ':00'
+                    else:
+                        item['dateReg'] = d_dt + ' ' + t_dt.split(':')[0].zfill(2) + ':' + t_dt.split(':')[1].zfill(2) + ':00'
+                        item['dateMod'] = d_dt + ' ' + t_dt.split(':')[0].zfill(2) + ':' + t_dt.split(':')[1].zfill(2) + ':00'
 
         # parse topic1 code
         item['topic1'] = self.now_topic1
