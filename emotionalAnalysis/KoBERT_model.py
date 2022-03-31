@@ -25,7 +25,7 @@ from tqdm import tqdm, tqdm_notebook
 
 from transformers import AdamW
 from transformers.optimization import get_cosine_schedule_with_warmup
-from transformers import BertModel)
+from transformers import BertModel
 
 # CPU
 device = torch.device("cpu")
