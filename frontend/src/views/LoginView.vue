@@ -10,11 +10,12 @@
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <div>
                     <input type="text" name="email" v-model="emailData" placeholder="email">
-                    <input type="password" name="password" v-model="pswdData" placeholder="password">
+                    <input type="password" name="password" v-model="passwdData" placeholder="password">
                 </div>
-                <input type="submit" value="login">
-
-                <router-link to="/register">register</router-link>
+                <button v-on:click='loginBtn'>로그인</button>
+                <button>
+                    <router-link to="/register">register</router-link>
+                </button>
                 <!-- social login -->
                 <div class="social-login">
                     <section>
@@ -37,11 +38,33 @@ export default {
     data() {
         return{
             emailData: '',
-            pswdData: '',
+            passwdData: '',
             kakaoToken: '',
+            kakaoEmail: '',
         }
     },
     methods: {
+        loginBtn() {
+            console.log("login triggerd ");
+            
+            if(this.emailData != null && this.passwdData !="") {
+                console.log('login data : ', this.emailData, this.passwdData);
+                axios.get(`${API_SERVER}/user/login`, {
+                params: {
+                    userEmail : this.emailData,
+                    userPwd : this.passwdData,
+                }
+                })
+                .then((res) =>{
+                console.log(res);
+                }).catch((e) => {
+                    console.log(e);
+                })
+            } else {
+                alert("로그인 정보를 입력해주세요");
+            }
+        },
+
         kakaoLogin:function() {
             window.Kakao.init('864650259e852266a14e98b75eedc985')
 
@@ -49,9 +72,11 @@ export default {
                 window.Kakao.API.request({
                     url: '/v1/user/unlink',
                     sucess: function(reponse) {
+                        console.log("unlink")
                         console.log(reponse)
                     },
                     fail: function(error) {
+                        console.log("unlink")
                         console.log(error)
                     },
                 })
@@ -67,6 +92,19 @@ export default {
                         },
                         success: async function(res) {
                             console.log(res);
+                            axios.post(`${API_SERVER}/user/kakao/login`, {
+                                accessToken: res.id,
+                            }).then((res) => {
+                                console.log(res);
+                                if(res.status == 200) {
+                                    alert("로그인 성공");
+                                    window.location.href = "/";
+                                } else {
+                                    alert("로그인 실패");
+                                }
+                            }).catch((e) => {
+                                console.log(e);
+                            })
                         },
                         fail: function(error) {
                             console.log(error);

@@ -9,17 +9,32 @@
             <form>
                 <div>
                     <input type="text" v-model="emailData" name="email" placeholder="email">
-                    <input type="button" value="인증">
+                    <input type="button" v-on:click="emailVerify" value="인증">
+                    <input type="text" v-model="emailCheckCode" name="emailCheckCode" placeholder="인증번호">
                 </div>
                 <div>
-                    <input type="password" name="password" placeholder="enter password"><br>
-                    <input type="password" name="password" placeholder="enter password again">
+                    <input type="password" v-model="passwdData" name="password" placeholder="enter password"><br>
+                    <input type="password" v-model="passwdDataCheck" name="password" placeholder="enter password again">
+                    <div>
+                        <span v-if="passwdData == '' | passwdDataCheck == ''"></span>
+                        <span v-else-if="passwdData == passwdDataCheck" v-on:change="console.log('aasd')">패스워드가 일치합니다.</span>
+                        <span v-else>패스워드가 일치하지 않습니다.</span>
+                    </div>
                 </div>
                 <div>
                     <span>gender</span>
                     <input type="radio" v-model="genderValue" value="male">
                     <input type="radio" v-model="genderValue" value="female">
                     {{genderValue}}
+                </div>
+                <div>
+                    <span>연령대</span>
+                    <select class="form-select" aria-label="Default select example">
+                        <option selected>연령대를 선택해주세요</option>
+                        <option value="1">10대</option>
+                        <option value="2">20대</option>
+                        <option value="3">30대</option>
+                    </select>
                 </div>
                 <div>
                     <div>
@@ -90,7 +105,7 @@
                     </div>
                 </div>
                 <div>
-                    <input type="submit" value="회원가입">
+                    <input type="submit" v-on:click="registerBtn" value="회원가입">
                     <input type="submit" value="취소">
                 </div>
             </form>
@@ -105,14 +120,70 @@ const API_SERVER = 'https://j6a406.p.ssafy.io/api'
 
 export default {
     name: "register",
+    conponent: {
+    },
     data() {
         return{
             emailData: '',
+            emailCheckCode: '',
+            isEmailChecked: false,
             genderValue: 'male',
+            passwdData: '',
+            passwdDataCheck: '',
+            isPasswdChecked: false,
+            birthDate: '20'
+
         }
     },
     methods: {
-        
+        emailVerify() {
+            console.log(this.emailData)
+
+            axios.post(`${API_SERVER}/user/info`, {
+                params: {
+                    userEmail : this.emailData,
+                    usersgType : "email",
+                }
+            }).then((res) => {
+                console.log(res)
+                if(res.status === 200){
+                    alert("이미 가입된 이메일입니다.")
+                } else if (res.status === 202) {
+                    axios.get(`${API_SERVER}/user/cert`, {
+                        params: {
+                            email : this.emailData,
+                        }
+                    }).then((res) => {
+                        console.log(res.data.data)
+                        this.emailCheckCode = res.data.data
+                    })
+                    alert("이메일로 인증번호를 보냈습니다.")
+                }
+            }).catch((e) => {
+                console.log(e)
+            })
+        },
+        registerBtn() {
+            console.log(this.emailData, this.genderValue, this.passwdData, this.birthDate)
+            axios.post(`${API_SERVER}/user/signin`, {
+                params: {
+                    userEmail : this.emailData,
+                    userGender : this.genderValue,
+                    userPwd : this.passwdData,
+                    userBirth : (this.birthDate)*1,
+                    usersgType : "email",
+                }
+            }).then((res) => {
+                console.log(res)
+                if(res.status === 200){
+                    alert("회원가입 성공")
+                } else {
+                    alert(res.status)
+                }
+            }).catch((e) => {
+                console.log(e)
+            })
+        }
     }
 }
 </script>
