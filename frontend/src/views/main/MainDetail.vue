@@ -32,6 +32,9 @@
   </li>
  </ul>
 
+<div v-if="loading" class="spinner-border text-center" style="width: 3rem; height: 3rem" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div>
 
 <div class="card m-2 " style="max-width: 1040px; max-height : 180px" v-for="news in searchedData" :key="news.news_seq">
   <div class="row g-0">
@@ -122,7 +125,8 @@ export default {
       pre: false,
       next: false,
       start: false,
-      end: false
+      end: false,
+      loading: false,
     }
   },
     components: {
@@ -136,21 +140,18 @@ export default {
   methods: {
       detail (seq) {
       console.log("검색 시퀀스 : "+seq);
-      
-       axios.get(`${SERVER_HOST}/news/detail`, {
-          params: {
-            newsSeq : seq,           
-          }
-        })
-        .then((res) =>{
-            //  console.log(res.data.data);
-            this.newsData = res.data.data;
-            this.newsVisible = !this.newsVisible;
-
-        }).catch((err) => {
-            console.log("에러");
-            console.log(err);
-          });
+      axios.get(`${SERVER_HOST}/news/detail`, {
+        params: {
+          newsSeq : seq,           
+        }
+      }).then((res) =>{
+        //  console.log(res.data.data);
+        this.newsData = res.data.data;
+        this.newsVisible = !this.newsVisible;
+      }).catch((err) => {
+        console.log("에러");
+        console.log(err);
+      });
 
     },
     newsInit: function () {
@@ -159,6 +160,7 @@ export default {
     search() {
       console.log("검색 키워드 확인 : "+this.searchWord);
       if(this.searchWord != null && this.searchWord !="") {
+        this.loading = true;
         axios.get(`${SERVER_HOST}/news/keyword`, {
           params: {
             keyword : this.searchWord,
@@ -167,7 +169,7 @@ export default {
           }
         })
         .then((res) =>{
-         
+          this.loading = false;
           console.log(res.data);
           this.searchedData = res.data.data;
           const totalElements = res.data.data[0].totalElements;
