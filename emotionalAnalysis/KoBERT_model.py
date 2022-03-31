@@ -1,13 +1,12 @@
+# get_ipython().system('pip install folium==0.2.1')
+# get_ipython().system('pip install mxnet')
+# get_ipython().system('pip install gluonnlp pandas tqdm')
+# get_ipython().system('pip install sentencepiece==0.1.91')
+# get_ipython().system('pip install transformers==4.8.2')
+# get_ipython().system('pip install torch')
 
-get_ipython().system('pip install folium==0.2.1')
-get_ipython().system('pip install mxnet')
-get_ipython().system('pip install gluonnlp pandas tqdm')
-get_ipython().system('pip install sentencepiece==0.1.91')
-get_ipython().system('pip install transformers==4.8.2')
-get_ipython().system('pip install torch')
-
-get_ipython().system("pip install 'git+https://github.com/SKTBrain/KoBERT.git#egg=kobert_tokenizer&subdirectory=kobert_hf' # https://github.com/SKTBrain/KoBERT의 파일들을 다운")
-get_ipython().system('pip install git+https://git@github.com/SKTBrain/KoBERT.git@master # http://github.com/SKTBrain/KoBERT의 파일들을 다운')
+# get_ipython().system("pip install 'git+https://github.com/SKTBrain/KoBERT.git#egg=kobert_tokenizer&subdirectory=kobert_hf'
+# get_ipython().system('pip install git+https://git@github.com/SKTBrain/KoBERT.git@master
 
 
 from kobert.pytorch_kobert import get_pytorch_kobert_model
