@@ -33,16 +33,15 @@
  </ul>
 
 
-<div class="card m-2 " style="max-width: 1040px; max-height : 400px" v-for="news in searchedData" :key="news.news_seq">
+<div class="card m-2 " style="max-width: 1040px; max-height : 180px" v-for="news in searchedData" :key="news.news_seq">
   <div class="row g-0">
     <div class="col-md-4">
-      <img v-bind:src="news.news_photo" class="card-img-top image"  @error="replaceDefault">
+      <img v-bind:src="news.news_photo" class="card-img-top" style="max-height : 180px"  @error="replaceDefault">
       <!-- <img v-bind:src="news.news.newsPhoto" class="img-fluid rounded-start"  @error="replaceDefault"> -->
     </div>
     <div class="col-md-7">
       <div class="card-body">
         <h5 class="card-title">{{news.news_Title}} </h5>
-        <!-- <p class="card-text">{{news.news_desc}} </p> -->
         <!-- <p class="card-text"><small class="text-muted"> 작은 글씨</small></p> -->
       </div>
     </div>
@@ -210,7 +209,7 @@ export default {
     detail () {
       var value = this.value;
       console.log('모달창 띄우기 뉴스 시퀀스 : '+value);
-      
+
     },
 
   }
