@@ -1,5 +1,5 @@
-get_ipython().system('pip install pymysql')
-get_ipython().system('sudo apt-get install python3-dev default-libmysqlclient-dev')
+# get_ipython().system('pip install pymysql')
+# get_ipython().system('sudo apt-get install python3-dev default-libmysqlclient-dev')
 
 
 import pandas as pd
