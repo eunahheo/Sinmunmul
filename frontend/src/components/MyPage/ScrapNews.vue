@@ -4,13 +4,13 @@
 <hr>
 <div class="row" >
   <div class="col-4 mb-5" v-for="news in newsList" :key="news.scrapSeq">
-    <div class="card" style="width: 20rem;  cursor: pointer" >
+    <div class="card" id="scrapCard" style="width: 21rem;  cursor: pointer" >
       <div style="text-align : right
     ;"> <svg  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16" @click="deleteNews(news.news.newsSeq)">
   <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
 </svg></div>
-<div @click="modal">
-<img v-bind:src="news.news.newsPhoto" class="card-img-top image"  @error="replaceDefault" >
+<div @click="modal(news.news)">
+<img v-bind:src="news.news.newsPhoto" class="card-img-top image cardImage"  @error="replaceDefault" >
   <div class="card-body">
     <div class="card-title" style="text-align: left;"><b>{{news.news.newsTitle}}</b></div>
     <hr>
@@ -19,8 +19,7 @@
   </div>
 </div>
   </div>
-</div>
- <nav aria-label="..." class="d-flex justify-content-center mb-4 ">
+   <nav aria-label="..." class="d-flex justify-content-center mb-4 ">
       <ul class="pagination d-flex justify-content-between">
         <li v-if="start" class="page-item">
           <a class="page-link" href="#" @click="thisPage(1)">«</a>
@@ -38,7 +37,7 @@
         <li
          v-for="pageitem in pageNumbers"
           v-bind:id="'p'+pageitem"
-          v-bind:class="{' active': pageitem == nowPage}"
+          v-bind:class="{'active': pageitem == nowPage}"
           :key="pageitem"
          class="page-item"><a class="page-link"  href="#" @click="thisPage(pageitem)">{{pageitem}}</a></li>
         <li v-if="next" class="page-item">
@@ -56,11 +55,18 @@
         </li>
       </ul>
     </nav>
+    <news-modal v-bind:visible="newsVisible" :news="newsData" @close='visible=newsInit()'></news-modal>
+<delete-modal v-bind:visible="DeleteVisible" @close='DeleteInit()'></delete-modal>
 </div>
+
+</div>
+
 </template>
 
 <script>
 import img from '@/assets/default.png'
+import newsModal from './newsModal.vue'
+import deleteModal from './deleteModal.vue'
 import axios from 'axios'
 const SERVER_HOST = process.env.VUE_APP_SERVER_HOST
 
@@ -68,8 +74,11 @@ export default {
   name: 'ScarapNews',
   data: function () {
     return {
+      newsData: {},
+      newsVisible: false,
+      DeleteVisible: false,
       newsList: [],
-      pageNumbers: [1, 2, 3, 4, 5],
+      pageNumbers: [],
       page: 1, // 기본 1페이지
       totalPage: '',
       totalCount: '',
@@ -82,6 +91,10 @@ export default {
       end: false
     }
   },
+  components: {
+    deleteModal,
+    newsModal
+  },
 
   created () {
     this.getScrapNews() // api를 요청하여 데이터를 받아온다
@@ -91,8 +104,9 @@ export default {
     replaceDefault: function (e) {
       e.target.src = img
     },
-    modal: function () {
-      window.alert('모달창')
+    modal: function (data) {
+      this.newsData = data
+      this.newsVisible = !this.newsVisible
     },
     getScrapNews: function () {
       axios({
@@ -141,7 +155,7 @@ export default {
       }
       console.log(this.startPage)
       console.log(this.endPage)
-
+      this.pageNumbers = []
       const s = this.startPage
       const e = this.endPage
       for (let i = s; i <= e; i++) {
@@ -166,11 +180,21 @@ export default {
       })
         .then((res) => {
           console.log(res)
-          this.getScrapNews()
+          this.deleteModalView()
         })
         .catch((err) => {
           console.log(err)
         })
+    },
+    deleteModalView: function () {
+      this.DeleteVisible = !this.DeleteVisible
+    },
+    DeleteInit: function () {
+      this.DeleteVisible = false
+      this.getScrapNews()
+    },
+    newsInit: function () {
+      this.newsVisible = false
     }
   }
 }
@@ -181,7 +205,7 @@ body{
  overflow : auto;
 }
 
-.image {
+.cardImage {
   height: 150px;
   object-fit: cover;
 
@@ -195,6 +219,10 @@ body{
   overflow:hidden;
   text-overflow:ellipsis;
     height:108px
+}
+
+.card-title {
+  height: 37px
 }
 
 </style>

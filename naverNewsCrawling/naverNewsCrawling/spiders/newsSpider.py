@@ -20,10 +20,10 @@ class NewsUrlSpider(scrapy.Spider):
             ['104','231','232','233','234','322'],
         ]
         if(datetime.datetime.now().hour < 1):
-            if (datetimme.datetime.now().day - 1) < 1:
+            if (datetime.datetime.now().day - 1) < 1:
                 curDate = str(30+((datetime.datetime.now().month) % 2))
             else:
-                curDate = str(datetimme.datetime.now().day - 1).zfill(2)
+                curDate = str(datetime.datetime.now().day - 1).zfill(2)
         else:
             curDate = str(datetime.datetime.now().day).zfill(2)
         
@@ -31,10 +31,10 @@ class NewsUrlSpider(scrapy.Spider):
             for i in range(1,len(url)):
                 self.now_topic1 = url[0]
                 self.now_topic2 = url[i]
-                for topicPage in range(1,8):
+                for topicPage in range(1,4):
                     yield scrapy.Request(url=f'https://news.naver.com/main/list.naver?mode=LS2D&mid=shm&sid1={url[0]}&sid2={url[i]}&page={topicPage}&date=202203{curDate}', callback=self.parse_news)
                     # yield scrapy.Request(url=f'https://news.naver.com/main/list.naver?mode=LS2D&mid=shm&sid1={url[0]}&sid2={url[i]}&page={topicPage}', callback=self.parse_news)
-                    time.sleep(0.5)
+                    time.sleep(0.1)
 
     def parse_page(self, response):
         return response.xpath('//*[@id="main_content"]/div[3]/strong/text()').extract()
@@ -43,7 +43,7 @@ class NewsUrlSpider(scrapy.Spider):
         for sel in response.xpath('//*[@id="main_content"]/div[2]/ul/li'):
             request = scrapy.Request(sel.xpath('dl/dt/a/@href').extract()[-1], callback=self.parse_news_detail)
             yield request
-            time.sleep(0.5)
+            time.sleep(0.15)
 
     def parse_news_detail(self, response):
         item = NaverNewsCrawlingItem()
@@ -102,7 +102,7 @@ class NewsUrlSpider(scrapy.Spider):
 
             if(ap_reg_dt == '오후'):
                 if (t_reg_dt.split(':')[0] == '12'):
-                    item['reg_dt'] = d_reg_dt + ' ' + '12' + ':' + t_reg_dt.split(':')[1].zfill(2) + ':00'
+                    item['dateReg'] = d_reg_dt + ' ' + '12' + ':' + t_reg_dt.split(':')[1].zfill(2) + ':00'
                 else:
                     item['dateReg'] = d_reg_dt + ' ' + str(int(t_reg_dt.split(':')[0])+12).zfill(2) + ':' + t_reg_dt.split(':')[1].zfill(2) + ':00'
             else:
@@ -113,7 +113,7 @@ class NewsUrlSpider(scrapy.Spider):
 
             if(ap_mod_dt == '오후'):
                 if (t_mod_dt.split(':')[0] == '12'):
-                    item['mod_dt'] = d_mod_dt + ' ' + '12' + ':' + t_mod_dt.split(':')[1].zfill(2) + ':00'
+                    item['dateMod'] = d_mod_dt + ' ' + '12' + ':' + t_mod_dt.split(':')[1].zfill(2) + ':00'
                 else:
                     item['dateMod'] = d_mod_dt + ' ' + str(int(t_mod_dt.split(':')[0])+12).zfill(2) + ':' + t_mod_dt.split(':')[1].zfill(2) + ':00'
             else:
@@ -170,4 +170,4 @@ class NewsUrlSpider(scrapy.Spider):
         item['mod_dt'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
         yield item
-        time.sleep(0.2)
+        time.sleep(0.1)
