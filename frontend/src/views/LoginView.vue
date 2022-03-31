@@ -56,7 +56,9 @@ export default {
                 }
                 })
                 .then((res) =>{
-                console.log(res);
+                    console.log(res);
+                    this.$store.authToken = res.data.data;
+                    this.$router.push({ name: 'home'});
                 }).catch((e) => {
                     console.log(e);
                 })
@@ -99,8 +101,9 @@ export default {
                                 if(res.status == 200) {
                                     alert("로그인 성공");
                                     window.location.href = "/";
-                                } else {
-                                    alert("로그인 실패");
+                                } else if (res.status == 202) {
+                                    alert("등록되지 않은 계정입니다. 회원가입 페이지로 이동합니다.");
+                                    this.$router.push({name: 'register', query: {email: res.data.email, gender: res.data.gender, usersgType: 'kakao'}});
                                 }
                             }).catch((e) => {
                                 console.log(e);
