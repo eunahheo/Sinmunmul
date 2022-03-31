@@ -6,9 +6,9 @@
 - scrapy: 웹 크롤링을 위한 라이브러리 [Scrapy Documentation](https://docs.scrapy.org/en/latest/)
 
 ## 크롤러 실행
-Crawler.py가 존재하는 루트에서 코드를 실행하여 크롤링을 시작합니다.
+settings.py가 존재하는 루트에서 코드를 실행하여 크롤링을 시작합니다.
 ```bash
-$ scrapy runspider ./Crawler.py
+$ scrapy crawl naverNewsCrawling
 ```
 
 ## 이슈사항
