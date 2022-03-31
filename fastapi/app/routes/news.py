@@ -4,7 +4,7 @@ from konlpy.tag import Okt
 import pymysql
 from datetime import datetime
 
-router = APIRouter(prefix="/news")
+router = APIRouter(prefix="/fapi/news")
 
 # DB 연결 정보
 class db_conn:
