@@ -11,7 +11,12 @@ def create_app():
     :return:
     """
     c = conf()
-    app = FastAPI()
+    app = FastAPI(title="API_NAME",
+              description="API_DESC",
+              version="0.2.0",
+              docs_url='/fapi/docs',
+              redoc_url='/fapi/redoc',
+              openapi_url='/fapi/openapi.json')
 
 
     # 미들웨어
@@ -35,6 +40,6 @@ if __name__ == "__main__":
     uvicorn.run("app.main:app", host="0.0.0.0", port=3031, reload=True)
 
 
-@app.get("/app")
+@app.get("/fapi/newsbig/sinmunmul")
 def read_main(request: Request):
-    return {"message": "Hello World", "root_path": request.scope.get("root_path")}
+    return {"message": "안녕하세요! 뉴스빅의 신문물입니다!", "root_path": request.scope.get("root_path")}
