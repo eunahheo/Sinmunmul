@@ -89,7 +89,7 @@ public class NewsController {
 			  @ApiResponse(code = 500, message = "서버 오류"),
 			  @ApiResponse(code = 202, message = "뉴스 시퀀스 오류"),
 			})
-	public ResponseEntity<? extends BaseResponseBody> detailNews(@RequestParam(value = "뉴스 번호") long newsSeq) {
+	public ResponseEntity<? extends BaseResponseBody> detailNews(@RequestParam long newsSeq) {
 		Map<String, Object> result = new HashMap<>();
 		
 		try {
