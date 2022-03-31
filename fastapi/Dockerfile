@@ -2,15 +2,16 @@
 FROM python:3.9
 
 #
-WORKDIR /fastapi
+WORKDIR /code
 
 #
-#COPY ./requirements.txt /fastapi/requirements.txt
+COPY ./ /code
+COPY ./requirements.txt /code/requirements.txt
 
 #
-RUN pip install --no-cache-dir --upgrade -r /fastapi/requirements.txt
+RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 #
-COPY ./fastapi /fastapi
+COPY ./app /code/app
 
-CMD ["uvicorn", "main:app", "--host", "j6a406.p.ssafy.io", "--port", "3031"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "3031"]
