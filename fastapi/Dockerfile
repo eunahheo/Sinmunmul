@@ -13,4 +13,4 @@ RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 #
 COPY ./app /code/app
 
-CMD ["uvicorn", "main:app", "--host", "j6a406.p.ssafy.io", "--port", "3031"]
+CMD ["uvicorn", "app.main:app", "--host", "j6a406.p.ssafy.io", "--port", "3031"]
