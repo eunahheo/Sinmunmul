@@ -9,9 +9,13 @@
 # get_ipython().system('pip install git+https://git@github.com/SKTBrain/KoBERT.git@master
 
 
-from kobert.pytorch_kobert import get_pytorch_kobert_model
-from kobert_tokenizer import KoBERTTokenizer 
-tokenizer = KoBERTTokenizer.from_pretrained('skt/kobert-base-v1') 
+# from kobert.pytorch_kobert import get_pytorch_kobert_model
+# from kobert_tokenizer import KoBERTTokenizer 
+from kobert import get_tokenizer
+from kobert import get_pytorch_kobert_model
+
+#tokenizer = KoBERTTokenizer.from_pretrained('skt/kobert-base-v1') 
+tokenizer = get_tokenizer()
 bertmodel, vocab = get_pytorch_kobert_model()
 
 import torch
@@ -21,11 +25,12 @@ import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader
 import gluonnlp as nlp
 import numpy as np
-from tqdm import tqdm, tqdm_notebook
+#from tqdm import tqdm, tqdm_notebook
+from tqdm.notebook import tqdm
 
 from transformers import AdamW
 from transformers.optimization import get_cosine_schedule_with_warmup
-from transformers import BertModel)
+from transformers import BertModel
 
 # CPU
 device = torch.device("cpu")
@@ -34,7 +39,7 @@ device = torch.device("cpu")
 # device = torch.device("cuda:0")
 
 import pandas as pd
-data = pd.read_excel('/content/감성대화말뭉치1.xlsx')
+data = pd.read_excel('감성대화말뭉치1.xlsx')
 
 data.loc[(data['감정_대분류'] == "기쁨"), '감정_대분류'] = 0
 data.loc[(data['감정_대분류'] == "기쁨 "), '감정_대분류'] = 0
@@ -87,7 +92,8 @@ from sklearn.model_selection import train_test_split
 
 dataset_train, dataset_test = train_test_split(data_list, test_size=0.2, shuffle=True, random_state=34)
 
-tok=tokenizer.tokenize
+tok = nlp.data.BERTSPTokenizer(tokenizer, vocab, lower=False)
+#tok=tokenizer.tokenize
 
 data_train = BERTDataset(dataset_train, 0, 1, tok, vocab, max_len, True, False)
 data_test = BERTDataset(dataset_test, 0, 1, tok, vocab, max_len, True, False)
@@ -156,7 +162,7 @@ for e in range(num_epochs):
     train_acc = 0.0
     test_acc = 0.0
     model.train()
-    for batch_id, (token_ids, valid_length, segment_ids, label) in enumerate(tqdm_notebook(train_dataloader)):
+    for batch_id, (token_ids, valid_length, segment_ids, label) in tqdm(enumerate(train_dataloader), total=len(train_dataloader), num_workers=0):
         optimizer.zero_grad()
         token_ids = token_ids.long().to(device)
         segment_ids = segment_ids.long().to(device)

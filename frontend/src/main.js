@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap'
 import VueChartkick from 'vue-chartkick'
 import 'chartkick/chart.js'
+import 'vuex-persistedstate'
 
 const app = createApp(App);
 

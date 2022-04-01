@@ -33,6 +33,9 @@
   </li>
  </ul>
 
+<div v-if="loading" class="spinner-border text-center" style="width: 3rem; height: 3rem" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div>
 
 <div class="card m-3 row" style="max-width: 1140px; max-height : 180px" v-for="news in searchedData" :key="news.news_seq">
   <div class="row g-0">
@@ -162,6 +165,7 @@ export default {
     search() {
       // console.log("검색 키워드 확인 : "+this.searchWord);
       if(this.searchWord != null && this.searchWord !="") {
+        this.loading = true;
         axios.get(`${SERVER_HOST}/news/keyword`, {
           params: {
             keyword : this.searchWord,
