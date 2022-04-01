@@ -21,8 +21,9 @@
     </div>
 
     <div class="plan span--2 long--2">
-      <h3>키워드 언급량 추이 그래프</h3>
-      <!-- <line-chart :data="lineData" ></line-chart> -->
+      <h3>키워드 검색량 추이 그래프</h3>
+      <line-chart :data="chartData" ></line-chart>
+
     </div>
   </main>
   
@@ -36,7 +37,7 @@
   <span class="visually-hidden">Loading...</span>
 </div>
 
-<div class="card m-2 " style="max-width: 1040px; max-height : 180px" v-for="news in searchedData" :key="news.news_seq">
+<div class="card m-3 row" style="max-width: 1140px; max-height : 180px" v-for="news in searchedData" :key="news.news_seq">
   <div class="row g-0">
     <div class="col-md-4">
       <img v-bind:src="news.news_photo" class="card-img-top" style="max-height : 180px"  @error="replaceDefault">
@@ -126,7 +127,8 @@ export default {
       next: false,
       start: false,
       end: false,
-      loading: false,
+      chartData :[{name: '',  data: {}}],
+
     }
   },
     components: {
@@ -134,31 +136,34 @@ export default {
   },
   created() {
       this.searchWord = this.$route.params.searchWord;
+      this.chartMake(this.searchWord);
       this.search();
   },
 
   methods: {
       detail (seq) {
-      console.log("검색 시퀀스 : "+seq);
-      axios.get(`${SERVER_HOST}/news/detail`, {
-        params: {
-          newsSeq : seq,           
-        }
-      }).then((res) =>{
-        //  console.log(res.data.data);
-        this.newsData = res.data.data;
-        this.newsVisible = !this.newsVisible;
-      }).catch((err) => {
-        console.log("에러");
-        console.log(err);
-      });
+      // console.log("검색 시퀀스 : "+seq);
+       axios.get(`${SERVER_HOST}/news/detail`, {
+          params: {
+            newsSeq : seq,           
+          }
+        })
+        .then((res) =>{
+            //  console.log(res.data.data);
+            this.newsData = res.data.data;
+            this.newsVisible = !this.newsVisible;
+
+        }).catch((err) => {
+            console.log("에러");
+            console.log(err);
+          });
 
     },
     newsInit: function () {
        this.newsVisible = false;
     },
     search() {
-      console.log("검색 키워드 확인 : "+this.searchWord);
+      // console.log("검색 키워드 확인 : "+this.searchWord);
       if(this.searchWord != null && this.searchWord !="") {
         this.loading = true;
         axios.get(`${SERVER_HOST}/news/keyword`, {
@@ -169,20 +174,18 @@ export default {
           }
         })
         .then((res) =>{
-          this.loading = false;
           console.log(res.data);
           this.searchedData = res.data.data;
           const totalElements = res.data.data[0].totalElements;
           this.pagination(totalElements);
-
-          
+          this.chartMake(this.searchWord);
         }).catch((err) => {
             console.log("에러");
+            alert("검색 결과가 없습니다.");
             console.log(err);
           })
       }
     },
-
     pagination: function (total) {
       this.totalPage = parseInt(total / 6)
       if ((total % 6) !== 0) {
@@ -229,6 +232,37 @@ export default {
 
     replaceDefault: function (e) {
       e.target.src = img
+    },
+
+    chartMake(keyword) {
+     // console.log("차트 검색 키워드 "+keyword);
+      axios.get(`${SERVER_HOST}/news/keyword/trend/week`, {
+          params: {
+            keywords : keyword,
+          }
+        })
+        .then((res) =>{
+    
+      this.chartData = [ {name: '',  data: {   }}]; //할당 안해주면 data 표시 안됨
+      var values = Object.values(res.data.data[0].stat); //받은 result value들만 따로 정제
+      var temp = {}; //value를 속성, 값으로 만들어줄 객체
+
+      for(var i =0; i<values.length; i++)  {
+        let label = values[i].label;
+        temp[label] = values[i].count; //temp 객체에 label 속성과 count 값 할당
+      }
+      
+      //차트 데이터 할당
+      this.chartData[0].name = keyword;
+      this.chartData[0].data = temp;
+      
+       console.log(this.chartData);
+
+      }).catch((err) => {
+            console.log("에러");
+            alert("검색 결과가 없습니다.");
+            console.log(err);
+          })
     },
 
   }
