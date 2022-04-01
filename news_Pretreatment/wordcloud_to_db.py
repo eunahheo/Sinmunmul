@@ -30,8 +30,7 @@ if __name__ == '__main__':
     # 년월일시 20220323-13 : 2022년 03월 23일 13시
     file_date = str(now.strftime("%Y%m%d%H"))
  
-    i = 0
-    for code_group in code_group_num:
+    for i, code_group in enumerate(code_group_num):
         # 파일 이름
         # politics-2022032313
         # 대분류-년월일-시
@@ -44,10 +43,12 @@ if __name__ == '__main__':
         client_hdfs = InsecureClient('http://172.26.4.211:9870', user='j6a406')
 
         encType = 'utf-8'
-        with client_hdfs.read(path, encoding = encType) as reader:
-            data = pd.read_csv(reader, header=None, engine='python', encoding = 'utf-8', on_bad_lines='skip')
-            reader.close()
-
+        try:
+            with client_hdfs.read(path, encoding = encType) as reader:
+                data = pd.read_csv(reader, header=None, engine='python', encoding = 'utf-8', on_bad_lines='skip')
+                reader.close()
+        except:
+            continue
         wordcloud = []
         for k in range(len(data)):
             row = data.iloc[k][0].split("\t")
@@ -61,5 +62,4 @@ if __name__ == '__main__':
         sql = "INSERT INTO news_wordcloud (code_group, wordcloud, del_yn, reg_dt, reg_id, mod_dt, mod_id) values (%s, %s, %s, %s, %s, %s, %s)"
 
         # sql 문 실행
-        curs.execute(sql, (code_group_num[i], json.dumps(wordcloud, ensure_ascii=False), 'n', curtime, 'admin', curtime, 'admin'))
-        i = i + 1
+        curs.execute(sql, (code_group_num[i], json.dumps(wordcloud[0:20], ensure_ascii=False), 'n', curtime, 'admin', curtime, 'admin'))
