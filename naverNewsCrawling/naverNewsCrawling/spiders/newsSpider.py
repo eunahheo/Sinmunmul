@@ -19,7 +19,7 @@ class NewsUrlSpider(scrapy.Spider):
             ['105','731','226','227','230','732','283','229','228'],
             ['104','231','232','233','234','322'],
         ]
-        if(datetime.datetime.now().hour < 1):
+        if(datetime.datetime.now().hour == 0 and datetime.datetime.now().minute < 20):
             if (datetime.datetime.now().day - 1) < 1:
                 curDate = str(30+((datetime.datetime.now().month) % 2))
             else:
@@ -31,10 +31,10 @@ class NewsUrlSpider(scrapy.Spider):
             for i in range(1,len(url)):
                 self.now_topic1 = url[0]
                 self.now_topic2 = url[i]
-                for topicPage in range(1,4):
-                    yield scrapy.Request(url=f'https://news.naver.com/main/list.naver?mode=LS2D&mid=shm&sid1={url[0]}&sid2={url[i]}&page={topicPage}&date=202203{curDate}', callback=self.parse_news)
-                    # yield scrapy.Request(url=f'https://news.naver.com/main/list.naver?mode=LS2D&mid=shm&sid1={url[0]}&sid2={url[i]}&page={topicPage}', callback=self.parse_news)
-                    time.sleep(0.1)
+                print("currently parsing : " + self.now_topic1 + ", " + self.now_topic2)
+                for topicPage in range(1,3):
+                    yield scrapy.Request(url=f'https://news.naver.com/main/list.naver?mode=LS2D&mid=shm&sid1={url[0]}&sid2={url[i]}&page={topicPage}&date=202204{curDate}', callback=self.parse_news)
+                    time.sleep(2)
 
     def parse_page(self, response):
         return response.xpath('//*[@id="main_content"]/div[3]/strong/text()').extract()
@@ -43,7 +43,7 @@ class NewsUrlSpider(scrapy.Spider):
         for sel in response.xpath('//*[@id="main_content"]/div[2]/ul/li'):
             request = scrapy.Request(sel.xpath('dl/dt/a/@href').extract()[-1], callback=self.parse_news_detail)
             yield request
-            time.sleep(0.15)
+            time.sleep(0.1)
 
     def parse_news_detail(self, response):
         item = NaverNewsCrawlingItem()
@@ -74,7 +74,6 @@ class NewsUrlSpider(scrapy.Spider):
         if len(t_email) < 5:
             item['author_email'] = 'None'
         else:                
-            # print(t_email)
             item['author_email'] = t_email
         # parse img_link
         if(len(response.xpath('//*[@class="end_photo_org"]/img/@src').extract()) > 0):
@@ -124,7 +123,7 @@ class NewsUrlSpider(scrapy.Spider):
         else:
             temp_dt = ''.join(response.xpath('//*[@id="main_content"]/div[1]/div[3]/div/span/text()').extract())
             
-            while not (temp_dt[0] == '2' and temp_dt[1] == '0'):
+            while not (temp_dt[0:4] == '2022'):
                 temp_dt = temp_dt[1:]
 
             if(temp_dt.find('오전') == -1 and temp_dt.find('오후') == -1):
@@ -139,7 +138,6 @@ class NewsUrlSpider(scrapy.Spider):
                 ap_dt = temp_dt.split(' ')[1]
                 t_dt = temp_dt.split(' ')[2]
                 
-                print(d_dt, ap_dt, t_dt)
                 if(ap_dt == '오후'):
                     if (t_dt.split(':')[0] == '12'):
                         item['dateReg'] = d_dt + ' ' + '00' + ':' + t_dt.split(':')[1].zfill(2) + ':00'
