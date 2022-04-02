@@ -6,7 +6,7 @@
 
  <main>
    <div class="title--large main-title plan"> 
-     <h2 class="title--large main-title">오늘의 뉴스 현황 &nbsp&nbsp&nbsp {{todayNews}}
+     <h2 class="title--large main-title">오늘의 뉴스 현황 &nbsp {{todayNews}}
      </h2>
   
      
@@ -324,7 +324,7 @@ p a {
 
 @media (min-width: 700px) {
   .title--large {
-    font-size: 36px;
+    font-size: 32px;
     margin: 0;
   }
 }
