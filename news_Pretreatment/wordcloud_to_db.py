@@ -30,6 +30,13 @@ if __name__ == '__main__':
     # 년월일시 20220323-13 : 2022년 03월 23일 13시
     file_date = str(now.strftime("%Y%m%d%H"))
  
+     # 불용어 리스트
+    stopword_file = open('/var/lib/jenkins/workspace/sinmunmul/news_Pretreatment/stopwords.txt', 'r', encoding='utf-8')
+    stopword = []
+    for word in stopword_file.readlines():
+        stopword.append(word.rstrip())
+    stopword_file.close()
+            
     for i, code_group in enumerate(code_group_num):
         # 파일 이름
         # politics-2022032313
@@ -47,19 +54,22 @@ if __name__ == '__main__':
             with client_hdfs.read(path, encoding = encType) as reader:
                 data = pd.read_csv(reader, header=None, engine='python', encoding = 'utf-8', on_bad_lines='skip')
                 reader.close()
-        except:
+        except Exception as e:
+            print(e)
             continue
+
         wordcloud = []
         for k in range(len(data)):
             row = data.iloc[k][0].split("\t")
             keyword = row[0]
             count = row[1]
-            wordcloud.append({'keyword' : keyword, 'count' : count})
+            wordcloud.append({'keyword' : keyword, 'count' : int(count)})
 
         wordcloud.sort(key = lambda object:object["count"], reverse = True)
 
         curtime = now.strftime('%Y-%m-%d %H:%M:%2S')
         sql = "INSERT INTO news_wordcloud (code_group, wordcloud, del_yn, reg_dt, reg_id, mod_dt, mod_id) values (%s, %s, %s, %s, %s, %s, %s)"
-
+        print(sql)
+        
         # sql 문 실행
         curs.execute(sql, (code_group_num[i], json.dumps(wordcloud[0:20], ensure_ascii=False), 'n', curtime, 'admin', curtime, 'admin'))

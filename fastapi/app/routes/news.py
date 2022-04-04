@@ -3,6 +3,7 @@ from gensim.models.word2vec import Word2Vec
 from konlpy.tag import Okt
 import pymysql
 from datetime import datetime
+import collections
 
 router = APIRouter(prefix="/fapi/news")
 
@@ -21,11 +22,20 @@ async def wordcloud(keyword: str):
                            charset=db_conn.char, autocommit=True)
     curs = conn.cursor(pymysql.cursors.DictCursor)
 
+    #stopword_file = open('C:/Users/SSAFY/git/S06P22A406/news_Pretreatment/stopwords.txt', 'r', encoding='utf-8')
+    stopword_file = open('/var/lib/jenkins/workspace/sinmunmul/news_Pretreatment/stopwords.txt', 'r', encoding='utf-8')
+    stopword = []
+    for word in stopword_file.readlines():
+        stopword.append(word.rstrip())
+    stopword_file.close()
+    print(stopword)
+
     # 현재시간 가져오기
     now = datetime.now()
-    today = str(now.strftime('%Y-%m-%d %H')) + ":00:00"
+    today = str(now.strftime('%Y-%m-%d %H')) + ":00:01"
     #sql = "SELECT news_title, news_desc FROM news WHERE del_yn='n' And news_reg_dt between DATE_ADD('" + today + "', INTERVAL -7 DAY) AND '" + today + "' AND news_desc like '%" + keyword + "%';"
-    sql = "SELECT news_title, news_desc FROM news WHERE del_yn='n' And news_reg_dt between DATE_ADD('" + today + "', INTERVAL -14 DAY) AND '" + today + "' AND news_desc like '%" + keyword + "%';"
+    #sql = "SELECT news_title, news_desc FROM news WHERE del_yn='n' And news_reg_dt between DATE_ADD('" + today + "', INTERVAL -14 DAY) AND '" + today + "' AND news_desc like '%" + keyword + "%' order by news_reg_dt limit 100;"
+    sql = "SELECT news_title, news_desc FROM news WHERE del_yn='n' AND news_desc like '%" + keyword + "%' order by news_reg_dt limit 100;"
 
     # sql 문 실행
     curs.execute(sql)
@@ -36,7 +46,10 @@ async def wordcloud(keyword: str):
     # KoNLPy 형태소 분석기
     hannanum = Okt()
     result = []
+    print(keyword, len(rows))
 
+    wordcloud = []
+    count = []
     for news in rows:
         title = news['news_title']
         desc = news['news_desc']
@@ -49,21 +62,25 @@ async def wordcloud(keyword: str):
         # 단어만 뽑아내기
         data_pretreatment = hannanum.nouns(desc)
 
-        # 한 글자인 명사 제외
+        # 한 글자인 명사와 불용어 제거
         for i, v in reversed(list((enumerate(data_pretreatment)))):
-            if (len(v) < 2):
+            if len(v) < 2 or v in stopword:
                 data_pretreatment.pop(i)
-
+            else:
+                count.append(v)
         # print(data_pretreatment)
         result.append(data_pretreatment)
 
+    counts = collections.Counter(count)
+
     model = Word2Vec(sentences=result, vector_size=100, window=5, min_count=5, workers=4, sg=0)
     # model = Word2Vec(sentences=result)
-    a = model.wv.most_similar(keyword, topn=20)
-    print(a)
+    most_similar = model.wv.most_similar(keyword, topn=20)
 
-    return a
+    for similar in most_similar:
+        wordcloud.append({'keyword': similar[0], 'count': int(similar[1] * counts[similar[0]])})
 
+    return wordcloud
 
 
 

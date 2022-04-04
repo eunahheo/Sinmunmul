@@ -11,8 +11,8 @@ def create_app():
     :return:
     """
     c = conf()
-    app = FastAPI(title="API_NAME",
-              description="API_DESC",
+    app = FastAPI(title="SINMUNMUL Fast API",
+              description="개인 맞춤형 뉴스 추천 서비스 신문물 API",
               version="0.2.0",
               docs_url='/fapi/docs',
               redoc_url='/fapi/redoc',
@@ -42,4 +42,4 @@ if __name__ == "__main__":
 
 @app.get("/fapi/newsbig/sinmunmul")
 def read_main(request: Request):
-    return {"message": "안녕하세요! 뉴스빅의 신문물입니다!", "root_path": request.scope.get("root_path")}
+    return {"message": "뉴스빅의 신문물입니다!", "root_path": request.scope.get("root_path")}
