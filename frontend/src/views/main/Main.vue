@@ -39,7 +39,7 @@
        <button type="button"  @click="generate(105)" class="btn btn-primary btn-sm"> IT/과학 </button> &nbsp  
        
        <!-- <bar-chart :data="chartData"></bar-chart> -->
-       <bar-chart  :chart-options="chartOptions" :data="chartData" :colors="['#eb6750', '#eb8500', '#0053e3', '#e8e800', '#00dfe3', '#00b347', '#9c03ad']" @click="getGraphKey"></bar-chart>
+       <bar-chart :data="chartData" :colors="['#3366CC', '#DC3912', '#FF9900', '#109618', '#990099', '#3B3EAC', '#0099C6']" @click="getGraphKey"></bar-chart>
     </div>
 
     <div class="plan span--2 long--2 ">
@@ -103,11 +103,6 @@ export default {
         
       ],
       chartData: [],
-      
-      chartOptions: {
-        events: ['click']
-      },
-
 
      lineData : [ ], //line data
 

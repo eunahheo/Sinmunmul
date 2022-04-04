@@ -109,9 +109,10 @@ public class NewsServiceImpl implements NewsService {
 	@SuppressWarnings("unchecked")
 	public List<JSONObject> searchNews(String keyword, int page, int size) {
 		List<JSONObject> result = new ArrayList<>();
-		PageRequest pageRequest = PageRequest.of(page - 1, size, Sort.by("newsRegDt").descending());
-		Page<News> pageNews = newsRepository.findBydelYnAndNewsTitleContainingOrNewsDescContaining("n", keyword, keyword, pageRequest);
-		
+		PageRequest pageRequest = PageRequest.of(page - 1, size, Sort.by("news_reg_dt").descending());
+		Page<News> pageNews = newsRepository.searchNewsKeyword("n", keyword, keyword, pageRequest);
+		 
+		System.out.println(pageNews.getPageable());
 		for (News news : pageNews) {
 			JSONObject obj = new JSONObject();
 
@@ -165,7 +166,7 @@ public class NewsServiceImpl implements NewsService {
 				+ "DATE_FORMAT(n.news_reg_dt, '%Y%u') AS 'date', "
 				+ "count(*) AS count "
 				+ "FROM news n "
-				+ "WHERE n.del_yn='n' and n.news_title like '%"+keyword+"%' OR n.news_desc like '%"+keyword+"%' "
+				+ "WHERE MATCH(n.news_title) AGAINST('" + keyword + "' IN BOOLEAN MODE) OR MATCH(n.news_desc) AGAINST('" + keyword + "' IN BOOLEAN MODE)"
 				+ "GROUP BY date ORDER BY date DESC LIMIT 6";
         
         JpaResultMapper result = new JpaResultMapper();
@@ -181,7 +182,7 @@ public class NewsServiceImpl implements NewsService {
 		String q = "SELECT date_format(n.news_reg_dt, '%Y-%m') AS 'label', "
 				+ "count(*) AS count "
 				+ "FROM news n "
-				+ "WHERE n.del_yn='n' and n.news_title like '%"+keyword+"%' OR n.news_desc like '%"+keyword+"%' "
+				+ "WHERE MATCH(n.news_title) AGAINST('" + keyword + "' IN BOOLEAN MODE) OR MATCH(n.news_desc) AGAINST('" + keyword + "' IN BOOLEAN MODE)"
 				+ "GROUP BY label ORDER BY label desc LIMIT 6";
         
         JpaResultMapper result = new JpaResultMapper();
