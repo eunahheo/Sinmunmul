@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f2bf91a0-4ea5-4e4a-95e7-6a081e6f2f78" name="Default Changelist" comment="" />
+    <list default="true" id="f2bf91a0-4ea5-4e4a-95e7-6a081e6f2f78" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../bigdata/.project" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/.project" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/com/newsbig/sinmunmul/repository/NewsRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/com/newsbig/sinmunmul/repository/NewsRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/com/newsbig/sinmunmul/service/NewsServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/com/newsbig/sinmunmul/service/NewsServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/routes/news.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/routes/news.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../news_Pretreatment/stopwords.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../news_Pretreatment/stopwords.txt" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,21 +58,21 @@
         <counts>
           <entry key="project.closed" value="3" />
           <entry key="project.open.time.3" value="1" />
-          <entry key="project.open.time.4" value="2" />
+          <entry key="project.open.time.4" value="3" />
           <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="4" />
+          <entry key="project.opened" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Dockerfile" value="124" />
-          <entry key="py" value="1218" />
+          <entry key="py" value="1316" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="124" />
-          <entry key="Python" value="1218" />
+          <entry key="Python" value="1316" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -93,8 +101,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/routes/news.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-144">
-              <caret line="58" column="35" selection-start-line="58" selection-start-column="35" selection-end-line="58" selection-end-column="35" />
+            <state relative-caret-position="508">
+              <caret line="35" column="49" selection-start-line="35" selection-start-column="49" selection-end-line="35" selection-end-column="49" />
               <folding>
                 <element signature="e#0#38#0" expanded="true" />
               </folding>
@@ -139,11 +147,11 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="1">
-    <option name="x" value="2208" />
-    <option name="y" value="130" />
-    <option name="width" value="3102" />
-    <option name="height" value="1758" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="2054" />
+    <option name="y" value="-16" />
+    <option name="width" value="4964" />
+    <option name="height" value="2182" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -207,10 +215,9 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="2064" y="65" width="1551" height="879" extended-state="1" />
-    <editor active="true" />
+    <frame x="1914" y="-6" width="1933" height="1053" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18679868" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15761729" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -221,7 +228,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" visible="true" weight="0.23930481" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" visible="true" weight="0.31236443" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="10" weight="0.328877" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -276,8 +283,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/routes/news.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-144">
-          <caret line="58" column="35" selection-start-line="58" selection-start-column="35" selection-end-line="58" selection-end-column="35" />
+        <state relative-caret-position="508">
+          <caret line="35" column="49" selection-start-line="35" selection-start-column="49" selection-end-line="35" selection-end-column="49" />
           <folding>
             <element signature="e#0#38#0" expanded="true" />
           </folding>

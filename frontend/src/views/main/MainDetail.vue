@@ -33,9 +33,9 @@
   </li>
  </ul>
 
-<div v-if="loading" class="spinner-border text-center" style="width: 3rem; height: 3rem" role="status">
+<!-- <div v-if="loading" class="spinner-border text-center" style="width: 3rem; height: 3rem" role="status">
   <span class="visually-hidden">Loading...</span>
-</div>
+</div> -->
 
 <div class="card m-3 row" style="max-width: 1140px; max-height : 180px" v-for="news in searchedData" :key="news.news_seq">
   <div class="row g-0">
