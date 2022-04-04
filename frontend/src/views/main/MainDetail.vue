@@ -40,27 +40,28 @@
 <div class="card m-3 row" style="max-width: 1140px; max-height : 180px" v-for="news in searchedData" :key="news.news_seq">
   <div class="row g-0">
     <div class="col-md-4">
-      <img v-bind:src="news.news_photo" class="card-img-top" style="max-height : 180px"  @error="replaceDefault">
+      <img v-if="news.news_photo !== ''" v-bind:src="news.news_photo" class="card-img-top" style="max-height : 180px object-fit:cover"  @error="replaceDefault">
+      <img v-else src="/frontend/public/img/no_image.jpg" class="card-img-top" style="max-height : 180px object-fit:contain" @error="replaceDefault">
       <!-- <img v-bind:src="news.news.newsPhoto" class="img-fluid rounded-start"  @error="replaceDefault"> -->
     </div>
     <div class="col-md-7">
       <div class="card-body">
-        <h5 class="card-title">{{news.news_Title}} </h5>
-        <!-- <p class="card-text"><small class="text-muted"> 작은 글씨</small></p> -->
+        <h5 class="card-title px-4">{{news.news_Title}} </h5>
+        <hr style="border: solid 2px black">
+        <p class="card-text px-4"><small class="text-muted">{{news.news_desc.substring(0,100)}}...</small></p>
       </div>
+
     </div>
     <div class="col-md-1">
       <!-- <button @click="detail">자세히 보기 </button> -->
       <!-- <a :href="detail" class="btn btn-primary" style="display:block; width:100%; height:100%; vertical-align: middle;">자세히 보기</a> -->
-
       <button @click="detail(news.news_seq)" class="btn btn-info" 
       style="display:block; width:100%; height:100%; vertical-align: middle;"
       >자세히 보기</button>
     </div>
-
   </div>
- 
 </div>
+
   <nav aria-label="..." class="d-flex justify-content-center mb-4 ">
       <ul class="pagination d-flex justify-content-between">
         <li v-if="start" class="page-item">
@@ -77,11 +78,13 @@
           <a class="page-link" href="#" tabindex="-1" aria-disabled="true">‹</a>
         </li>
         <li
-         v-for="pageitem in pageNumbers"
-          v-bind:id="'p'+pageitem"
-          v-bind:class="{' active': pageitem == nowPage}"
-          :key="pageitem"
-         class="page-item"><a class="page-link"  href="#" @click="thisPage(pageitem)">{{pageitem}}</a></li>
+          v-for="pageitem in pageNumbers"
+            v-bind:id="'p'+pageitem"
+            v-bind:class="{' active': pageitem == nowPage}"
+            :key="pageitem"
+          class="page-item">
+          <a class="page-link"  href="#" @click="thisPage(pageitem)">{{pageitem}}</a>
+        </li>
         <li v-if="next" class="page-item">
           <a class="page-link" href="#" @click="thisPage(nowPage+5)">›</a>
         </li>
@@ -170,7 +173,7 @@ export default {
           params: {
             keyword : this.searchWord,
             page : this.nowPage,
-            size : 5
+            size : 10,
           }
         })
         .then((res) =>{
@@ -179,10 +182,12 @@ export default {
           const totalElements = res.data.data[0].totalElements;
           this.pagination(totalElements);
           this.chartMake(this.searchWord);
+          this.loading = false;
         }).catch((err) => {
-            console.log("에러");
-            alert("검색 결과가 없습니다.");
-            console.log(err);
+          console.log("에러");
+          alert("검색 결과가 없습니다.");
+          console.log(err);
+          this.loading = false;
           })
       }
     },
