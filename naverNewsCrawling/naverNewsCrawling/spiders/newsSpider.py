@@ -29,9 +29,7 @@ class NewsUrlSpider(scrapy.Spider):
         
         for url in urls:
             for i in range(1,len(url)):
-                self.now_topic1 = url[0]
-                self.now_topic2 = url[i]
-                print("currently parsing : " + self.now_topic1 + ", " + self.now_topic2)
+                print("currently parsing : " + url[0] + ", " + url[i])
                 for topicPage in range(1,3):
                     yield scrapy.Request(url=f'https://news.naver.com/main/list.naver?mode=LS2D&mid=shm&sid1={url[0]}&sid2={url[i]}&page={topicPage}&date=202204{curDate}', callback=self.parse_news)
                     time.sleep(2)
@@ -154,12 +152,13 @@ class NewsUrlSpider(scrapy.Spider):
                         item['dateMod'] = d_dt + ' ' + t_dt.split(':')[0].zfill(2) + ':' + t_dt.split(':')[1].zfill(2) + ':00'
 
         # parse topic1 code
-        item['topic1'] = self.now_topic1
+        item['topic1'] = (response.url).split('sid1=')[1][0:3]
         # parse topic2 code
-        if(self.now_topic2 == "59b"):
+        tempTopic2 = (response.url).split('sid2=')[1][0:3]
+        if(tempTopic2 == "59b"):
             item['topic2'] = "59"
         else:
-            item['topic2'] = self.now_topic2
+            item['topic2'] = tempTopic2
         # parse current time
         item['reg_dt'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         item['mod_dt'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
