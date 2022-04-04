@@ -100,12 +100,12 @@ class MysqlPipeline(object):
 
     def process_item(self, item, spider):
         cursor = self.dbcon.cursor()
-        cursor.execute(f"SELECT * FROM sinmunmul.news WHERE news_link = '{item['link']}'")
+        cursor.execute(f"SELECT * FROM sinmunmul.news WHERE news_link = '{item['link']}' ORDER BY news_seq DESC LIMIT 1")
         result = cursor.fetchall()
         if len(result) != 0:
             print(f"{item['link']} already exists")
             raise DropItem("Duplicate item found: %s" % item)
-        sql = f"INSERT INTO {self.table} (news_title, news_link, news_press, news_author, news_author_email, news_photo, news_desc, news_summary, news_reg_dt,news_mod_dt, code_group, code, reg_dt, reg_id, mod_dt, mod_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        sql = f"INSERT INTO {self.table} (news_title, news_link, news_press, news_author, news_author_email, news_photo, news_desc, news_summary, news_reg_dt, news_mod_dt, code_group, code, reg_dt, reg_id, mod_dt, mod_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         cursor.execute(sql, (item['title'], item['link'], item['press'], item['author'], item['author_email'], item['img'], item['desc'], item['desc'][0:50], item['dateReg'], item['dateMod'], item['topic1'], item['topic2'], item['reg_dt'], 'admin', item['mod_dt'], 'admin'))
         self.dbcon.commit()
         # cursor.close()
