@@ -30,13 +30,6 @@ if __name__ == '__main__':
     # 년월일시 20220323-13 : 2022년 03월 23일 13시
     file_date = str(now.strftime("%Y%m%d%H"))
  
-     # 불용어 리스트
-    stopword_file = open('/var/lib/jenkins/workspace/sinmunmul/news_Pretreatment/stopwords.txt', 'r', encoding='utf-8')
-    stopword = []
-    for word in stopword_file.readlines():
-        stopword.append(word.rstrip())
-    stopword_file.close()
-            
     for i, code_group in enumerate(code_group_num):
         # 파일 이름
         # politics-2022032313

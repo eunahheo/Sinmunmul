@@ -49,12 +49,11 @@ if __name__ == '__main__':
     # 불용어 리스트
     stopword_file = open('/var/lib/jenkins/workspace/sinmunmul/news_Pretreatment/stopwords.txt', 'r', encoding='utf-8')
     stopword = []
-    for word in stopword_file.readline().split(" "):
-        stopword.append(word)
+    for word in stopword_file.readlines():
+        stopword.append(word.rstrip())
     stopword_file.close()
 
     for i, code_group in enumerate(code_group_num):
-
         # 코드 그룹에 따른 sql 문
         # 현재 시각 hour를 기준으로 hour - 1 ~ hour, ex) 현재 14시이면, 13시 ~ 14시 사이에 등록된 기사들을 가져온다.
         # news_reg_dt or reg_dt
