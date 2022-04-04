@@ -1,6 +1,5 @@
 package com.newsbig.sinmunmul.repository;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -17,8 +16,10 @@ public interface NewsRepository extends JpaRepository<News, Long> {
 	// 오늘의 전체 뉴스 개수
 	public int countBydelYnAndNewsRegDtBetween(String delYn, String start, String end);
 
-	public Page<News> findBydelYnAndNewsTitleContainingOrNewsDescContaining(String delYn, String keyword,
-			String keyword2, Pageable pageable);
+	@Query(value = "select * from news WHERE del_yn=:delYn AND MATCH(news_title) AGAINST(:keyword IN BOOLEAN MODE) OR MATCH(news_desc) AGAINST(:keyword2 IN BOOLEAN MODE)",
+			nativeQuery = true)
+	public Page<News> searchNewsKeyword(@Param("delYn") String delYn, @Param("keyword") String keyword,
+			@Param("keyword2") String keyword2, Pageable pageable);
 
 	public Optional<News> findBydelYnAndNewsSeq(String delYn, long newsSeq);
 
