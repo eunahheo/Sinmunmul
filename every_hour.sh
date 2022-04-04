@@ -1,11 +1,7 @@
-# 크롤링 스크립트 실행
-#cd /var/lib/jenkins/workspace/sinmunmul/naverNewsCrawling/naverNewsCrawling
-#scrapy crawl naverNewsCrawling
-
-
 # 크롤링 한 데이터 전처리 -> 하둡 클러스터 hdfs에 저장
 # news_pretreatment.py
-python3 /var/lib/jenkins/workspace/sinmunmul/news_Pretreatment/news_pretreatment.py
+sudo chmod +x /var/lib/jenkins/workspace/sinmunmul/news_Pretreatment/news_pretreatment.py
+/usr/bin/python3 /var/lib/jenkins/workspace/sinmunmul/news_Pretreatment/news_pretreatment.py
 echo "전처리 완료"
 
 
@@ -21,7 +17,7 @@ echo "워드카운트 완료 "${today}
 
       # 하둡 클러스터에서 분야 별로 wordcount mapreduce 실행
       # wordcount.sh
-      
+
               # 하둡 클러스터에서 wordcount mapreduce 실행
               # 분야 별로
               # code_num=(0 100 101 102 103 104 105)
@@ -41,6 +37,6 @@ echo "워드카운트 완료 "${today}
 ### 원래 서버
 # wordcount_to_db.py 실행
 echo "워드클라우드 DB에 넣기 시작"
-python3 /var/lib/jenkins/workspace/sinmunmul/news_Pretreatment/wordcloud_to_db.py
+sudo chmod +x /var/lib/jenkins/workspace/sinmunmul/news_Pretreatment/wordcloud_to_db.py
+/usr/bin/python3 /var/lib/jenkins/workspace/sinmunmul/news_Pretreatment/wordcloud_to_db.py
 echo "워드클라우드 DB에 넣기 완료"
-

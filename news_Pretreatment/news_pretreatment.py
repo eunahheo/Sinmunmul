@@ -46,6 +46,13 @@ if __name__ == '__main__':
     # 한 시간 단위
     start_time = str(now.strftime('%Y-%m-%d %H')) + ":00:00"
 
+    # 불용어 리스트
+    stopword_file = open('/var/lib/jenkins/workspace/sinmunmul/news_Pretreatment/stopwords.txt', 'r', encoding='utf-8')
+    stopword = []
+    for word in stopword_file.readline().split(" "):
+        stopword.append(word)
+    stopword_file.close()
+
     for i, code_group in enumerate(code_group_num):
 
         # 코드 그룹에 따른 sql 문
@@ -94,9 +101,9 @@ if __name__ == '__main__':
             data_pretreatment = hannanum.nouns(desc)
 
             # 한 글자인 명사 제외
-            for i,v in reversed(list((enumerate(data_pretreatment)))):
-                if(len(v)<2):
-                    data_pretreatment.pop(i)
+            for j,v in reversed(list((enumerate(data_pretreatment)))):
+                if(len(v)<2 or v in stopword):
+                    data_pretreatment.pop(j)
                 else:
                     continue
 

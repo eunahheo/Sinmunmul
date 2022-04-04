@@ -2,8 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f2bf91a0-4ea5-4e4a-95e7-6a081e6f2f78" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../news_Pretreatment/stopwords.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../every_hour.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../every_hour.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/routes/news.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/routes/news.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../news_Pretreatment/news_pretreatment.py" beforeDir="false" afterPath="$PROJECT_DIR$/../news_Pretreatment/news_pretreatment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../news_Pretreatment/wordcloud_to_db.py" beforeDir="false" afterPath="$PROJECT_DIR$/../news_Pretreatment/wordcloud_to_db.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -51,21 +55,23 @@
     <session id="1579882803">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="1" />
+          <entry key="project.closed" value="3" />
+          <entry key="project.open.time.3" value="1" />
+          <entry key="project.open.time.4" value="2" />
           <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="1" />
+          <entry key="project.opened" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Dockerfile" value="124" />
-          <entry key="py" value="908" />
+          <entry key="py" value="1217" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="124" />
-          <entry key="Python" value="908" />
+          <entry key="Python" value="1217" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -85,7 +91,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/common/config.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
+            <state relative-caret-position="304">
               <caret line="17" column="27" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="27" />
             </state>
           </provider>
@@ -94,8 +100,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/routes/news.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="874">
-              <caret line="49" column="28" lean-forward="true" selection-start-line="49" selection-start-column="28" selection-end-line="49" selection-end-column="28" />
+            <state relative-caret-position="342">
+              <caret line="27" column="35" selection-start-line="25" selection-start-column="4" selection-end-line="29" selection-end-column="25" />
               <folding>
                 <element signature="e#0#38#0" expanded="true" />
               </folding>
@@ -106,7 +112,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="141">
+            <state relative-caret-position="171">
               <caret line="13" column="34" selection-start-line="13" selection-start-column="34" selection-end-line="13" selection-end-column="34" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
@@ -141,9 +147,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="2660" />
+    <option name="x" value="2208" />
+    <option name="y" value="130" />
     <option name="width" value="3102" />
-    <option name="height" value="2092" />
+    <option name="height" value="1758" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -207,7 +214,8 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="2290" y="0" width="1551" height="1046" extended-state="0" />
+    <frame x="2064" y="65" width="1551" height="879" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18679868" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -220,9 +228,9 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" visible="true" weight="0.33224043" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" visible="true" weight="0.23930481" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Python Console" order="10" />
+      <window_info anchor="bottom" id="Python Console" order="10" weight="0.328877" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -249,16 +257,6 @@
     <entry file="file://$PROJECT_DIR$/app/common/__init__.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="608">
-          <caret line="36" selection-start-line="36" selection-end-line="36" />
-          <folding>
-            <element signature="e#0#14#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Dockerfile">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="665">
@@ -268,14 +266,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/common/config.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
+        <state relative-caret-position="304">
           <caret line="17" column="27" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="27" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="141">
+        <state relative-caret-position="171">
           <caret line="13" column="34" selection-start-line="13" selection-start-column="34" selection-end-line="13" selection-end-column="34" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
@@ -285,8 +283,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/routes/news.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="874">
-          <caret line="49" column="28" lean-forward="true" selection-start-line="49" selection-start-column="28" selection-end-line="49" selection-end-column="28" />
+        <state relative-caret-position="342">
+          <caret line="27" column="35" selection-start-line="25" selection-start-column="4" selection-end-line="29" selection-end-column="25" />
           <folding>
             <element signature="e#0#38#0" expanded="true" />
           </folding>
