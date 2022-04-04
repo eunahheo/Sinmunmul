@@ -39,7 +39,7 @@
        <button type="button"  @click="generate(105)" class="btn btn-primary btn-sm"> IT/과학 </button> &nbsp  
        
        <!-- <bar-chart :data="chartData"></bar-chart> -->
-       <bar-chart :data="chartData" :colors="['#eb6750', '#eb8500', '#0053e3', '#e8e800', '#00dfe3', '#00b347', '#9c03ad']"></bar-chart>
+       <bar-chart  :chart-options="chartOptions" :data="chartData" :colors="['#eb6750', '#eb8500', '#0053e3', '#e8e800', '#00dfe3', '#00b347', '#9c03ad']" @click="getGraphKey"></bar-chart>
     </div>
 
     <div class="plan span--2 long--2 ">
@@ -74,6 +74,15 @@
 
 <script>
 import axios from 'axios'
+
+axios.defaults.paramsSerializer = function(paramObj) {
+    const params = new URLSearchParams()
+    for (const key in paramObj) {
+        params.append(key, paramObj[key])
+    }
+    return params.toString()
+}
+
 // const LOCAL_HOST = 'http://localhost:3030/api'
 const SERVER_HOST = 'https://j6a406.p.ssafy.io/api'
 
@@ -94,39 +103,13 @@ export default {
         
       ],
       chartData: [],
+      
+      chartOptions: {
+        events: ['click']
+      },
 
-       lineData : [ {name: '검색어1',  data: {
-      '1월': 3, 
-      '2월': 4,
-      '3월': 14,
-      '4월': 24,
-      '5월': 34,
-      '6월': 44,
-      '7월': 54,
-      '8월': 36,
-      '8월': 26,
-      '9월': 16,
-      '10월': 36,
-      '11월': 246,
-      '12월': 146
-      }},
 
-      {name: '검색어2',  data: {
-      '1월': 31, 
-      '2월': 41,
-      '3월': 134,
-      '4월': 241,
-      '5월': 341,
-      '6월': 441,
-      '7월': 514,
-      '8월': 316,
-      '8월': 216,
-      '9월': 126,
-      '10월': 136,
-      '11월': 246,
-      '12월': 146
-      }},
-  ], //line data
+     lineData : [ ], //line data
 
     todayNewsData : [],
     todayNews : null,
@@ -143,6 +126,10 @@ export default {
   }, //mounted
 
   methods : {
+    getGraphKey() {
+      //
+      
+    },
     generate(category) {
       axios.get(`${SERVER_HOST}/news/main/wordcloud`, {
           params: {
@@ -152,11 +139,17 @@ export default {
         .then((res) =>{
           this.chartData=[];
             // console.log(res.data.data);
+          var keywords = [];
+
            for(var i =0; i<7; i++) {
             //  console.log(res.data.data[i].keyword +" , "+res.data.data[i].count);
              var temp =[res.data.data[i].keyword, res.data.data[i].count];
+             keywords.push(res.data.data[i].keyword);
              this.chartData.push(temp);
            }
+
+          // console.log(keywords);
+          this.LinechartMake(keywords);
 
         }).catch((err) => {
             console.log("에러");
@@ -164,6 +157,46 @@ export default {
         });
       
     },
+
+    LinechartMake(keyword) {
+      axios.get(`${SERVER_HOST}/news/keyword/trend/week`, {
+          params: {
+            // keywords : obj,
+            keywords : keyword,
+          },
+        })
+        .then((res) =>{
+      
+        this.lineData = [ 
+          {name: '',  data: {   }},
+          {name: '',  data: {   }},
+          {name: '',  data: {   }},
+          {name: '',  data: {   }},
+          {name: '',  data: {   }},
+          {name: '',  data: {   }},
+          {name: '',  data: {   }},
+          ]; 
+        
+        for(var i=0; i<7; i++) {
+          var values = Object.values(res.data.data[i].stat); //받은 result value들만 따로 정제
+          var temp = {}; //value를 속성, 값으로 만들어줄 객체
+          for(var j =0; j<values.length; j++)  {
+            let label = values[j].label;
+            temp[label] = values[j].count; //temp 객체에 label 속성과 count 값 할당
+          }
+          this.lineData[i].name = keyword[i];
+          this.lineData[i].data = temp;
+        }
+        
+      //  console.log(this.lineData);
+
+      }).catch((err) => {
+            console.log("에러");
+            alert("그래프 데이터 없음");
+            console.log(err);
+          })
+    },
+
     genLayout() {
       const cloud = require("d3-cloud");
       cloud()
