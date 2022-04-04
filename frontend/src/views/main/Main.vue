@@ -27,18 +27,25 @@
       </figure>
     </a>
     </div>
-
-    <div class="plan span--2 long--2 ">
-       <h3>최고 빈도 키워드 뉴스</h3>
-       <!-- <bar-chart :data="chartData"></bar-chart> -->
-       <bar-chart :data="chartData" :colors="['#0b6e00', '#006ca2', '#10379c']"></bar-chart>
-    </div>
     
+    <div class="plan span--2 long--2 ">
+       <h3>최고 빈도 키워드</h3>
+       <button type="button"  @click="generate(0)" class="btn btn-primary btn-sm"> 전체 </button> &nbsp  
+       <button type="button"  @click="generate(100)" class="btn btn-primary btn-sm"> 정치 </button> &nbsp  
+       <button type="button"  @click="generate(101)" class="btn btn-primary btn-sm"> 경제 </button> &nbsp  
+       <button type="button"  @click="generate(102)" class="btn btn-primary btn-sm"> 사회 </button> &nbsp  
+       <button type="button"  @click="generate(103)" class="btn btn-primary btn-sm"> 생활/문화 </button> &nbsp  
+       <button type="button"  @click="generate(104)" class="btn btn-primary btn-sm"> 세계 </button> &nbsp  
+       <button type="button"  @click="generate(105)" class="btn btn-primary btn-sm"> IT/과학 </button> &nbsp  
+       
+       <!-- <bar-chart :data="chartData"></bar-chart> -->
+       <bar-chart :data="chartData" :colors="['#eb6750', '#eb8500', '#0053e3', '#e8e800', '#00dfe3', '#00b347', '#9c03ad']"></bar-chart>
+    </div>
+
     <div class="plan span--2 long--2 ">
       <h3>키워드 언급량 추이 그래프</h3>
       <line-chart :data="lineData" ></line-chart>
     </div>
-
 
     <div class="span--2 long--2">
       <h2>추천 기사 자리 1</h2>
@@ -56,9 +63,9 @@
     </div>
 
     <div class="sidebar">
-      <h2 class="title--big">사이드 바</h2>
-      <h3>필요한지는 모름</h3>
-      <h5> test text </h5>
+      <br>
+      <h3 style="font-size : 20px">찾던 상품 아니신가요 ?</h3>
+     
     </div>
   </main>
 
@@ -86,17 +93,8 @@ export default {
         {text : "bad", size : 36},
         
       ],
-      chartData: [
-          ['검색어 1', 422],
-          ['검색어 2', 1092],
-          ['검색어 3', 1192],
-          ['검색어 4', 1292],
-          ['검색어 5', 1392],
-          ['검색어 6', 1492],
-          ['검색어 7', 1552],
-          ['검색어 8', 1592],
-          ['검색어 9', 2692]
-        ],
+      chartData: [],
+
        lineData : [ {name: '검색어1',  data: {
       '1월': 3, 
       '2월': 4,
@@ -128,54 +126,6 @@ export default {
       '11월': 246,
       '12월': 146
       }},
-
-      {name: '검색어3',  data: {
-      '1월': 311, 
-      '2월': 14,
-      '3월': 14,
-      '4월': 214,
-      '5월': 314,
-      '6월': 414,
-      '7월': 514,
-      '8월': 316,
-      '8월': 26,
-      '9월': 16,
-      '10월': 36,
-      '11월': 246,
-      '12월': 146
-      }},
-
-      {name: '검색어4',  data: {
-      '1월': 32, 
-      '2월': 34,
-      '3월': 214,
-      '4월': 324,
-      '5월': 134,
-      '6월': 244,
-      '7월': 654,
-      '8월': 326,
-      '8월': 6,
-      '9월': 16,
-      '10월': 36,
-      '11월': 546,
-      '12월': 146
-      }},
-
-      {name: '검색어5',  data: {
-      '1월': 3, 
-      '2월': 4,
-      '3월': 14,
-      '4월': 254,
-      '5월': 344,
-      '6월': 414,
-      '7월': 524,
-      '8월': 336,
-      '8월': 246,
-      '9월': 156,
-      '10월': 636,
-      '11월': 746,
-      '12월': 846
-      }}
   ], //line data
 
     todayNewsData : [],
@@ -183,14 +133,37 @@ export default {
     };//return
 
   },//data
+  
 
   mounted() {
     this.genLayout();
+    this.generate(0);
     this.getTodayNews();
 
   }, //mounted
 
   methods : {
+    generate(category) {
+      axios.get(`${SERVER_HOST}/news/main/wordcloud`, {
+          params: {
+            codeGroup : category,           
+          }
+        })
+        .then((res) =>{
+          this.chartData=[];
+            // console.log(res.data.data);
+           for(var i =0; i<7; i++) {
+            //  console.log(res.data.data[i].keyword +" , "+res.data.data[i].count);
+             var temp =[res.data.data[i].keyword, res.data.data[i].count];
+             this.chartData.push(temp);
+           }
+
+        }).catch((err) => {
+            console.log("에러");
+            console.log(err);
+        });
+      
+    },
     genLayout() {
       const cloud = require("d3-cloud");
       cloud()
@@ -245,9 +218,7 @@ export default {
             news += " "+per.toFixed(1)+"% ";
           }
 
-          this.todayNews = news;
-
-          
+          this.todayNews = news;          
           
         }).catch((err) => {
             console.log("에러");
