@@ -36,8 +36,6 @@ def wordcloud(keyword: str):
     # 현재시간 가져오기
     now = datetime.now()
     today = str(now.strftime('%Y-%m-%d %H')) + ":00:00"
-    #sql = "SELECT news_title, news_desc FROM news WHERE del_yn='n' And news_reg_dt between DATE_ADD('" + today + "', INTERVAL -7 DAY) AND '" + today + "' AND news_desc like '%" + keyword + "%';"
-    #sql = "SELECT news_title, news_desc FROM news WHERE del_yn='n' And news_reg_dt between DATE_ADD('" + today + "', INTERVAL -14 DAY) AND '" + today + "' AND news_desc like '%" + keyword + "%' order by news_reg_dt limit 100;"
     sql = "SELECT news_title, news_desc FROM news WHERE MATCH(news_title, news_desc) AGAINST('" + keyword + "' IN BOOLEAN MODE) AND del_yn ='n' order by news_reg_dt desc limit 100;"
 
     # sql 문 실행
@@ -53,7 +51,6 @@ def wordcloud(keyword: str):
     wordcloud = []
     count = []
 
-    print("형태소 분석 시작", datetime.now())
     for news in rows:
         title = news['news_title']
         desc = news['news_desc']
@@ -76,15 +73,25 @@ def wordcloud(keyword: str):
 
         result.append(data_pretreatment)
 
-    print("형태소분석 완료", datetime.now())
     counts = collections.Counter(count)
-    print("counts", counts)
 
     model = Word2Vec(sentences=result, vector_size=100, window=5, min_count=5, workers=4, sg=0)
-    most_similar = model.wv.most_similar(keyword, topn=20)
 
+    try:
+        most_similar = model.wv.most_similar(keyword, topn=20)
+    except:
+        return {
+            "message" : "연관어 워드클라우드 조회 실패",
+            "statusCode" : 204
+            }
     for similar in most_similar:
         wordcloud.append({'keyword': similar[0], 'count': int(similar[1] * counts[similar[0]])})
 
-    return wordcloud
+    response_wordcloud = {
+            "message" : "연관어 워드클라우드 조회 성공",
+            "statusCode" : 200,
+            "data" : wordcloud
+            }
+
+    return response_wordcloud
 
