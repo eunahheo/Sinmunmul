@@ -68,7 +68,8 @@ import img from '@/assets/default.png'
 import newsModal from './newsModal.vue'
 import deleteModal from './deleteModal.vue'
 import axios from 'axios'
-const SERVER_HOST = process.env.VUE_APP_SERVER_HOST
+//const SERVER_HOST = process.env.VUE_APP_SERVER_HOST
+const SERVER_HOST = 'https://j6a406.p.ssafy.io/api'
 
 export default {
   name: 'ScarapNews',

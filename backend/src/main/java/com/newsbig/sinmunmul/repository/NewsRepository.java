@@ -16,7 +16,7 @@ public interface NewsRepository extends JpaRepository<News, Long> {
 	// 오늘의 전체 뉴스 개수
 	@Query(value = "select count(*) from news WHERE del_yn=:delYn AND unix_timestamp(news_reg_dt) >= unix_timestamp(:start) AND unix_timestamp(news_reg_dt) <= unix_timestamp(:end)",
 			nativeQuery = true)
-	public int countBydelYnAndNewsRegDtBetween(@Param("delYn") String delYn,@Param("start") String start,@Param("end") String end);
+	public int countBydelYnAndNewsRegDtBetween(@Param("delYn") String delYn, @Param("start") String start, @Param("end") String end);
 
 	@Query(value = "select * from news WHERE del_yn=:delYn AND MATCH(news_title, news_desc) AGAINST(:keyword IN BOOLEAN MODE)",
 			nativeQuery = true)

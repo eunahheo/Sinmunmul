@@ -1,6 +1,6 @@
 <template>
  <div id="mypage" class="container-fluid">
-   <div class="row">
+   <div class="row mypage">
       <div class="col-2"><my-page-sidebar></my-page-sidebar></div>
       <div class="col-10"><router-view/></div>
    </div>
@@ -18,8 +18,8 @@ export default {
 }
 </script>
 
-<style>
-.row {height: 100%;}
+<style >
+.mypage {height: 100%;}
 #app {height: 100%;}
 html,body {height: 100%; overflow-y: hidden}
 #mypage {
