@@ -110,7 +110,7 @@ public class NewsServiceImpl implements NewsService {
 	public List<JSONObject> searchNews(String keyword, int page, int size) {
 		List<JSONObject> result = new ArrayList<>();
 		PageRequest pageRequest = PageRequest.of(page - 1, size, Sort.by("news_reg_dt").descending());
-		Page<News> pageNews = newsRepository.searchNewsKeyword("n", keyword, keyword, pageRequest);
+		Page<News> pageNews = newsRepository.searchNewsKeyword("n", keyword, pageRequest);
 		 
 		System.out.println(pageNews.getPageable());
 		for (News news : pageNews) {
@@ -159,15 +159,13 @@ public class NewsServiceImpl implements NewsService {
 	// 주 별 언급량
 	@Override
 	public List<KeywordTrendWeek> keywordTrendWeek(String keyword) {
-//		List<Object> list = newsRepository.keywordWeekTrend("n", keyword, keyword);
-		
 		String q = "SELECT DATE_FORMAT(DATE_SUB(n.news_reg_dt, INTERVAL (DAYOFWEEK(n.news_reg_dt)-1) DAY), '%Y/%m/%d') as label, "
 				+ "DATE_FORMAT(DATE_SUB(n.news_reg_dt, INTERVAL (DAYOFWEEK(n.news_reg_dt)-7) DAY), '%Y/%m/%d') as end, "
 				+ "DATE_FORMAT(n.news_reg_dt, '%Y%u') AS 'date', "
 				+ "count(*) AS count "
 				+ "FROM news n "
-				+ "WHERE MATCH(n.news_title) AGAINST('" + keyword + "' IN BOOLEAN MODE) OR MATCH(n.news_desc) AGAINST('" + keyword + "' IN BOOLEAN MODE)"
-				+ "GROUP BY date ORDER BY date DESC LIMIT 6";
+				+ "WHERE MATCH(n.news_title, n.news_desc) AGAINST('" + keyword + "' IN BOOLEAN MODE)"
+				+ "GROUP BY date ORDER BY news_reg_dt DESC LIMIT 6";
         
         JpaResultMapper result = new JpaResultMapper();
         Query query = entityManager.createNativeQuery(q);
@@ -182,7 +180,7 @@ public class NewsServiceImpl implements NewsService {
 		String q = "SELECT date_format(n.news_reg_dt, '%Y-%m') AS 'label', "
 				+ "count(*) AS count "
 				+ "FROM news n "
-				+ "WHERE MATCH(n.news_title) AGAINST('" + keyword + "' IN BOOLEAN MODE) OR MATCH(n.news_desc) AGAINST('" + keyword + "' IN BOOLEAN MODE)"
+				+ "WHERE MATCH(n.news_title, n.news_desc) AGAINST('" + keyword + "' IN BOOLEAN MODE)"
 				+ "GROUP BY label ORDER BY label desc LIMIT 6";
         
         JpaResultMapper result = new JpaResultMapper();
