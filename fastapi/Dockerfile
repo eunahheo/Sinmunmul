@@ -17,12 +17,11 @@ RUN cd /usr/local/bin && \
   ln -s /usr/bin/pip3 pip && \
   pip install --upgrade pip
 
+RUN bash <(curl -s https://raw.githubusercontent.com/konlpy/konlpy/master/scripts/mecab.sh)
+
 # apt clean
 RUN apt-get clean && \
   rm -rf /var/lib/apt/lists/*
-
-RUN apt-get install curl git
-RUN bash <(curl -s https://raw.githubusercontent.com/konlpy/konlpy/master/scripts/mecab.sh)
 
 #
 WORKDIR /code
