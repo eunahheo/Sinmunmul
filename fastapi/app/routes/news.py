@@ -24,7 +24,9 @@ async def wordcloud(keyword: str):
     curs = conn.cursor(pymysql.cursors.DictCursor)
 
     #stopword_file = open('C:/Users/SSAFY/git/S06P22A406/news_Pretreatment/stopwords.txt', 'r', encoding='utf-8')
-    stopword_file = open('/var/lib/jenkins/workspace/sinmunmul/news_Pretreatment/stopwords.txt', 'r', encoding='utf-8')
+    #stopword_file = open('/var/lib/jenkins/workspace/sinmunmul/news_Pretreatment/stopwords.txt', 'r', encoding='utf-8')
+    stopword_file = open('/code/stopwords.txt', 'r', encoding='utf-8')
+
     stopword = []
     for word in stopword_file.readlines():
         stopword.append(word.rstrip())

@@ -17,7 +17,6 @@ RUN cd /usr/local/bin && \
   ln -s /usr/bin/pip3 pip && \
   pip install --upgrade pip
 
-RUN bash <(curl -s https://raw.githubusercontent.com/konlpy/konlpy/master/scripts/mecab.sh)
 
 # apt clean
 RUN apt-get clean && \
@@ -31,7 +30,10 @@ COPY ./ /code
 COPY ./requirements.txt /code/requirements.txt
 
 #
+RUN apt update
+RUN apt-get install -y curl git
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+RUN curl -L https://raw.githubusercontent.com/konlpy/konlpy/master/scripts/mecab.sh | bash
 
 #
 COPY ./app /code/app
