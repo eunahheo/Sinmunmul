@@ -60,27 +60,24 @@ export default {
       this.date = tmp[0]
 
       this.desc = text
-      console.log(this.desc)
+
       // window.alert(text)
       this.desc = this.desc.replace(/^\s*/, '')
       this.desc = this.desc.replace(/\t/g, '')
       this.desc = this.desc.replace(/\n$/gm, '<br/>')
-      console.log('해당문자를 포함하고 있나요? ' + this.desc.indexOf(('\n')))
       if (this.desc.indexOf(('\n')) === -1) {
         this.desc = this.desc.replace(/(?:\.\s)/g, '. <br /> <br />')
       } else {
         this.desc = this.desc.replace(/(?:\.\r\n|\.\r|\.\n|\.\s*\n)/g, '. <br/> <br/>')
         this.desc = this.desc.replace(/(?:\n)/g, '<br/>')
-        window.alert(this.desc)
-        console.log(this.desc)
       }
       // this.desc = this.desc.replace(/(?:\r\n|\r|\n|\s\n)/g, '<br />')
     }
   },
   methods: {
     redirect: function (data) { // 기사원문 버튼 클릭
-      window.location.href = data // 바로 이동
-      // window.open(data) // 새 창 열기
+      //window.location.href = data // 바로 이동
+      window.open(data) // 새 창 열기
     }
   }
 }

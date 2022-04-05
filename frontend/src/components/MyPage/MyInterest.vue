@@ -29,7 +29,8 @@
 <script>
 import axios from 'axios'
 import InterestModal from './InterestModal.vue'
-const SERVER_HOST = process.env.VUE_APP_SERVER_HOST
+//const SERVER_HOST = process.env.VUE_APP_SERVER_HOST
+const SERVER_HOST = 'https://j6a406.p.ssafy.io/api'
 export default {
   name: 'MyInterest',
   data: function () {
@@ -198,7 +199,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #interest-form {
   margin-bottom: 50px;
   padding: 20px;

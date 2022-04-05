@@ -1,218 +1,503 @@
 <template>
 <div>
-    <aside class="cssgrid-collection"> 
-     
-    </aside>
 
- <main>
-   <div class="title--large main-title plan"> 
-     <h2 class="title--large main-title">오늘의 뉴스 현황 &nbsp {{todayNews}}
-     </h2>
-  
-     
-   </div>
-    
-     
-       
-    <div class="plan span--2 long--2 m-3 ">
-       <h3>이슈 - 워드 클라우드</h3>
-      <div id="word-cloud">
+
+<news-modal  v-bind:visible="newsVisible" :news="newsData2" @close='visible=newsInit()'></news-modal>
+
+  <div class="row">
+
+    <div class="col-1"> </div>
+
+
+
+
+    <div class="col-10">
+
+      <div class="row"  style="text-align: left;">
+
+       <h5 > 오늘의 뉴스 현황 &nbsp&nbsp&nbsp  {{todayNews}} </h5>
+       <hr>
+      </div>
+
+      <div class="row mb-2">
+
+
+      <div class="col-6 mb-4">
+
+
+
+        <div>
+       <h3>주요 키워드</h3>
+
+
+       <div class="mb-2"> <button :class="{'main-btn-check': item.flag===1 , 'main-btn-uncheck': item.flag===0}"  v-for="item in codeGroup" :key="item.number"  @click="wordcloud(item.number)" >
+         {{ item.name }}
+       </button></div>
+      <div  id="word-cloud"   style="width:100%; height:100%; text-align:center">
         </div>
     </div>
 
-    <div class="plan span--2 long--2 m-3">
-    <a class="terrarium" href="" target="_blank">
-      <figure><img src=""/>
-        <figcaption>해당 토픽에 대한 관련 기사 자리</figcaption>
-      </figure>
-    </a>
-    </div>
-    
-    <div class="plan span--2 long--2 ">
-       <h3>최고 빈도 키워드</h3>
-       <button type="button"  @click="generate(0)" class="btn btn-primary btn-sm"> 전체 </button> &nbsp  
-       <button type="button"  @click="generate(100)" class="btn btn-primary btn-sm"> 정치 </button> &nbsp  
-       <button type="button"  @click="generate(101)" class="btn btn-primary btn-sm"> 경제 </button> &nbsp  
-       <button type="button"  @click="generate(102)" class="btn btn-primary btn-sm"> 사회 </button> &nbsp  
-       <button type="button"  @click="generate(103)" class="btn btn-primary btn-sm"> 생활/문화 </button> &nbsp  
-       <button type="button"  @click="generate(104)" class="btn btn-primary btn-sm"> 세계 </button> &nbsp  
-       <button type="button"  @click="generate(105)" class="btn btn-primary btn-sm"> IT/과학 </button> &nbsp  
-       
-       <!-- <bar-chart :data="chartData"></bar-chart> -->
-       <bar-chart :data="chartData" :colors="['#3366CC', '#DC3912', '#FF9900', '#109618', '#990099', '#3B3EAC', '#0099C6']" @click="getGraphKey"></bar-chart>
+
+
+      </div>
+
+
+
+
+      <div class="col-6 mb-3">
+
+<div class="spinner-div" v-if="this.newsData==null">
+<button class="btn">
+    <span class="spinner-border spinner-border-m"></span>
+    조회중입니다.
+  </button>
+</div>
+              <div else>
+<div v-for="item in newsData" :key="item.news_seq"  class="mb-1 main-news-list" @click="modal(item.news_seq)">
+<div class="card">
+  <div class="row">
+  <div class="col-4 ">
+    <img  class="card-img main-card-img" v-bind:src="item.news_photo" alt="Card image"  @error="replaceDefault" >
     </div>
 
-    <div class="plan span--2 long--2 ">
+    <div class="col-8">
+    <div class="card-body">
+      <div class="mb-2">
+      <h5 class="card-title "  style="text-align: left;">{{item.news_Title}}
+      </h5>
+      </div>
+      <hr>
+      <div>
+      <p class="card-text  main-card"  style="text-align: left; font-size:12px;">{{item.news_desc}}</p>
+      </div>
+    </div>
+    </div>
+    </div>
+  </div>
+  </div>
+    </div>
+
+
+
+
+      </div>
+
+  <hr>
+      </div>
+
+
+<div class= "row mb-2">
+
+  <div class="col-6 mb-3" >
+    <div >
+       <h3>최고 빈도 키워드 뉴스</h3>
+       <!-- <bar-chart :data="chartData"></bar-chart> -->
+       <bar-chart :data="chartData" :colors="['#0b6e00', '#006ca2', '#10379c']"></bar-chart>
+    </div>
+
+     </div>
+
+
+
+
+<div class="col-6 mb-3" >
+
+    <div >
       <h3>키워드 언급량 추이 그래프</h3>
       <line-chart :data="lineData" ></line-chart>
     </div>
 
-    <div class="span--2 long--2">
+</div>
+<hr>
+</div>
+
+
+
+<div class="row mb-2">
+
+<div class="col-6 mb-3">
+<div>
       <h2>추천 기사 자리 1</h2>
     </div>
 
-    <div class="span--2 long--2">
+</div>
+<div class="col-6 mb-3">
+
+
+
+    <div>
       <h2>추천기사 자리 2</h2>
     </div>
 
-    <div class="item-with-image cssgrid-collection">
-        <a class="cssgrid-collection__image" href="#" target="_blank"><img src=""/></a>
-      <h1>임시 푸터 자리</h1>
-      <div class="cssgrid-collection__content">
-      </div>
+
+
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </div>
 
-    <div class="sidebar">
-      <br>
-      <h3 style="font-size : 20px">찾던 상품 아니신가요 ?</h3>
-     
-    </div>
-  </main>
+    <div class="col-1"> </div>
+
+
+  </div>
 
 </div>
 </template>
 
 <script>
 import axios from 'axios'
-
-axios.defaults.paramsSerializer = function(paramObj) {
-    const params = new URLSearchParams()
-    for (const key in paramObj) {
-        params.append(key, paramObj[key])
-    }
-    return params.toString()
-}
-
+import VueWordCloud from 'vuewordcloud'
+import wordcloud from 'vue-wordcloud'
+import img from '@/assets/default.png'
+import newsModal from '@/components/MyPage/newsModal.vue'
 // const LOCAL_HOST = 'http://localhost:3030/api'
 const SERVER_HOST = 'https://j6a406.p.ssafy.io/api'
 
 export default {
+
+  components: { VueWordCloud, wordcloud ,newsModal },
   data() {
     return {
-      words: [
-        {text : "Vue", size : 40},
-        {text : "Hi", size : 25},
-        {text : "신문물", size : 50},
-        {text : "뉴스빅", size : 45},
-        {text : "ㅋㅋㅋ", size : 31},
-        {text : "ㄴㄴㄴ", size : 32},
-        {text : "ㅇㅇㅇ", size : 37},
-        {text : "Bye", size : 42},
-        {text : "good", size : 38},
-        {text : "bad", size : 36},
-        
-      ],
-      chartData: [],
+      newsData2: {},
+        newsVisible: false,
+        newsData: null,
+      codeGroup: [
+          {number : 0 , name : '전체', flag:1},
+          {number : 100 , name : '정치', flag:0},
+          {number : 101 , name : '경제',flag:0},
+          {number : 102 , name : '사회',flag:0},
+          {number : 103 , name : '생활/문화',flag:0},
+          {number : 104 , name : '세계',flag:0},
+          {number : 105 , name : 'IT/과학',flag:0}
 
-     lineData : [ ], //line data
+
+      ],
+
+      words: [
+        {text : "글자1", size : 40, color: "#f6535d"},
+        {text : "글자2", size : 36, color: "#377cc4" },
+        {text : "글자3", size : 32, color: "#b168e0" },
+        {text : "글자4", size : 28, color: "#1a9a9f" },
+        {text : "글자5", size : 24, color: "#fac302"},
+        {text : "글자6", size : 24, color: "#d86898"},
+        {text : "글자7", size : 24, color: "#f9870e"},
+        {text : "글자8", size : 18, color: "#6E6E6E"},
+        {text : "글자9", size : 18, color: "#6E6E6E"},
+        {text : "글10", size : 18, color: "#6E6E6E"},
+        {text : "글11", size : 18, color: "#6E6E6E"},
+        {text : "글12", size : 18, color: "#6E6E6E"},
+        {text : "글13", size : 18, color: "#6E6E6E"},
+        {text : "글14", size : 18, color: "#6E6E6E"},
+        {text : "글15", size : 18, color: "#6E6E6E"},
+        {text : "글16", size : 18, color: "#6E6E6E"},
+        {text : "글17", size : 18, color: "#6E6E6E"},
+        {text : "글18", size : 18, color: "#6E6E6E"},
+        {text : "글19", size : 18, color: "#6E6E6E"},
+        {text : "글20", size : 18, color: "#6E6E6E"},
+      ],
+      chartData: [
+          ['검색어 1', 422],
+          ['검색어 2', 1092],
+          ['검색어 3', 1192],
+          ['검색어 4', 1292],
+          ['검색어 5', 1392],
+          ['검색어 6', 1492],
+          ['검색어 7', 1552],
+          ['검색어 8', 1592],
+          ['검색어 9', 2692]
+        ],
+       lineData : [ {name: '검색어1',  data: {
+      '1월': 3,
+      '2월': 4,
+      '3월': 14,
+      '4월': 24,
+      '5월': 34,
+      '6월': 44,
+      '7월': 54,
+      '8월': 36,
+      '8월': 26,
+      '9월': 16,
+      '10월': 36,
+      '11월': 246,
+      '12월': 146
+      }},
+
+     {name: '검색어2',  data: {
+      '1월': 31,
+      '2월': 41,
+      '3월': 134,
+      '4월': 241,
+      '5월': 341,
+      '6월': 441,
+      '7월': 514,
+      '8월': 316,
+      '8월': 216,
+      '9월': 126,
+      '10월': 136,
+      '11월': 246,
+      '12월': 146
+      }},
+
+      {name: '검색어3',  data: {
+      '1월': 311,
+      '2월': 14,
+      '3월': 14,
+      '4월': 214,
+      '5월': 314,
+      '6월': 414,
+      '7월': 514,
+      '8월': 316,
+      '8월': 26,
+      '9월': 16,
+      '10월': 36,
+      '11월': 246,
+      '12월': 146
+      }},
+
+      {name: '검색어4',  data: {
+      '1월': 32,
+      '2월': 34,
+      '3월': 214,
+      '4월': 324,
+      '5월': 134,
+      '6월': 244,
+      '7월': 654,
+      '8월': 326,
+      '8월': 6,
+      '9월': 16,
+      '10월': 36,
+      '11월': 546,
+      '12월': 146
+      }},
+
+      {name: '검색어5',  data: {
+      '1월': 3,
+      '2월': 4,
+      '3월': 14,
+      '4월': 254,
+      '5월': 344,
+      '6월': 414,
+      '7월': 524,
+      '8월': 336,
+      '8월': 246,
+      '9월': 156,
+      '10월': 636,
+      '11월': 746,
+      '12월': 846
+      }}
+  ], //line data
 
     todayNewsData : [],
     todayNews : null,
     };//return
 
   },//data
-  
 
-  mounted() {
-    this.genLayout();
-    this.generate(0);
+
+
+  created (){
+
+     this.wordcloud(0)
+  },
+
+  mounted () {
     this.getTodayNews();
 
   }, //mounted
 
-  methods : {
-    getGraphKey() {
-      //
-      
+  methods: {
+     newsInit: function () {
+      this.newsVisible = false
     },
-    generate(category) {
-      axios.get(`${SERVER_HOST}/news/main/wordcloud`, {
-          params: {
-            codeGroup : category,           
+
+    modal:function (seq) {
+      //seq로  뉴스 상세정보 조회
+       axios({
+        method: 'get',
+        url: `${SERVER_HOST}/news/detail`,
+         params: {
+            newsSeq : seq,
           }
-        })
-        .then((res) =>{
-          this.chartData=[];
-            // console.log(res.data.data);
-          var keywords = [];
-
-           for(var i =0; i<7; i++) {
-            //  console.log(res.data.data[i].keyword +" , "+res.data.data[i].count);
-             var temp =[res.data.data[i].keyword, res.data.data[i].count];
-             keywords.push(res.data.data[i].keyword);
-             this.chartData.push(temp);
-           }
-
-          // console.log(keywords);
-          this.LinechartMake(keywords);
-
-        }).catch((err) => {
-            console.log("에러");
-            console.log(err);
-        });
-      
-    },
-
-    LinechartMake(keyword) {
-      axios.get(`${SERVER_HOST}/news/keyword/trend/week`, {
-          params: {
-            // keywords : obj,
-            keywords : keyword,
-          },
-        })
-        .then((res) =>{
-      
-        this.lineData = [ 
-          {name: '',  data: {   }},
-          {name: '',  data: {   }},
-          {name: '',  data: {   }},
-          {name: '',  data: {   }},
-          {name: '',  data: {   }},
-          {name: '',  data: {   }},
-          {name: '',  data: {   }},
-          ]; 
-        
-        for(var i=0; i<7; i++) {
-          var values = Object.values(res.data.data[i].stat); //받은 result value들만 따로 정제
-          var temp = {}; //value를 속성, 값으로 만들어줄 객체
-          for(var j =0; j<values.length; j++)  {
-            let label = values[j].label;
-            temp[label] = values[j].count; //temp 객체에 label 속성과 count 값 할당
-          }
-          this.lineData[i].name = keyword[i];
-          this.lineData[i].data = temp;
-        }
-        
-      //  console.log(this.lineData);
-
-      }).catch((err) => {
-            console.log("에러");
-            alert("그래프 데이터 없음");
-            console.log(err);
-          })
-    },
-
-    genLayout() {
-      const cloud = require("d3-cloud");
-      cloud()
-      .words(this.words)
-      .padding(1.5)
-      .font("Impact")
-      .fontSize(function(d) {
-        return d.size;
       })
-      .on("end", this.end)
-      .spiral("archimedean")
-      .start();
-      //.stop();
+        .then((res) => {
+          console.log(res.data.data)
+           this.newsData2 = res.data.data
+          this.newsVisible = !this.newsVisible
+
+
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+
+    },
+
+
+      replaceDefault: function (e) {
+      e.target.src = img
+    },
+    wordcloud(number)
+    {
+          for (let index = 0; index < this.codeGroup.length; index++) {
+                if(this.codeGroup[index].number===number)
+                {
+                  this.codeGroup[index].flag=1;
+                }
+                else{
+                  this.codeGroup[index].flag=0;
+                }
+
+          }
+
+
+
+        console.log(number)
+        axios({
+        method: 'get',
+        url: `${SERVER_HOST}/news/main/wordcloud`,
+        params: {
+          codeGroup: number
+        }
+      })
+        .then((res) => {
+          console.log(res)
+          const data = res.data.data
+          let flag = false
+
+            if(this.words[0].text==='글자1')
+            {
+              flag=true
+            }
+
+          for (let index = 0; index < 20; index++) {
+
+
+
+            this.words[index].text = data[index].keyword
+          }
+
+          if(flag)
+          {
+  axios({
+        method: 'get',
+        url: `${SERVER_HOST}/news/keyword`,
+         params: {
+            keyword : this.words[0].text,
+            page : 1,
+            size : 3
+          }
+      })
+        .then((res) => {
+          console.log(res)
+         this.newsData = res.data.data
+
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+          }
+
+
+          console.log(this.words)
+        this.genLayout()
+
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    check (d,d3) {
+
+          this.newsData = null;
+
+      console.log(d)
+      d3.selectAll("text").style("fill-opacity", 0.5)
+      d3.select("." + d.text).style("fill-opacity", 1)
+      console.log(d.text)
+
+         axios({
+        method: 'get',
+        url: `${SERVER_HOST}/news/keyword`,
+         params: {
+            keyword : d.text,
+            page : 1,
+            size : 3
+          }
+      })
+        .then((res) => {
+          console.log(res)
+         this.newsData = res.data.data
+
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+
+
+
+
+    },
+
+    genLayout () {
+      const cloud = require('d3-cloud')
+      cloud()
+        .words(this.words)
+        .padding(2)
+        .rotate(0)
+        .font('serif')
+        .fontSize(function (d) {
+          return d.size
+        })
+        .on('end', this.end)
+        .spiral("archimedean")
+        .start()
+        // .stop();
     },
     end(words) {
+      console.log(words)
       const d3 = require("d3");
-      const width = 400;
-      const height = 180;
-
-      d3.select("#word-cloud")
-      .append("svg")
+      const width = 500;
+      const height = 400;
+      const text ='';
+     d3.select("#word-cloud")
+     .html('')
+    .append("svg")
       .attr("width", width)
       .attr("height", height)
       // .attr("class", "span--2 long--2")
@@ -223,13 +508,35 @@ export default {
       .data(words)
       .enter()
       .append("text")
+      .attr("class",(d)=>{return d.text})
       .style("font-size", (d)=>{return d.size +"px";})
-      .style("font-family", "middle")
+      .style("cursor","pointer")
+      .style("fill",(d)=>{return d.color;}) //색지정
+      .style("fill-opacity", 1) //투명도 조절
+      .style("font-family", "Impact")
+      .style("font-weight","bold")
       .attr("text-anchor", "middle")
-      .attr("transform", (d)=>{return "translate(" + [d.x, d.y] +") rotate (" +d.rotate +")";})
-      .text((d)=>d.text);
+      .attr("transform", (d)=>{return "translate(" + [d.x, d.y] +") rotate (" + d.rotate +")";})
+      .text((d)=>d.text)
+      .on('click',(ev,d) =>  {
+            this.check(d,d3)
+      })
+      .on('mouseover', function() {
+          d3.select(this).style("font-size", (d)=>{return d.size+3 +"px";})
+
+      })
+       .on('mouseout', function() {
+          d3.select(this).style("font-size", (d)=>{return d.size-3 +"px";})
+
+      })
     },
 
+    handleMouseOver(d) {
+
+        d.style("fill","blue")
+
+
+    },
     getTodayNews() {
       axios.get(`${SERVER_HOST}/news/today`)
         .then((res) =>{
@@ -240,14 +547,16 @@ export default {
           var values = Object.values( this.todayNewsData);
           var news ="";
           for(var i=0; i < keys.length-1; i++) {
-            
+
             news += keys[i];
             const per = values[i].percent;
             news += " "+per.toFixed(1)+"% ";
           }
 
-          this.todayNews = news;          
-          
+          this.todayNews = news;
+
+
+
         }).catch((err) => {
             console.log("에러");
             console.log(err);
@@ -271,7 +580,7 @@ font([font]): 단어들의 폰트를 결정한다. default는 serif
 fonrStyle([fontStyle]): 폰트 스타일을 결정한다. default는 normal
 fontWeight([fontWeight]): fontWeight을 결정한다. default는 'normal'
 fontSize([fontSize]): font 크기를 결정한다. (예. {text: 'word', value: 30}
-rotate([rotate]): 각 단어의 회전각을 결정. 
+rotate([rotate]): 각 단어의 회전각을 결정.
 function() { return (~~(Math.random() * 6) - 3) * 30; }
 text([text]): words에서 넣은 값에서 표시할 것을 명시한다. 예를 들어 words에 {text: 'word', value: 30 }를 넣었다면
 function(d) { return d.text;}
@@ -283,376 +592,64 @@ canvas([canvas]): 캔버스 생성기
 <style scoped>
 
 
-h1 {
-  font: 50px/1 "Playfair Display SC";
-  text-align: center;
+.main-news-list{
+cursor:pointer;
+
+}
+
+.spinner-div {
+line-height: 470px;
+text-align: center;
+
 }
 
 
-h3 {
-  font: italic 20px var(--font-title);
-  margin-bottom: 1rem;
+.main-btn-check {
+border: none;
+ border-bottom : 3px solid blue;
+
+ margin-right : 10px;
+ background-Color:white;
+
+
 }
 
-h4 {
-  font: 20px/1.2 var(--font-title);
+.main-btn-uncheck {
+
+  border:none;
+  margin-right : 10px;
+  background-Color:white;
+
 }
 
-h5 {
-  font: 700 20px/1 var(--font);
-  transition: 0.3s ease;
+.main-card-img {
+  height:156px;
+  object-fit: cover ;
+  margin:0px;
 }
 
-p {
-  line-height: 1.3;
-}
-p a {
-  display: inline;
-}
-
-.title--large {
-  text-align: center;
-  font-family: var(--font-title);
-  font-size: 32px;
-  font-style: normal;
-  margin-bottom: 0.8rem;
-}
-/* .category {
-  text-align: right;
-} */
-
-@media (min-width: 700px) {
-  .title--large {
-    font-size: 32px;
-    margin: 0;
-  }
+.main-card {
+ display:-webkit-box;
+  word-wrap:break-word;
+  -webkit-line-clamp:3;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+  text-overflow:ellipsis;
+    height:54px
 }
 
-@media (min-width: 700px) {
-  main .main-title {
-    grid-column: 1/-1;
-  }
-}
-@media (min-width: 1024px) {
-  main .main-title {
-    grid-column: 1/-2;
-  }
-}
 
-@media (min-width: 700px) {
-  main {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr) 23%;
-    grid-template-rows: repeat(5, auto);
-    grid-gap: 1.2rem;
-  }
-}
-main h1,
-main aside {
-  grid-column: 1/-1;
-}
+#word-cloud {
+  /* border  : 1px solid blue; */
+   -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+   border-radius: 10px;
+  -webkit-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.1)
 
-@media (min-width: 700px) {
-  main .terrarium {
-    grid-column: 1/-1;
-  }
-}
-@media (min-width: 1024px) {
-  main .terrarium {
-    grid-column: 3/span 2;
-  }
-}
-@media (min-width: 700px) {
-  main .main-text {
-    grid-column: span 5;
-  }
-}
-@media (min-width: 1024px) {
-  main .main-text {
-    grid-column: span 2;
-  }
-}
-@media (min-width: 700px) {
-  main .sidebar {
-    grid-column: 1/-1;
-  }
-}
-@media (min-width: 1024px) {
-  main .sidebar {
-    /* grid-row: 3/9;
-    grid-column: 5/6; */
-    grid-row: 1/9;
-    grid-column: 5/6;
-  }
-}
-
-main .article-bar-1 {
-  grid-row: span 4;
-}
-
-@media (min-width: 700px) {
-  main .menu {
-    grid-column: 1/-1;
-    grid-row: 13;
-  }
-}
-@media (min-width: 1024px) {
-  main .menu {
-    grid-row: 7/8;
-    grid-column: 2/4;
-  }
-}
-@media (min-width: 700px) and (max-width: 1024px) {
-  main .toggles {
-    grid-column: 3/6;
-    grid-row: 10/13;
-  }
-}
-@media (min-width: 700px) and (max-width: 1024px) {
-  main .plan {
-    grid-column: span 4;
-  }
-}
-@media (min-width: 700px) and (max-width: 1024px) {
-  main .style,
-main .magazine,
-main .pasta {
-    grid-column: 1/3;
-  }
-}
-main .cssgrid-collection {
-  grid-column: 1/-1;
-  grid-row: 9;
-}
-
-.span--2 {
-  grid-column: span 2;
-}
-
-.long--2 {
-  grid-row: span 2;
-}
-
-.long--4 {
-  grid-row: span 4;
-}
-
-.with-border {
-  border-top: 1px solid;
-  padding-top: 0.6rem;
-}
-
-img {
-  width: 100%;
-  filter: grayscale(95%);
-  margin-bottom: 0.5rem;
-  border: 1px solid var(--black);
-  transition: 0.3s ease;
-}
-
-figcaption {
-  font-style: italic;
-  font-size: 90%;
-}
-
-aside {
-  text-align: center;
-  padding: 3px 0;
-  border: solid var(--black);
-  border-width: 2px 0;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin: 1.5rem 0;
-}
-@media (min-width: 700px) {
-  aside {
-    margin: 0;
-  }
-}
-aside > div {
-  display: flex;
-  align-items: center;
-  border: solid var(--black);
-  border-width: 1px 0;
-}
-aside > div > div {
-  flex: 1;
-  padding: 8px;
-}
-
-@media (min-width: 700px) {
-  .multi-column {
-    column-count: 2;
-    column-gap: 1.3rem;
-    margin-top: 0.75rem;
-  }
-  .multi-column-3 {
-    column-count: 3;
-  }
-}
-.sidebar {
-  margin-top: 3rem;
-}
-@media (min-width: 700px) and (max-width: 1024px) {
-  .sidebar {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin: 0;
-  }
-  .sidebar h3 {
-    width: 100%;
-    text-align: center;
-  }
-  .sidebar > a {
-    flex: 0 1 48%;
-    margin: 1.5rem 0;
-    padding: 0;
-  }
-  .sidebar .slack-ui {
-    border-top: 0;
-  }
- 
-}
-@media (min-width: 1024px) {
-  .sidebar {
-    display: block;
-    border-left: 1px solid;
-    padding-left: 1.2rem;
-    margin: 0;
-  }
-}
-
-.main-text.multi-column {
-  margin: 0;
-}
-.main-text.multi-column p {
-  margin-bottom: 0.8rem;
-}
-
-.terrarium {
-  margin: 1.5rem 0;
-}
-@media (min-width: 700px) {
-  .terrarium {
-    margin: 0 0 1.5rem;
-  }
-}
-.terrarium figure {
-  height: 100%;
-}
-.terrarium img {
-  height: 96%;
-  object-fit: cover;
-  object-position: right;
-}
-
-.sidebar-item {
-  margin: 2rem 0;
-  padding: 2rem 0 0;
-}
-.sidebar-item h5 {
-  text-align: center;
-  width: 100%;
-  padding: 0.5rem;
-  margin: auto;
-}
-.sidebar-item p {
-  margin-top: 1rem;
-}
-.sidebar-item:hover h5 {
-  transition: 0.3s ease;
-  background: var(--black);
-  color: #fff;
-}
-
-.item-with-image {
-  margin-top: 1.5rem;
-}
-.item-with-image h4 {
-  font-size: 24px;
-  text-align: left;
-  margin-bottom: 0.5rem;
-  transition: 0.2s ease;
-}
-@media (min-width: 700px) {
-  .item-with-image {
-    margin: 0;
-  }
-}
-.item-with-image:not(.cssgrid-collection):hover h4 {
-  color: white !important;
-  background: var(--black);
-}
-
-.menu {
-  margin: 1.5rem 0;
-}
-@media (min-width: 1024px) {
-  .menu {
-    margin: 0;
-  }
-}
-.menu figure {
-  height: 100%;
-}
-.menu img {
-  height: 90%;
-  object-fit: cover;
-  object-position: left;
-}
-
-.cssgrid-collection {
-  display: flex;
-  align-content: stretch;
-  border-top: 2px solid;
-  padding-top: 0.5rem;
-}
-.cssgrid-collection h4 {
-  margin: 0 0 0.8rem;
-}
-.cssgrid-collection__image {
-  flex: 0 0 32%;
-  margin-right: 1.5rem;
-}
-.cssgrid-collection img {
-  height: 100%;
-  object-fit: cover;
-  object-position: left;
-}
-.cssgrid-collection p a {
-  border-bottom: 1px dashed;
-}
-.cssgrid-collection p a:hover {
-  border-bottom: 1px solid;
-}
-
-.plan {
-  padding-bottom: 1rem;
-}
-@media (min-width: 700px) and (max-width: 1024px) {
-  .plan {
-    grid-column: span 3;
-    margin: 0 0 1.5rem;
-  }
-}
-@media (min-width: 1024px) {
-  .plan {
-    border-bottom: 1px solid;
-  }
-}
-
-.pie:hover img,
-.menu:hover img,
-.terrarium:hover img,
-.plan:hover img,
-.toggles:hover img,
-.cssgrid-collection__image:hover img {
-  filter: grayscale(0);
 }
 
 </style>
-
 
 

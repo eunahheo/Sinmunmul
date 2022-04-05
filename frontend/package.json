@@ -29,6 +29,7 @@
     "vue-echarts-v3": "^2.0.1",
     "vue-router": "^4.0.13",
     "vue-wordcloud": "^1.1.1",
+    "vuewordcloud": "^18.7.12",
     "vuex": "^4.0.0",
     "vuex-persistedstate": "^4.1.0"
   },
