@@ -29,7 +29,9 @@ public class NewsRepositorySupport {
 		List<Tuple> todayNews = jpaQueryFactory
 				.select(qCommonCodeGroup.cgValue, qNews.count())
 				.from(qNews)
-				.where(qNews.delYn.eq("n"), qNews.newsRegDt.between(start, end)).groupBy(qNews.commonCodeGroup).fetch();
+				.where( qNews.newsRegDt.goe(start), qNews.newsRegDt.loe(end), qNews.delYn.eq("n"))
+				.groupBy(qNews.commonCodeGroup)
+				.fetch();
 		
 		List<TodayNewsDto> result = new ArrayList<>();
 		for (int i = 0; i < todayNews.size(); i++) {
