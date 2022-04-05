@@ -17,7 +17,7 @@ class db_conn:
 
 
 @router.get("/search/wordcloud", tags=["news"])
-async def wordcloud(keyword: str):
+def wordcloud(keyword: str):
     # DB를 연결할때 autocommit 부분을 True로 설정해주면, 별도의 커밋없이 자동으로 커밋
     conn = pymysql.connect(host=db_conn.host, user=db_conn.user, password=db_conn.pwd, db=db_conn.db,
                            charset=db_conn.char, autocommit=True)
@@ -31,6 +31,7 @@ async def wordcloud(keyword: str):
     for word in stopword_file.readlines():
         stopword.append(word.rstrip())
     stopword_file.close()
+
 
     # 현재시간 가져오기
     now = datetime.now()
@@ -48,7 +49,6 @@ async def wordcloud(keyword: str):
     # KoNLPy 형태소 분석기
     mecab = Mecab()
     result = []
-    print(keyword, len(rows))
 
     wordcloud = []
     count = []
@@ -64,17 +64,21 @@ async def wordcloud(keyword: str):
         # 단어만 뽑아내기
         data_pretreatment = mecab.nouns(desc)
 
-        # 한 글자인 명사와 불용어 제거
-        for i, v in reversed(list((enumerate(data_pretreatment)))):
-            if len(v) < 2 or v in stopword:
-                data_pretreatment.pop(i)
-            else:
-                count.append(v)
+        try:
+            # 한 글자인 명사와 불용어 제거
+            for i, v in reversed(list((enumerate(data_pretreatment)))):
+                if len(v) < 2 or v in stopword:
+                    data_pretreatment.pop(i)
+                else:
+                    count.append(v)
+        except StopIteration:
+            continue
 
         result.append(data_pretreatment)
-    print("형태소분석 완료", datetime.now())
 
+    print("형태소분석 완료", datetime.now())
     counts = collections.Counter(count)
+    print("counts", counts)
 
     model = Word2Vec(sentences=result, vector_size=100, window=5, min_count=5, workers=4, sg=0)
     most_similar = model.wv.most_similar(keyword, topn=20)
@@ -83,3 +87,4 @@ async def wordcloud(keyword: str):
         wordcloud.append({'keyword': similar[0], 'count': int(similar[1] * counts[similar[0]])})
 
     return wordcloud
+
