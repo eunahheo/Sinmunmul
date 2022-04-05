@@ -74,6 +74,12 @@ public class News implements Serializable {
 	@JoinColumn(nullable = false, name = "code", referencedColumnName = "code")
 	private CommonCode commonCode;
 
+	@Column(name = "news_positive")
+	private Double newsPositive;
+	
+	@Column(name = "news_negative")
+	private Double newsNegative;
+	
 	@Column(name = "del_yn")
 	private String delYn;
 	
