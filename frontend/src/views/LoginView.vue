@@ -1,25 +1,31 @@
 <template>
-    <div class="login">
-        <img alt="신문물 logo" src="../assets/shin_logo.png" style="width: 10%">
-        <h1>신문물</h1>
-        <h2 style="height:50px"></h2>
-        <div>
-            <h2>login</h2>
+    <div class="login d-flex flex-wrap  align-item-center justify-content-center" style="height: 60%">
+        <div class="container m-5 align-item-center" style="border: 3px solid black">
+            <h1 class="m-5">로그인</h1>
+
+            <blockquote class="blockquote">
+                <p>신문물의 회원 기능을 사용하려면 로그인이 필요합니다.</p>
+            </blockquote>
 
             <form>
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <div>
-                    <input type="text" name="email" v-model="emailData" placeholder="email">
-                    <input type="password" name="password" v-model="passwdData" placeholder="password">
+                <div class="input-group mb-3" style="padding: 5% 5% 0% 5%">
+                    <input type="text" class="form-control" v-model="emailData" placeholder="아이디를 입력하세요(이메일)" aria-label="Username" aria-describedby="basic-addon1">
                 </div>
-                <button v-on:click='loginBtn'>로그인</button>
-                <button>
-                    <router-link to="/register">register</router-link>
-                </button>
+                <div class="input-group mb-3" style="padding: 0% 5% 0% 5%">
+                    <input type="password" class="form-control" v-model="passwdData" placeholder="비밀번호를 입력하세요" aria-label="Username" aria-describedby="basic-addon1">
+                </div>
+
+                <button type="button" class="btn btn-primary m-2" v-on:click='loginBtn'>로그인</button>
+                <button type="button" class="btn btn-light m-2" to='/'>취소</button>
+                <p class="m-2">
+                    아직 회원이 아니신가요? <router-link to="/register">회원가입</router-link>으로 계정을 만들어주세요.
+                </p>
                 <!-- social login -->
-                <div class="social-login">
+                <div class="social-login m-5">
+                    <h3>소셜 로그인</h3>
                     <section>
-                        <div v-on:click="kakaoLogin">카카오 연동</div>
+                        <img src="/frontend/public/img/kakao_login_medium_narrow.png" class="rounded" alt="카카오 로그인" v-on:click="kakaoLogin">
                     </section>
                 </div>
             </form>
