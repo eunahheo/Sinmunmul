@@ -1,5 +1,10 @@
 package com.newsbig.sinmunmul.service;
 
-public interface NewsRecommendService {
+import java.util.Map;
 
+import com.newsbig.sinmunmul.entity.News;
+
+public interface NewsRecommendService {
+	
+	public Map<String,News> recommentArticle(int code, String keyword); 
 }
