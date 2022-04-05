@@ -330,6 +330,7 @@ export default {
   },//data
 
 
+
   created (){
 
      this.wordcloud(0)

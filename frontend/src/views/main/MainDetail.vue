@@ -21,26 +21,93 @@
     </div>
 
     <div class="plan span--2 long--2">
-      <h3>키워드 언급량 추이 그래프</h3>
-      <line-chart :data="lineData" ></line-chart>
+      <h3>키워드 검색량 추이 그래프</h3>
+      <line-chart :data="chartData" ></line-chart>
+
     </div>
   </main>
   
-<ul class="nav nav-tabs m-3" >
+<ul class="nav nav-tabs m-4" >
   <li class="nav-item container row" style="float: none; margin:100 auto;">
    <h3 class="">관련 뉴스 목록</h3>
-   
-   <br>
-   <hr><hr>
-  
-   
   </li>
  </ul>
+
+<!-- <div v-if="loading" class="spinner-border text-center" style="width: 3rem; height: 3rem" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div> -->
+
+<div class="card m-3 row" style="max-width: 1140px; max-height : 180px" v-for="news in searchedData" :key="news.news_seq">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img v-if="news.news_photo !== ''" v-bind:src="news.news_photo" class="card-img-top" style="max-height : 180px object-fit:cover"  @error="replaceDefault">
+      <img v-else src="/frontend/public/img/no_image.jpg" class="card-img-top" style="max-height : 180px object-fit:contain" @error="replaceDefault">
+      <!-- <img v-bind:src="news.news.newsPhoto" class="img-fluid rounded-start"  @error="replaceDefault"> -->
+    </div>
+    <div class="col-md-7">
+      <div class="card-body">
+        <h5 class="card-title px-4">{{news.news_Title}} </h5>
+        <hr style="border: solid 2px black">
+        <p class="card-text px-4"><small class="text-muted">{{news.news_desc.substring(0,100)}}...</small></p>
+      </div>
+
+    </div>
+    <div class="col-md-1">
+      <!-- <button @click="detail">자세히 보기 </button> -->
+      <!-- <a :href="detail" class="btn btn-primary" style="display:block; width:100%; height:100%; vertical-align: middle;">자세히 보기</a> -->
+      <button @click="detail(news.news_seq)" class="btn btn-info" 
+      style="display:block; width:100%; height:100%; vertical-align: middle;"
+      >자세히 보기</button>
+    </div>
+  </div>
+</div>
+
+  <nav aria-label="..." class="d-flex justify-content-center mb-4 ">
+      <ul class="pagination d-flex justify-content-between">
+        <li v-if="start" class="page-item">
+          <a class="page-link" href="#" @click="thisPage(1)">«</a>
+        </li>
+        <li v-else class="page-item disabled">
+          <a class="page-link" href="#" tabindex="-1" aria-disabled="true">«</a>
+        </li>
+
+        <li v-if="pre" li class="page-item">
+          <a class="page-link" href="#" @click="thisPage(nowPage-5)">‹</a>
+        </li>
+        <li v-else li class="page-item disabled">
+          <a class="page-link" href="#" tabindex="-1" aria-disabled="true">‹</a>
+        </li>
+        <li
+          v-for="pageitem in pageNumbers"
+            v-bind:id="'p'+pageitem"
+            v-bind:class="{' active': pageitem == nowPage}"
+            :key="pageitem"
+          class="page-item">
+          <a class="page-link"  href="#" @click="thisPage(pageitem)">{{pageitem}}</a>
+        </li>
+        <li v-if="next" class="page-item">
+          <a class="page-link" href="#" @click="thisPage(nowPage+5)">›</a>
+        </li>
+        <li v-else li class="page-item disabled">
+          <a class="page-link" href="#" tabindex="-1" aria-disabled="true">›</a>
+        </li>
+
+        <li v-if="end" class="page-item">
+          <a class="page-link" href="#" @click="thisPage(totalPage)">»</a>
+        </li>
+        <li v-else li class="page-item disabled">
+          <a class="page-link" href="#" tabindex="-1" aria-disabled="true">»</a>
+        </li>
+      </ul>
+    </nav>
+    <news-modal v-bind:visible="newsVisible" :news="newsData" @close='visible=newsInit()'></news-modal>
 </div>
 
 </div>
 </template>
 <script>
+import img from '@/assets/default.png'
+import newsModal from './newsModal.vue'
 import axios from 'axios'
 // const LOCAL_HOST = 'http://localhost:3030/api'
 const SERVER_HOST = 'https://j6a406.p.ssafy.io/api'
@@ -49,40 +116,160 @@ export default {
   data() {
     return {
       searchWord : null,
-      searchedData : []
+      newsData : {},
+      newsVisible: false,
+      searchedData : [],
+      pageNumbers: [1, 2, 3, 4, 5],
+      page: 1, // 기본 1페이지
+      totalPage: '',
+      totalCount: '',
+      nowPage: 1,
+      startPage: '',
+      endPage: '',
+      pre: false,
+      next: false,
+      start: false,
+      end: false,
+      chartData :[{name: '',  data: {}}],
+
     }
+  },
+    components: {
+    newsModal
   },
   created() {
       this.searchWord = this.$route.params.searchWord;
+      this.chartMake(this.searchWord);
       this.search();
   },
 
   methods: {
-    search() {
-      console.log("검색 키워드 확인 : "+this.searchWord);
-      if(this.searchWord != null && this.searchWord !="") {
-        axios.get(`${SERVER_HOST}/news/keyword`, {
+      detail (seq) {
+      // console.log("검색 시퀀스 : "+seq);
+       axios.get(`${SERVER_HOST}/news/detail`, {
           params: {
-            keyword : this.searchWord,
-            page : 1,
-            size : 3
+            newsSeq : seq,           
           }
         })
         .then((res) =>{
-         
-          // console.log(res.data);
-          this.searchedData = res.data;
-          // console.log(this.searchedData);
-          // console.log("=========================");
-          console.log(this.searchedData.data);
+            //  console.log(res.data.data);
+            this.newsData = res.data.data;
+            this.newsVisible = !this.newsVisible;
 
-          
         }).catch((err) => {
             console.log("에러");
             console.log(err);
+          });
+
+    },
+    newsInit: function () {
+       this.newsVisible = false;
+    },
+    search() {
+      // console.log("검색 키워드 확인 : "+this.searchWord);
+      if(this.searchWord != null && this.searchWord !="") {
+        this.loading = true;
+        axios.get(`${SERVER_HOST}/news/keyword`, {
+          params: {
+            keyword : this.searchWord,
+            page : this.nowPage,
+            size : 10,
+          }
+        })
+        .then((res) =>{
+          console.log(res.data);
+          this.searchedData = res.data.data;
+          const totalElements = res.data.data[0].totalElements;
+          this.pagination(totalElements);
+          this.chartMake(this.searchWord);
+          this.loading = false;
+        }).catch((err) => {
+          console.log("에러");
+          alert("검색 결과가 없습니다.");
+          console.log(err);
+          this.loading = false;
           })
       }
-    }
+    },
+    pagination: function (total) {
+      this.totalPage = parseInt(total / 6)
+      if ((total % 6) !== 0) {
+        this.totalPage = this.totalPage + 1
+      }
+      this.startPage = (parseInt((this.nowPage - 1) / 5)) * 5 + 1
+      this.endPage = this.startPage + 4
+
+      if (this.endPage > this.totalPage) {
+        this.endPage = this.totalPage
+      }
+      this.pre = false
+      this.start = false
+
+      if ((this.nowPage - 5) >= 1) {
+        this.pre = true
+      }
+      if (this.startPage > 5) {
+        this.start = true
+      }
+      this.next = false
+      this.end = false
+
+      if (this.endPage < this.totalPage) {
+        this.next = true
+        this.end = true
+      }
+
+      const s = this.startPage
+      const e = this.endPage
+      for (let i = s; i <= e; i++) {
+        this.pageNumbers[i - s] = i
+       
+      }
+    },
+    thisPage: function (num) {
+      if (num > this.totalPage) {
+        num = this.totalPage
+      }
+
+      this.nowPage = num
+      this.search();
+    },
+
+    replaceDefault: function (e) {
+      e.target.src = img
+    },
+
+    chartMake(keyword) {
+     // console.log("차트 검색 키워드 "+keyword);
+      axios.get(`${SERVER_HOST}/news/keyword/trend/week`, {
+          params: {
+            keywords : keyword,
+          }
+        })
+        .then((res) =>{
+    
+      this.chartData = [ {name: '',  data: {   }}]; //할당 안해주면 data 표시 안됨
+      var values = Object.values(res.data.data[0].stat); //받은 result value들만 따로 정제
+      var temp = {}; //value를 속성, 값으로 만들어줄 객체
+
+      for(var i =0; i<values.length; i++)  {
+        let label = values[i].label;
+        temp[label] = values[i].count; //temp 객체에 label 속성과 count 값 할당
+      }
+      
+      //차트 데이터 할당
+      this.chartData[0].name = keyword;
+      this.chartData[0].data = temp;
+      
+       console.log(this.chartData);
+
+      }).catch((err) => {
+            console.log("에러");
+            alert("검색 결과가 없습니다.");
+            console.log(err);
+          })
+    },
+
   }
   
 }
