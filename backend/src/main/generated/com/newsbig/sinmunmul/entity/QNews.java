@@ -42,7 +42,11 @@ public class QNews extends EntityPathBase<News> {
 
     public final StringPath newsModDt = createString("newsModDt");
 
+    public final NumberPath<Double> newsNegative = createNumber("newsNegative", Double.class);
+
     public final StringPath newsPhoto = createString("newsPhoto");
+
+    public final NumberPath<Double> newsPositive = createNumber("newsPositive", Double.class);
 
     public final StringPath newsPress = createString("newsPress");
 

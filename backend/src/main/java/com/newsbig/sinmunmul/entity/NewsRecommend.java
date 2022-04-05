@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -26,8 +27,10 @@ import lombok.ToString;
 @Setter
 @ToString
 @AllArgsConstructor
-public class NewsRecommend {
-
+public class NewsRecommend implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "recom_seq")
@@ -39,9 +42,15 @@ public class NewsRecommend {
 	@Column(name = "news_seq")
 	private long newsSeq;
 	
-	@Column(name = "keyword")
-	private String keyword;
+	@Column(name = "keyword1")
+	private String keyword1;
 
+	@Column(name = "keyword2")
+	private String keyword2;
+	
+	@Column(name = "keyword3")
+	private String keyword3;
+	
 	@Column(name = "del_yn")
 	private String delYn;
 
