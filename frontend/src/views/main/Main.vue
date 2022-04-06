@@ -730,7 +730,7 @@ body .container {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  width: 1600px;
+  width: 100%;
   height: 100px;
   background: #fff;
   align-items: center;
@@ -739,7 +739,7 @@ body .container {
 body .container2 {
   flex-direction: row;
   justify-content: space-around;
-  width: 750px;
+  width: 100%;
   height: 480px;
   background: #fff;
   align-items: center;
@@ -749,7 +749,7 @@ body .container2 {
 body .container3 {
   flex-direction: row;
   justify-content: space-around;
-  width: 750px;
+  width: 100%;
   height: 400px;
   background: #fff;
   align-items: center;
