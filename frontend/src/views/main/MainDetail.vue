@@ -40,9 +40,16 @@
 <div class="card m-3 row" style="max-width: 1140px; max-height : 180px" v-for="news in searchedData" :key="news.news_seq">
   <div class="row g-0">
     <div class="col-md-4">
-      <img v-if="news.news_photo !== ''" v-bind:src="news.news_photo" class="card-img-top" style="max-height : 180px object-fit:cover"  @error="replaceDefault">
-      <img v-else src="/frontend/public/img/no_image.jpg" class="card-img-top" style="max-height : 180px object-fit:contain" @error="replaceDefault">
-      <!-- <img v-bind:src="news.news.newsPhoto" class="img-fluid rounded-start"  @error="replaceDefault"> -->
+      <!-- <img v-if="news.news_photo !== ''" v-bind:src="news.news_photo" class="card-img-top" style="max-height : 180px ; "  @error="replaceDefault"> -->
+      <img
+      v-if="news.news_photo !== ''"
+      class="card-img main-card-img"
+      v-bind:src="news.news_photo"
+      style="max-height : 180px;" 
+      alt="Card image"
+      @error="replaceDefault"/>
+      <img v-else src="/frontend/public/img/no_image.jpg" class="card-img-top" style="max-height : 180px ;" @error="replaceDefault">
+      
     </div>
     <div class="col-md-7">
       <div class="card-body">
@@ -56,7 +63,7 @@
       <!-- <button @click="detail">자세히 보기 </button> -->
       <!-- <a :href="detail" class="btn btn-primary" style="display:block; width:100%; height:100%; vertical-align: middle;">자세히 보기</a> -->
       <button @click="detail(news.news_seq)" class="btn btn-info"
-      style="display:block; width:100%; height:100%; vertical-align: middle;"
+      style="display:block; max-width: 1140px; max-height : 180px; width:100%; height:100%; vertical-align: middle;"
       >자세히 보기</button>
     </div>
   </div>
