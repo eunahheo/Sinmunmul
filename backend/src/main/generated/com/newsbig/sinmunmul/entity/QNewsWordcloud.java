@@ -6,61 +6,58 @@ import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
-
-import org.json.simple.JSONArray;
-import org.springframework.data.web.JsonPath;
-
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
+
 
 /**
- * QNews is a Querydsl query type for News
+ * QNewsWordcloud is a Querydsl query type for NewsWordcloud
  */
 @Generated("com.querydsl.codegen.EntitySerializer")
 public class QNewsWordcloud extends EntityPathBase<NewsWordcloud> {
 
-	private static final long serialVersionUID = 1141730232L;
+    private static final long serialVersionUID = -296136557L;
 
-	private static final PathInits INITS = PathInits.DIRECT2;
+    private static final PathInits INITS = PathInits.DIRECT2;
 
-	public static final QNewsWordcloud newsWordcloud = new QNewsWordcloud("newsWordcloud");
+    public static final QNewsWordcloud newsWordcloud = new QNewsWordcloud("newsWordcloud");
 
-	public final NumberPath<Long> newsSeq = createNumber("wordcloudSeq", Long.class);
-	
-	public final StringPath wordcloud = createString("wordcloud");
+    public final QCommonCodeGroup commonCodeGroup;
 
-	public final QCommonCodeGroup commonCodeGroup;
-	
-	public final StringPath delYn = createString("delYn");
+    public final StringPath delYn = createString("delYn");
 
-	public final StringPath regDt = createString("regDt");
+    public final StringPath modDt = createString("modDt");
 
-	public final StringPath regId = createString("regId");
+    public final StringPath modId = createString("modId");
 
-	public final StringPath modDt = createString("modDt");
+    public final StringPath regDt = createString("regDt");
 
-	public final StringPath modId = createString("modId");
+    public final StringPath regId = createString("regId");
 
-	public QNewsWordcloud(String variable) {
-		this(NewsWordcloud.class, forVariable(variable), INITS);
-	}
+    public final StringPath wordcloud = createString("wordcloud");
 
-	public QNewsWordcloud(Path<? extends NewsWordcloud> path) {
-		this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
-	}
+    public final NumberPath<Long> wordcloudSeq = createNumber("wordcloudSeq", Long.class);
 
-	public QNewsWordcloud(PathMetadata metadata) {
-		this(metadata, PathInits.getFor(metadata, INITS));
-	}
+    public QNewsWordcloud(String variable) {
+        this(NewsWordcloud.class, forVariable(variable), INITS);
+    }
 
-	public QNewsWordcloud(PathMetadata metadata, PathInits inits) {
-		this(NewsWordcloud.class, metadata, inits);
-	}
+    public QNewsWordcloud(Path<? extends NewsWordcloud> path) {
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
+    }
 
-	public QNewsWordcloud(Class<? extends NewsWordcloud> type, PathMetadata metadata, PathInits inits) {
-		super(type, metadata, inits);
-		this.commonCodeGroup = inits.isInitialized("commonCodeGroup")
-				? new QCommonCodeGroup(forProperty("commonCodeGroup"))
-				: null;
-	}
+    public QNewsWordcloud(PathMetadata metadata) {
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QNewsWordcloud(PathMetadata metadata, PathInits inits) {
+        this(NewsWordcloud.class, metadata, inits);
+    }
+
+    public QNewsWordcloud(Class<? extends NewsWordcloud> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.commonCodeGroup = inits.isInitialized("commonCodeGroup") ? new QCommonCodeGroup(forProperty("commonCodeGroup")) : null;
+    }
 
 }
+

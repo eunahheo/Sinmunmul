@@ -77,7 +77,7 @@ public class NewsServiceImpl implements NewsService {
 		// 오늘 시작 시간과 끝 시간
 		String startDatetime = LocalDateTime.of(LocalDate.now(), LocalTime.of(00, 00, 00)).toString().replace("T", " ");
 		String endDatetime = LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 59, 59, 999999999)).toString().replace("T", " ");
-		
+
 		// 모든 뉴스 개수 : % 구할 때 사용
 		int allCount = newsRepository.countBydelYnAndNewsRegDtBetween("n", startDatetime, endDatetime);
 		
@@ -112,7 +112,6 @@ public class NewsServiceImpl implements NewsService {
 		PageRequest pageRequest = PageRequest.of(page - 1, size, Sort.by("news_reg_dt").descending());
 		Page<News> pageNews = newsRepository.searchNewsKeyword("n", keyword, pageRequest);
 		 
-		System.out.println(pageNews.getPageable());
 		for (News news : pageNews) {
 			JSONObject obj = new JSONObject();
 
@@ -181,7 +180,7 @@ public class NewsServiceImpl implements NewsService {
 				+ "count(*) AS count "
 				+ "FROM news n "
 				+ "WHERE MATCH(n.news_title, n.news_desc) AGAINST('" + keyword + "' IN BOOLEAN MODE)"
-				+ "GROUP BY label ORDER BY label desc LIMIT 6";
+				+ "GROUP BY label ORDER BY news_reg_dt desc LIMIT 6";
         
         JpaResultMapper result = new JpaResultMapper();
         Query query = entityManager.createNativeQuery(q);

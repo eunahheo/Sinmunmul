@@ -39,6 +39,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final NumberPath<Integer> userSeq = createNumber("userSeq", Integer.class);
 
+    public final StringPath userSgtype = createString("userSgtype");
+
     public QUser(String variable) {
         super(User.class, forVariable(variable));
     }
