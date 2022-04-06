@@ -101,7 +101,7 @@
        
        <!-- <bar-chart :data="chartData"></bar-chart> -->
        <bar-chart :data="chartData" :colors="['#3366CC', '#DC3912', '#FF9900', '#109618', '#990099', '#3B3EAC', '#0099C6']" @click="getGraphKey"></bar-chart>
-   
+
     </div>
 
      </div>
@@ -206,7 +206,7 @@ export default {
         {text : "글17", size : 18, color: "#6E6E6E"},
         {text : "글18", size : 18, color: "#6E6E6E"},
         {text : "글19", size : 18, color: "#6E6E6E"},
-        {text : "글20", size : 18, color: "#6E6E6E"},
+        {text : "글20", size : 18, color: "#6E6E6E"}
       ],
       chartData: [ ],
       lineData : [ ], //line data
@@ -228,7 +228,7 @@ export default {
     generate(category) {
       axios.get(`${SERVER_HOST}/news/main/wordcloud`, {
           params: {
-            codeGroup : category,           
+            codeGroup : category,
           }
         })
         .then((res) =>{
@@ -250,7 +250,7 @@ export default {
             console.log("에러");
             console.log(err);
         });
-      
+
     },
 
     LinechartMake(keyword) {
@@ -261,8 +261,8 @@ export default {
           },
         })
         .then((res) =>{
-      
-        this.lineData = [ 
+
+        this.lineData = [
           {name: '',  data: {   }},
           {name: '',  data: {   }},
           {name: '',  data: {   }},
@@ -270,8 +270,8 @@ export default {
           {name: '',  data: {   }},
           {name: '',  data: {   }},
           {name: '',  data: {   }},
-          ]; 
-        
+          ];
+
         for(var i=0; i<7; i++) {
           var values = Object.values(res.data.data[i].stat); //받은 result value들만 따로 정제
           var temp = {}; //value를 속성, 값으로 만들어줄 객체
@@ -282,7 +282,7 @@ export default {
           this.lineData[i].name = keyword[i];
           this.lineData[i].data = temp;
         }
-        
+
       //  console.log(this.lineData);
 
       }).catch((err) => {
@@ -479,7 +479,7 @@ export default {
     handleMouseOver(d) {
         d.style("fill","blue")
     },
-    
+
     getTodayNews() {
       axios.get(`${SERVER_HOST}/news/today`)
         .then((res) =>{
