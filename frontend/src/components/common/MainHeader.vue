@@ -1,73 +1,67 @@
 <template>
-<nav class="py-2">
-<div class="px-3 py-0 mb-0">
-      <div class="container d-flex flex-wrap justify-content-center">
-          
-         <div class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto">
-          <input type="search" class="form-control" placeholder="Search..." aria-label="Search" v-model="searchWord" @keyup.enter="moveDetail" v-if="showSearch">  
-        </div> 
+<div class="px-3 py-0 mt-4 mb-2">
 
-        <!-- <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto" @submit.prevent="moveDetail">
-          <input type="search" class="form-control" placeholder="Search..." aria-label="Search" v-model="searchWord" v-if="showSearch">
-        </form> -->        
 
-      <!-- <router-link to="/" class="navbar-brand col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto">
-      <img src="@/assets/img/titleLogo.png" alt="" width="120" height="60">
-      </router-link> -->
-      
-      <router-link to="/" v-on:click="renew" class="navbar-brand col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto" >
+
+
+      <div class="row">
+
+
+
+
+           <div class="col-4 col-lg-auto mt-1 mb-2 mb-lg-0 me-lg-auto">
+
+            <div class="search-div row  mx-3" v-if="showSearch">
+              <div class="col-10"  style="text-align:left; border-right:1px solid">
+              <input type="text" class="search-form    mt-3" placeholder="검색어를 입력하세요." aria-label="Search" v-model="searchWord" @keyup.enter="moveDetail" v-if="showSearch">
+              </div>
+              <div class="col-2 pt-2 mt-1" style="text-align:center;">
+                   <svg xmlns="http://www.w3.org/2000/svg"  width="23" height="23" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16" @click="moveDetail">
+  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+</svg>
+</div>
+               </div>
+
+
+
+
+        </div>
+
+
+
+        <div class="col-4" style="text-align:center;">
+      <router-link to="/" v-on:click="renew" class="navbar-brand col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto"  >
          <img src="@/assets/img/titleLogo.png" alt="" width="120" height="60">
       </router-link>
+</div>
 
-        <div class="text-end">
+
+
+        <div class="text-end col-4 mt-2" style=" text-align:center">
           <button type="button" class="btn btn-outline-secondary m-2">
             <router-link to="/login">로그인</router-link>
           </button>
           <button type="button" class="btn btn-outline-secondary m-2">
             <router-link to="/register">회원가입</router-link>
           </button>
-          <button type="button" class="btn btn-outline-secondary m-2"> 
+          <button type="button" class="btn btn-outline-secondary m-2">
             <router-link to="/mypage">마이페이지</router-link>
             </button>
-         
+
         </div>
-      </div>
+
+         </div>
+
+
+
+
+
+
+
     </div>
-</nav>
- <aside class="d-flex flex-wrap align-items-center justify-content-center py-3 mb-3 " >
-      <ul class="nav col-10 col-md-auto mb-2 justify-content-center mb-md-0">
+    <br>
+ <aside class="d-flex flex-wrap align-items-center justify-content-center py-1 mb-3" >
 
-         <li class="nav-item dropdown">
-          <a class="nav-link link-dark" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">카테고리</a>
-          <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="#">상세 카테고리 1</a></li>
-        <li><a class="dropdown-item" href="#">상세 카테고리 2</a></li>
-        <li><a class="dropdown-item" href="#">상세 카테고리 3</a></li>
-          </ul>
-         </li>
-
-        <li>
-          <router-link to="/temp"  class="nav-link px-20 link-dark">
-            워드클라우드
-          </router-link>
-        </li>
-        <li>
-          <router-link to="/tempchart"  class="nav-link px-20 link-dark">
-            차트
-          </router-link>
-        </li>
-        <li>
-          <router-link to="/tempgraph"  class="nav-link px-20 link-dark">
-            그래프
-          </router-link>
-        </li>
-        <li><a href="#" class="nav-link px-20 link-dark">연예</a>
-        </li>
-        <li><a href="#" class="nav-link px-20 link-dark">스포츠</a>
-        </li>
-        <li><a href="#" class="nav-link px-20 link-dark">매거진</a>
-        </li>
-      </ul>
 
  </aside>
 
@@ -84,6 +78,10 @@ export default {
       searchWord : null
     }
   },
+  created() {
+    this.showSearch = true;
+  },
+
   mounted() {
     this.showSearch = true;
   },
@@ -110,12 +108,42 @@ export default {
 
 <style scoped>
 
+.search-div {
+
+  width:400px;
+  height:50px;
+    -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+   border-radius: 30px;
+   border: 1px solid black;
+}
+
+.search-form {
+  height:20px;
+  border: none;
+  display: inline;
+  width:300px;
+  margin-right :10px;
+  margin-left :10px;
+  font-size: 20px;
+}
+input:focus {outline: none;}
+
+.bi-search {
+  cursor: pointer;
+}
+
 aside {
   text-align: center;
   border-bottom: solid;
   border-color: black;
-  border-width: 2px 0;
+  border-width: 1px 0;
+  /* border-width: 2px 0; */
   text-transform: uppercase;
   letter-spacing: 2px;
+}
+
+a {
+   text-decoration-line: none;
 }
 </style>
