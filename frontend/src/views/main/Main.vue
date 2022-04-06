@@ -207,11 +207,12 @@
           <div class="col-6 mb-3">
             <div class="container3">
               <h3>키워드 언급량 추이 그래프</h3>
-
-              <button class="btn" v-if="this.lineData == null">
+                <div class="spinner-div2" v-if="this.lineData == null" >
+              <button class="btn" >
                 <span class="spinner-border spinner-border-m"></span>
                 조회중입니다.
               </button>
+              </div>
               <line-chart v-else :data="lineData"></line-chart>
             </div>
           </div>
@@ -669,6 +670,10 @@ canvas([canvas]): 캔버스 생성기
 
 .spinner-div {
   line-height: 470px;
+  text-align: center;
+}
+.spinner-div2 {
+  line-height: 350px;
   text-align: center;
 }
 
