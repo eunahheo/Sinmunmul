@@ -1,4 +1,4 @@
-package ssafy;
+package sinmunmul;
 
 import java.io.*;
 import java.util.*;
