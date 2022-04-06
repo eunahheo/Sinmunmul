@@ -438,12 +438,13 @@ export default {
     end(words) {
       console.log(words)
       const d3 = require("d3");
-      const width = 500;
+      const width = 660;
       const height = 400;
       const text ='';
      d3.select("#word-cloud")
      .html('')
     .append("svg")
+    .attr("preserveAspectRatio", "xMinYMin meet")
       .attr("width", width)
       .attr("height", height)
       // .attr("class", "span--2 long--2")
@@ -455,24 +456,24 @@ export default {
       .enter()
       .append("text")
       .attr("class",(d)=>{return d.text})
-      .style("font-size", (d)=>{return d.size +"px";})
+      .style("font-size", (d)=>{return d.size*1.2 +"px";})
       .style("cursor","pointer")
       .style("fill",(d)=>{return d.color;}) //색지정
       .style("fill-opacity", 1) //투명도 조절
       .style("font-family", "Impact")
       .style("font-weight","bold")
       .attr("text-anchor", "middle")
-      .attr("transform", (d)=>{return "translate(" + [d.x*2, d.y*1.5] +") rotate (" + d.rotate +")";})
+      .attr("transform", (d)=>{return "translate(" + [d.x*2.5, d.y*1.5] +") rotate (" + d.rotate +")";})
       .text((d)=>d.text)
       .on('click',(ev,d) =>  {
             this.check(d,d3)
       })
       .on('mouseover', function() {
-          d3.select(this).style("font-size", (d)=>{return d.size+3 +"px";})
+          d3.select(this).style("font-size", (d)=>{return (d.size*1.2)+3 +"px";})
 
       })
        .on('mouseout', function() {
-          d3.select(this).style("font-size", (d)=>{return d.size-3 +"px";})
+          d3.select(this).style("font-size", (d)=>{return (d.size*1.2)-3 +"px";})
 
       })
     },
