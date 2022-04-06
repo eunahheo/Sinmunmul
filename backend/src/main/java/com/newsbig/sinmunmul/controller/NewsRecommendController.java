@@ -42,13 +42,13 @@ public class NewsRecommendController {
 			  @ApiResponse(code = 500, message = "서버 오류"),
 			  @ApiResponse(code = 202, message = "키워드에 해당하는 기사가 없습니다.")
 			})
-	public ResponseEntity<? extends BaseResponseBody> registInterest(@RequestParam int code, @RequestParam String keyword) {
+	public ResponseEntity<? extends BaseResponseBody> registInterest(@RequestParam int userSeq) {
 		Map<String, News> result = new HashMap<>();
 		try {
-			result = newsRService.recommentArticle(code, keyword);
+			result = newsRService.recommentArticle(userSeq);
 		}
 		catch(IndexOutOfBoundsException e) {
-			return ResponseEntity.status(409).body(BaseResponseBody.of(202, "키워드에 해당하는 기사가 없습니다."));
+			return ResponseEntity.status(202).body(BaseResponseBody.of(202, "키워드에 해당하는 기사가 없습니다."));
 		}
 		return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "관심사 등록 성공",result));
 	}

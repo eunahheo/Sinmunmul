@@ -6,5 +6,5 @@ import com.newsbig.sinmunmul.entity.News;
 
 public interface NewsRecommendService {
 	
-	public Map<String,News> recommentArticle(int code, String keyword); 
+	public Map<String,News> recommentArticle(int userSeq); 
 }
