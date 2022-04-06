@@ -100,7 +100,7 @@
        <button type="button"  @click="generate(105)" class="btn btn-primary btn-sm"> IT/과학 </button> &nbsp   -->
        
        <!-- <bar-chart :data="chartData"></bar-chart> -->
-       <bar-chart :data="chartData" :colors="['#3366CC', '#DC3912', '#FF9900', '#109618', '#990099', '#3B3EAC', '#0099C6']" @click="getGraphKey"></bar-chart>
+       <bar-chart :data="chartData" :colors="['#3366CC', '#DC3912', '#FF9900', '#109618', '#990099', '#3B3EAC', '#0099C6']" ></bar-chart>
    
     </div>
 
@@ -113,7 +113,12 @@
 
     <div >
       <h3>키워드 언급량 추이 그래프</h3>
-      <line-chart :data="lineData" ></line-chart>
+      
+  <button class="btn"  v-if="this.lineData==null" >
+    <span class="spinner-border spinner-border-m"></span>
+    조회중입니다.
+  </button>
+      <line-chart v-else :data="lineData" ></line-chart>
     </div>
 
 </div>
@@ -209,7 +214,7 @@ export default {
         {text : "글20", size : 18, color: "#6E6E6E"},
       ],
       chartData: [ ],
-      lineData : [ ], //line data
+      lineData : null, //line data
 
     todayNewsData : [],
     todayNews : null,
@@ -220,7 +225,7 @@ export default {
   created (){
     this.wordcloud(0);
    // this.genLayout();
-    this.generate(0);
+  // this.generate(0);
     this.getTodayNews();
 
   },
@@ -287,7 +292,7 @@ export default {
 
       }).catch((err) => {
             console.log("에러");
-            alert("그래프 데이터 없음");
+            // alert("그래프 데이터 없음");
             console.log(err);
           })
     },
@@ -323,6 +328,7 @@ export default {
     },
     wordcloud(number)
     {
+      this.lineData=null;
       this.generate(number);
 
           for (let index = 0; index < this.codeGroup.length; index++) {
