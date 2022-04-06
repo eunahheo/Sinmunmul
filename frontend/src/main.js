@@ -8,6 +8,8 @@ import VueChartkick from 'vue-chartkick'
 import 'chartkick/chart.js'
 import 'vuex-persistedstate'
 
+window.Kakao.init('864650259e852266a14e98b75eedc985')
+
 const app = createApp(App);
 
 app.use(store);
