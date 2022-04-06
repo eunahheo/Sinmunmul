@@ -15,14 +15,14 @@
 
   <main class="m-3">
     <div class="plan span--2 long--2 ">
-       <h3>이슈 - 워드 클라우드</h3>
-        <div id="word-cloud">
+       <h3>연관 키워드</h3>
+           <div  id="word-cloud">
         </div>
     </div>
 
     <div class="plan span--2 long--2">
       <h3>키워드 검색량 추이 그래프</h3>
-      <line-chart :data="chartData" ></line-chart>
+      <line-chart :data="chartData"></line-chart>
 
     </div>
   </main>
@@ -113,35 +113,35 @@ import axios from 'axios'
 const SERVER_HOST = 'https://j6a406.p.ssafy.io/api'
 
 export default {
-  data() {
+  data () {
     return {
-       words: [
-        {text : "글자1", size : 40, color: "#f6535d"},
-        {text : "글자2", size : 36, color: "#377cc4"},
-        {text : "글자3", size : 32, color: "#b168e0"},
-        {text : "글자4", size : 28, color: "#1a9a9f"},
-        {text : "글자5", size : 24, color: "#fac302"},
-        {text : "글자6", size : 24, color: "#d86898"},
-        {text : "글자7", size : 24, color: "#f9870e"},
-        {text : "글자8", size : 18, color: "#6E6E6E"},
-        {text : "글자9", size : 18, color: "#6E6E6E"},
-        {text : "글10", size : 18, color: "#6E6E6E"},
-        {text : "글11", size : 18, color: "#6E6E6E"},
-        {text : "글12", size : 18, color: "#6E6E6E"},
-        {text : "글13", size : 18, color: "#6E6E6E"},
-        {text : "글14", size : 18, color: "#6E6E6E"},
-        {text : "글15", size : 18, color: "#6E6E6E"},
-        {text : "글16", size : 18, color: "#6E6E6E"},
-        {text : "글17", size : 18, color: "#6E6E6E"},
-        {text : "글18", size : 18, color: "#6E6E6E"},
-        {text : "글19", size : 18, color: "#6E6E6E"},
-        {text : "글20", size : 18, color: "#6E6E6E"}
+      words: [
+        { text: '글자1', size: 40, color: '#f6535d' },
+        { text: '글자2', size: 36, color: '#377cc4' },
+        { text: '글자3', size: 32, color: '#b168e0' },
+        { text: '글자4', size: 28, color: '#1a9a9f' },
+        { text: '글자5', size: 24, color: '#fac302' },
+        { text: '글자6', size: 24, color: '#d86898' },
+        { text: '글자7', size: 24, color: '#f9870e' },
+        { text: '글자8', size: 18, color: '#6E6E6E' },
+        { text: '글자9', size: 18, color: '#6E6E6E' },
+        { text: '글자10', size: 18, color: '#6E6E6E' },
+        { text: '글자11', size: 18, color: '#6E6E6E' },
+        { text: '글자12', size: 18, color: '#6E6E6E' },
+        { text: '글자13', size: 18, color: '#6E6E6E' },
+        { text: '글자14', size: 18, color: '#6E6E6E' },
+        { text: '글자15', size: 18, color: '#6E6E6E' },
+        { text: '글자16', size: 18, color: '#6E6E6E' },
+        { text: '글자17', size: 18, color: '#6E6E6E' },
+        { text: '글자18', size: 18, color: '#6E6E6E' },
+        { text: '글자19', size: 18, color: '#6E6E6E' },
+        { text: '글자20', size: 18, color: '#6E6E6E' }
       ],
 
-      searchWord : null,
-      newsData : {},
+      searchWord: null,
+      newsData: {},
       newsVisible: false,
-      searchedData : [],
+      searchedData: [],
       pageNumbers: [1, 2, 3, 4, 5],
       page: 1, // 기본 1페이지
       totalPage: '',
@@ -157,107 +157,89 @@ export default {
 
     }
   },
-    components: {
+  components: {
     newsModal
   },
-  created() {
-      this.searchWord = this.$route.params.searchWord;
-       this.wordcloud();
-      this.chartMake(this.searchWord);
-      this.search();
+  created () {
+    this.searchWord = this.$route.params.searchWord
+    this.wordcloud()
+    this.chartMake(this.searchWord)
+    this.search()
   },
 
   methods: {
-
-    wordcloud: function () {
-
-        // 키워드 연관어 받아오는 api 호출
-  axios({
-        method: 'get',
-        url: `https://j6a406.p.ssafy.io/fapi/news/search/wordcloud`,
-         params: {
-            keyword : this.searchWord
-          }
-      })
-        .then((res) => {
-          const data = res.data.data
-
-          for (let index = 0; index < 20; index++) {
-
-
-
-            this.words[index].text = data[index].keyword
-          }
-
-           console.log("왜 안나오죠??")
-          console.log(res)
-
-         // this.genLayout()
-
-
-
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-
-
-
-    },
- genLayout () {
+    genLayout () {
       const cloud = require('d3-cloud')
       cloud()
         .words(this.words)
-        .padding(2)
+        .padding(1)
         .rotate(0)
         .font('serif')
         .fontSize(function (d) {
           return d.size
         })
-        .on('end', this.end)
-        .spiral("archimedean")
+        .on('end', this.wordcloudend)
+        .spiral('archimedean')
         .start()
-        // .stop();
+        .stop()
     },
-    end (words) {
+    wordcloudend (words) {
       console.log(words)
-      const d3 = require("d3");
-      const width = 500;
-      const height = 400;
-      const text ='';
-     d3.select("#word-cloud")
-     .html('')
-    .append("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .style("background", "white")
-      .append("g")
-      .attr("transform", "translate(" + width /2 + "," +height /2 +")") //g를 중심으로 단어그림 svg 중심으로 이동
-      .selectAll("text")
-      .data(words)
-      .enter()
-      .append("text")
-      .attr("class",(d)=>{return d.text})
-      .style("font-size", (d)=>{return d.size +"px";})
-      .style("cursor","pointer")
-      .style("fill",(d)=>{return d.color;}) //색지정
-      .style("fill-opacity", 1) //투명도 조절
-      .style("font-family", "Impact")
-      .style("font-weight","bold")
-      .attr("text-anchor", "middle")
-      .attr("transform", (d)=>{return "translate(" + [d.x, d.y] +") rotate (" + d.rotate +")";})
-      .text((d)=>d.text)
+      const d3 = require('d3')
+      const width = 600
+      const height = 300
+      d3.select('#word-cloud')
+        .html('')
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .style('background', 'white')
+        .append('g')
+        .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')') // g를 중심으로 단어그림 svg 중심으로 이동
+        .selectAll('text')
+        .data(words)
+        .enter()
+        .append('text')
+        .attr('class', (d) => { return d.text })
+        .style('font-size', (d) => { return d.size + 'px' })
+        .style('cursor', 'pointer')
+        .style('fill', (d) => { return d.color }) // 색지정
+        .style('fill-opacity', 1) // 투명도 조절
+        .style('font-family', 'Impact')
+        .style('font-weight', 'bold')
+        .attr('text-anchor', 'middle')
+        .attr('transform', (d) => { return 'translate(' + [d.x * 1.2, d.y * 1.2] + ') rotate (' + d.rotate + ')' })
+        .text((d) => d.text)
     },
 
+    wordcloud () { // 키워드 연관어 받아오는 api 호출
+      axios({
+        method: 'get',
+        url: 'https://j6a406.p.ssafy.io/fapi/news/search/wordcloud',
+        params:
+        { keyword: this.searchWord }
+      })
+        .then((res) => {
+          const data = res.data.data
 
-      detail (seq) {
+          for (let index = 0; index < 20; index++) {
+            this.words[index].text = data[index].keyword
+          }
+          console.log(res)
+          this.genLayout()
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    detail (seq) {
       // console.log("검색 시퀀스 : "+seq);
        axios.get(`${SERVER_HOST}/news/detail`, {
           params: {
             newsSeq : seq,
           }
         })
-        .then((res) =>{
+        .then((res) => {
             //  console.log(res.data.data);
             this.newsData = res.data.data;
             this.newsVisible = !this.newsVisible;
@@ -402,5 +384,21 @@ export default {
 .long--4 {
   grid-row: span 4;
 }
+#word-cloud {
+  /* border  : 1px solid blue; */
+   -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+   border-radius: 10px;
+  -webkit-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.1)
+
+}
+
+bar-chart {
+height:400px;
+
+}
+
 
 </style>
