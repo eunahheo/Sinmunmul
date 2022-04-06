@@ -91,14 +91,14 @@
   <div class="col-6 mb-3" >
     <div >
       <h3>최고 빈도 키워드</h3>
-       <!-- <button type="button"  @click="generate(0)" class="btn btn-primary btn-sm"> 전체 </button> &nbsp  
-       <button type="button"  @click="generate(100)" class="btn btn-primary btn-sm"> 정치 </button> &nbsp  
-       <button type="button"  @click="generate(101)" class="btn btn-primary btn-sm"> 경제 </button> &nbsp  
-       <button type="button"  @click="generate(102)" class="btn btn-primary btn-sm"> 사회 </button> &nbsp  
-       <button type="button"  @click="generate(103)" class="btn btn-primary btn-sm"> 생활/문화 </button> &nbsp  
-       <button type="button"  @click="generate(104)" class="btn btn-primary btn-sm"> 세계 </button> &nbsp  
+       <!-- <button type="button"  @click="generate(0)" class="btn btn-primary btn-sm"> 전체 </button> &nbsp
+       <button type="button"  @click="generate(100)" class="btn btn-primary btn-sm"> 정치 </button> &nbsp
+       <button type="button"  @click="generate(101)" class="btn btn-primary btn-sm"> 경제 </button> &nbsp
+       <button type="button"  @click="generate(102)" class="btn btn-primary btn-sm"> 사회 </button> &nbsp
+       <button type="button"  @click="generate(103)" class="btn btn-primary btn-sm"> 생활/문화 </button> &nbsp
+       <button type="button"  @click="generate(104)" class="btn btn-primary btn-sm"> 세계 </button> &nbsp
        <button type="button"  @click="generate(105)" class="btn btn-primary btn-sm"> IT/과학 </button> &nbsp   -->
-       
+
        <!-- <bar-chart :data="chartData"></bar-chart> -->
        <bar-chart :data="chartData" :colors="['#3366CC', '#DC3912', '#FF9900', '#109618', '#990099', '#3B3EAC', '#0099C6']" @click="getGraphKey"></bar-chart>
 
@@ -150,8 +150,6 @@
 
 <script>
 import axios from 'axios'
-import VueWordCloud from 'vuewordcloud'
-import wordcloud from 'vue-wordcloud'
 import img from '@/assets/default.png'
 import newsModal from '@/components/MyPage/newsModal.vue'
 // const LOCAL_HOST = 'http://localhost:3030/api'
@@ -168,7 +166,7 @@ axios.defaults.paramsSerializer = function(paramObj) {
 
 export default {
 
-  components: { VueWordCloud, wordcloud ,newsModal },
+  components: { newsModal },
   data() {
     return {
       newsData2: {},
