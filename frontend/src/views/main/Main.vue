@@ -149,10 +149,13 @@
                   <div class="card">
                     <div class="row">
                       <div class="col-4">
+                        <img class="card-img main-card-img" v-if="item.news_photo == ''" style="object-fit: contain;" src="../../../public/img/no_image.jpg">
                         <img
                           class="card-img main-card-img"
                           v-bind:src="item.news_photo"
+                          v-else
                           alt="Card image"
+                          style="object-fit: cover;"
                           @error="replaceDefault"
                         />
                       </div>
