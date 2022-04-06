@@ -86,7 +86,9 @@ def wordcloud(keyword: str):
             }
     for similar in most_similar:
         wordcloud.append({'keyword': similar[0], 'count': int(similar[1] * counts[similar[0]])})
-
+    
+    wordcloud.sort(key = lambda object:object["count"], reverse = True)
+    
     response_wordcloud = {
             "message" : "연관어 워드클라우드 조회 성공",
             "statusCode" : 200,
