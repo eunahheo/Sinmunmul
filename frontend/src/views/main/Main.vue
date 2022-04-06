@@ -187,13 +187,6 @@
           <div class="col-6 mb-3">
             <div class="container3">
               <h3>최고 빈도 키워드</h3>
-              <!-- <button type="button"  @click="generate(0)" class="btn btn-primary btn-sm"> 전체 </button> &nbsp  
-       <button type="button"  @click="generate(100)" class="btn btn-primary btn-sm"> 정치 </button> &nbsp  
-       <button type="button"  @click="generate(101)" class="btn btn-primary btn-sm"> 경제 </button> &nbsp  
-       <button type="button"  @click="generate(102)" class="btn btn-primary btn-sm"> 사회 </button> &nbsp  
-       <button type="button"  @click="generate(103)" class="btn btn-primary btn-sm"> 생활/문화 </button> &nbsp  
-       <button type="button"  @click="generate(104)" class="btn btn-primary btn-sm"> 세계 </button> &nbsp  
-       <button type="button"  @click="generate(105)" class="btn btn-primary btn-sm"> IT/과학 </button> &nbsp   -->
 
               <!-- <bar-chart :data="chartData"></bar-chart> -->
               <bar-chart
@@ -211,32 +204,37 @@
               ></bar-chart>
             </div>
           </div>
-
           <div class="col-6 mb-3">
             <div class="container3">
-              <h3>기사량 주간 추이</h3>
-              <line-chart :data="lineData"></line-chart>
+              <h3>키워드 언급량 추이 그래프</h3>
+
+              <button class="btn" v-if="this.lineData == null">
+                <span class="spinner-border spinner-border-m"></span>
+                조회중입니다.
+              </button>
+              <line-chart v-else :data="lineData"></line-chart>
             </div>
           </div>
-          <hr />
         </div>
 
-        <div class="row mb-2">
-          <div class="col-6 mb-3">
-            <div>
-              <h2>추천 기사 자리 1</h2>
-            </div>
+        <hr />
+      </div>
+
+      <div class="row mb-2">
+        <div class="col-6 mb-3">
+          <div>
+            <h2>추천 기사 자리 1</h2>
           </div>
-          <div class="col-6 mb-3">
-            <div>
-              <h2>추천기사 자리 2</h2>
-            </div>
+        </div>
+        <div class="col-6 mb-3">
+          <div>
+            <h2>추천기사 자리 2</h2>
           </div>
         </div>
       </div>
-
-      <div class="col-1"></div>
     </div>
+
+    <div class="col-1"></div>
   </div>
 </template>
 
@@ -298,7 +296,7 @@ export default {
         { text: "글20", size: 18, color: "#6E6E6E" },
       ],
       chartData: [],
-      lineData: [], //line data
+      lineData: null, //line data
 
       todayNewsData: [0, 0, 0, 0, 0, 0],
       todayNews: null,
@@ -308,7 +306,7 @@ export default {
   created() {
     this.wordcloud(0);
     // this.genLayout();
-    this.generate(0);
+    // this.generate(0);
     this.getTodayNews();
   },
   methods: {
@@ -332,6 +330,7 @@ export default {
           }
 
           // console.log(keywords);
+          this.lineData = null;
           this.LinechartMake(keywords);
         })
         .catch((err) => {
@@ -348,6 +347,50 @@ export default {
             keywords: keyword,
           },
         })
+        .then((res) => {
+          this.lineData = [
+            { name: "", data: {} },
+            { name: "", data: {} },
+            { name: "", data: {} },
+            { name: "", data: {} },
+            { name: "", data: {} },
+            { name: "", data: {} },
+            { name: "", data: {} },
+          ];
+
+          for (var i = 0; i < 7; i++) {
+            var values = Object.values(res.data.data[i].stat); //받은 result value들만 따로 정제
+            var temp = {}; //value를 속성, 값으로 만들어줄 객체
+            for (var j = 0; j < values.length; j++) {
+              let label = values[j].label;
+              temp[label] = values[j].count; //temp 객체에 label 속성과 count 값 할당
+            }
+            this.lineData[i].name = keyword[i];
+            this.lineData[i].data = temp;
+          }
+
+          //  console.log(this.lineData);
+        })
+        .catch((err) => {
+          console.log("에러");
+          alert("그래프 데이터 없음");
+          console.log(err);
+        });
+    },
+
+    newsInit: function () {
+      this.newsVisible = false;
+    },
+
+    modal: function (seq) {
+      //seq로  뉴스 상세정보 조회
+      axios({
+        method: "get",
+        url: `${SERVER_HOST}/news/detail`,
+        params: {
+          newsSeq: seq,
+        },
+      })
         .then((res) => {
           this.lineData = [
             { name: "", data: {} },
@@ -507,12 +550,13 @@ export default {
     end(words) {
       console.log(words);
       const d3 = require("d3");
-      const width = 500;
+      const width = 660;
       const height = 400;
       const text = "";
       d3.select("#word-cloud")
         .html("")
         .append("svg")
+        .attr("preserveAspectRatio", "xMinYMin meet")
         .attr("width", width)
         .attr("height", height)
         // .attr("class", "span--2 long--2")
@@ -527,7 +571,7 @@ export default {
           return d.text;
         })
         .style("font-size", (d) => {
-          return d.size + "px";
+          return d.size * 1.2 + "px";
         })
         .style("cursor", "pointer")
         .style("fill", (d) => {
@@ -538,7 +582,13 @@ export default {
         .style("font-weight", "bold")
         .attr("text-anchor", "middle")
         .attr("transform", (d) => {
-          return "translate(" + [d.x, d.y] + ") rotate (" + d.rotate + ")";
+          return (
+            "translate(" +
+            [d.x * 2.5, d.y * 1.5] +
+            ") rotate (" +
+            d.rotate +
+            ")"
+          );
         })
         .text((d) => d.text)
         .on("click", (ev, d) => {
@@ -546,12 +596,12 @@ export default {
         })
         .on("mouseover", function () {
           d3.select(this).style("font-size", (d) => {
-            return d.size + 3 + "px";
+            return d.size * 1.2 + 3 + "px";
           });
         })
         .on("mouseout", function () {
           d3.select(this).style("font-size", (d) => {
-            return d.size - 3 + "px";
+            return d.size * 1.2 - 3 + "px";
           });
         });
     },
@@ -657,9 +707,9 @@ canvas([canvas]): 캔버스 생성기
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
-  -webkit-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.1);
-  -moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.1);
-  box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.05);
 }
 
 @import url("https://fonts.googleapis.com/css?family=Lato");
@@ -685,7 +735,6 @@ body .container {
   background: #fff;
   align-items: center;
   border-radius: 8px;
-  box-shadow: 0px 10px 30px rgba(139, 139, 139, 0.3);
 }
 body .container2 {
   flex-direction: row;
@@ -695,7 +744,7 @@ body .container2 {
   background: #fff;
   align-items: center;
   border-radius: 8px;
-  box-shadow: 0px 10px 30px rgba(139, 139, 139, 0.3);
+  box-shadow: 0px 10px 30px rgba(139, 139, 139, 0.1);
 }
 body .container3 {
   flex-direction: row;
@@ -705,7 +754,7 @@ body .container3 {
   background: #fff;
   align-items: center;
   border-radius: 8px;
-  box-shadow: 0px 10px 30px rgba(139, 139, 139, 0.3);
+  box-shadow: 0px 10px 30px rgba(139, 139, 139, 0.1);
 }
 body .container .block {
   text-align: center;

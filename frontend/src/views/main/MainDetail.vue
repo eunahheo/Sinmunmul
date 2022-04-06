@@ -12,7 +12,7 @@
    <h3 class="">검색 결과</h3>
   </li>
  </ul>
-  
+
   <main class="m-3">
     <div class="plan span--2 long--2 ">
        <h3>이슈 - 워드 클라우드</h3>
@@ -26,7 +26,7 @@
 
     </div>
   </main>
-  
+
 <ul class="nav nav-tabs m-4" >
   <li class="nav-item container row" style="float: none; margin:100 auto;">
    <h3 class="">관련 뉴스 목록</h3>
@@ -55,7 +55,7 @@
     <div class="col-md-1">
       <!-- <button @click="detail">자세히 보기 </button> -->
       <!-- <a :href="detail" class="btn btn-primary" style="display:block; width:100%; height:100%; vertical-align: middle;">자세히 보기</a> -->
-      <button @click="detail(news.news_seq)" class="btn btn-info" 
+      <button @click="detail(news.news_seq)" class="btn btn-info"
       style="display:block; width:100%; height:100%; vertical-align: middle;"
       >자세히 보기</button>
     </div>
@@ -115,6 +115,29 @@ const SERVER_HOST = 'https://j6a406.p.ssafy.io/api'
 export default {
   data() {
     return {
+       words: [
+        {text : "글자1", size : 40, color: "#f6535d"},
+        {text : "글자2", size : 36, color: "#377cc4"},
+        {text : "글자3", size : 32, color: "#b168e0"},
+        {text : "글자4", size : 28, color: "#1a9a9f"},
+        {text : "글자5", size : 24, color: "#fac302"},
+        {text : "글자6", size : 24, color: "#d86898"},
+        {text : "글자7", size : 24, color: "#f9870e"},
+        {text : "글자8", size : 18, color: "#6E6E6E"},
+        {text : "글자9", size : 18, color: "#6E6E6E"},
+        {text : "글10", size : 18, color: "#6E6E6E"},
+        {text : "글11", size : 18, color: "#6E6E6E"},
+        {text : "글12", size : 18, color: "#6E6E6E"},
+        {text : "글13", size : 18, color: "#6E6E6E"},
+        {text : "글14", size : 18, color: "#6E6E6E"},
+        {text : "글15", size : 18, color: "#6E6E6E"},
+        {text : "글16", size : 18, color: "#6E6E6E"},
+        {text : "글17", size : 18, color: "#6E6E6E"},
+        {text : "글18", size : 18, color: "#6E6E6E"},
+        {text : "글19", size : 18, color: "#6E6E6E"},
+        {text : "글20", size : 18, color: "#6E6E6E"}
+      ],
+
       searchWord : null,
       newsData : {},
       newsVisible: false,
@@ -139,16 +162,99 @@ export default {
   },
   created() {
       this.searchWord = this.$route.params.searchWord;
+       this.wordcloud();
       this.chartMake(this.searchWord);
       this.search();
   },
 
   methods: {
+
+    wordcloud: function () {
+
+        // 키워드 연관어 받아오는 api 호출
+  axios({
+        method: 'get',
+        url: `https://j6a406.p.ssafy.io/fapi/news/search/wordcloud`,
+         params: {
+            keyword : this.searchWord
+          }
+      })
+        .then((res) => {
+          const data = res.data.data
+
+          for (let index = 0; index < 20; index++) {
+
+
+
+            this.words[index].text = data[index].keyword
+          }
+
+           console.log("왜 안나오죠??")
+          console.log(res)
+
+         // this.genLayout()
+
+
+
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+
+
+
+    },
+ genLayout () {
+      const cloud = require('d3-cloud')
+      cloud()
+        .words(this.words)
+        .padding(2)
+        .rotate(0)
+        .font('serif')
+        .fontSize(function (d) {
+          return d.size
+        })
+        .on('end', this.end)
+        .spiral("archimedean")
+        .start()
+        // .stop();
+    },
+    end (words) {
+      console.log(words)
+      const d3 = require("d3");
+      const width = 500;
+      const height = 400;
+      const text ='';
+     d3.select("#word-cloud")
+     .html('')
+    .append("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .style("background", "white")
+      .append("g")
+      .attr("transform", "translate(" + width /2 + "," +height /2 +")") //g를 중심으로 단어그림 svg 중심으로 이동
+      .selectAll("text")
+      .data(words)
+      .enter()
+      .append("text")
+      .attr("class",(d)=>{return d.text})
+      .style("font-size", (d)=>{return d.size +"px";})
+      .style("cursor","pointer")
+      .style("fill",(d)=>{return d.color;}) //색지정
+      .style("fill-opacity", 1) //투명도 조절
+      .style("font-family", "Impact")
+      .style("font-weight","bold")
+      .attr("text-anchor", "middle")
+      .attr("transform", (d)=>{return "translate(" + [d.x, d.y] +") rotate (" + d.rotate +")";})
+      .text((d)=>d.text)
+    },
+
+
       detail (seq) {
       // console.log("검색 시퀀스 : "+seq);
        axios.get(`${SERVER_HOST}/news/detail`, {
           params: {
-            newsSeq : seq,           
+            newsSeq : seq,
           }
         })
         .then((res) =>{
@@ -223,7 +329,7 @@ export default {
       const e = this.endPage
       for (let i = s; i <= e; i++) {
         this.pageNumbers[i - s] = i
-       
+
       }
     },
     thisPage: function (num) {
@@ -247,7 +353,7 @@ export default {
           }
         })
         .then((res) =>{
-    
+
       this.chartData = [ {name: '',  data: {   }}]; //할당 안해주면 data 표시 안됨
       var values = Object.values(res.data.data[0].stat); //받은 result value들만 따로 정제
       var temp = {}; //value를 속성, 값으로 만들어줄 객체
@@ -256,11 +362,11 @@ export default {
         let label = values[i].label;
         temp[label] = values[i].count; //temp 객체에 label 속성과 count 값 할당
       }
-      
+
       //차트 데이터 할당
       this.chartData[0].name = keyword;
       this.chartData[0].data = temp;
-      
+
        console.log(this.chartData);
 
       }).catch((err) => {
@@ -271,7 +377,7 @@ export default {
     },
 
   }
-  
+
 }
 
 </script>
