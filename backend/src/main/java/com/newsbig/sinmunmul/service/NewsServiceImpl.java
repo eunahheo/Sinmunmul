@@ -160,11 +160,11 @@ public class NewsServiceImpl implements NewsService {
 	public List<KeywordTrendWeek> keywordTrendWeek(String keyword) {
 		String q = "SELECT DATE_FORMAT(DATE_SUB(n.news_reg_dt, INTERVAL (DAYOFWEEK(n.news_reg_dt)-1) DAY), '%Y/%m/%d') as label, "
 				+ "DATE_FORMAT(DATE_SUB(n.news_reg_dt, INTERVAL (DAYOFWEEK(n.news_reg_dt)-7) DAY), '%Y/%m/%d') as end, "
-				+ "DATE_FORMAT(n.news_reg_dt, '%Y%u') AS 'date', "
+				+ "DATE_FORMAT(n.news_reg_dt, '%Y%U') AS 'date', "
 				+ "count(*) AS count "
 				+ "FROM news n "
 				+ "WHERE MATCH(n.news_title, n.news_desc) AGAINST('" + keyword + "' IN BOOLEAN MODE)"
-				+ "GROUP BY date ORDER BY news_reg_dt DESC LIMIT 6";
+				+ "GROUP BY date ORDER BY date DESC LIMIT 6";
         
         JpaResultMapper result = new JpaResultMapper();
         Query query = entityManager.createNativeQuery(q);
