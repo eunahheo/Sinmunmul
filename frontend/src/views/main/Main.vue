@@ -111,9 +111,14 @@
 
   <div class="col-6 mb-3" >
 
-    <div >
+   <div >
       <h3>키워드 언급량 추이 그래프</h3>
-      <line-chart :data="lineData" ></line-chart>
+      
+  <button class="btn"  v-if="this.lineData==null" >
+    <span class="spinner-border spinner-border-m"></span>
+    조회중입니다.
+  </button>
+      <line-chart v-else :data="lineData" ></line-chart>
     </div>
 
 </div>
@@ -209,7 +214,7 @@ export default {
         {text : "글20", size : 18, color: "#6E6E6E"}
       ],
       chartData: [ ],
-      lineData : [ ], //line data
+      lineData : null, //line data
 
     todayNewsData : [],
     todayNews : null,
@@ -220,7 +225,7 @@ export default {
   created (){
     this.wordcloud(0);
    // this.genLayout();
-    this.generate(0);
+    // this.generate(0);
     this.getTodayNews();
 
   },
@@ -244,6 +249,7 @@ export default {
            }
 
           // console.log(keywords);
+          this.lineData=null;
           this.LinechartMake(keywords);
 
         }).catch((err) => {
