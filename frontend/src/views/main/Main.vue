@@ -152,7 +152,7 @@
                         <img
                           class="card-img main-card-img"
                           v-if="item.news_photo == ''"
-                          style="object-fit: contain"
+                          style="object-fit: contail"
                           src="../../../src/assets/shin_logo.png"
                         />
                         <img
