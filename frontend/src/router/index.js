@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import MainView from '../views/main/Main.vue'
-import Temp from '../views/main/Temp.vue'
 import HomeView from '../views/HomeView.vue'
 import MyPage from '../views/MyPage.vue'
 import MyProfile from '@/components/MyPage/MyProfile.vue'
@@ -60,21 +59,7 @@ const routes = [
     name: 'search',
     component: () => import('../views/main/MainDetail.vue')
   },
-  {
-    path: '/temp',
-    name: 'temp',
-    component: Temp
-  },
-  {
-    path: '/tempchart',
-    name: 'tempchart',
-    component: () => import('../views/main/TempChart.vue')
-  },
-  {
-    path: '/tempgraph',
-    name: 'tempgraph',
-    component: () => import('../views/main/TempGraph.vue')
-  },
+ 
   {
     path: '/login',
     name: 'login',

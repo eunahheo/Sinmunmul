@@ -149,13 +149,18 @@
                   <div class="card">
                     <div class="row">
                       <div class="col-4">
-                        <img class="card-img main-card-img" v-if="item.news_photo == ''" style="object-fit: contain;" src="../../../public/img/no_image.jpg">
+                        <img
+                          class="card-img main-card-img"
+                          v-if="item.news_photo == ''"
+                          style="object-fit: contain"
+                          src="../../../public/img/no_image.jpg"
+                        />
                         <img
                           class="card-img main-card-img"
                           v-bind:src="item.news_photo"
                           v-else
                           alt="Card image"
-                          style="object-fit: cover;"
+                          style="object-fit: cover"
                           @error="replaceDefault"
                         />
                       </div>
@@ -203,18 +208,17 @@
                   '#3B3EAC',
                   '#0099C6',
                 ]"
-                @click="getGraphKey"
               ></bar-chart>
             </div>
           </div>
           <div class="col-6 mb-3">
             <div class="container3">
               <h3>키워드 언급량 추이 그래프</h3>
-                <div class="spinner-div2" v-if="this.lineData == null" >
-              <button class="btn" >
-                <span class="spinner-border spinner-border-m"></span>
-                조회중입니다.
-              </button>
+              <div class="spinner-div2" v-if="this.lineData == null">
+                <button class="btn">
+                  <span class="spinner-border spinner-border-m"></span>
+                  조회중입니다.
+                </button>
               </div>
               <line-chart v-else :data="lineData"></line-chart>
             </div>
@@ -227,12 +231,12 @@
       <div class="row mb-2">
         <div class="col-6 mb-3">
           <div>
-            <h2>추천 기사 자리 1</h2>
+            <h2>긍정적 추천 기사</h2>
           </div>
         </div>
         <div class="col-6 mb-3">
           <div>
-            <h2>추천기사 자리 2</h2>
+            <h2>부정적 추천 기사</h2>
           </div>
         </div>
       </div>
@@ -262,7 +266,7 @@ axios.defaults.paramsSerializer = function (paramObj) {
 
 export default {
   components: { VueWordCloud, wordcloud, newsModal, VueNumber },
-  data () {
+  data() {
     return {
       newsData2: {},
       newsVisible: false,
@@ -312,8 +316,35 @@ export default {
     // this.genLayout();
     // this.generate(0);
     this.getTodayNews();
+    console.log("로그인체크");
+    console.log(this.$store.authToken);
+    console.log(this.$store.userSeq);
+    console.log("===================");
+
+    if(this.$store.userSeq!=null && this.$store.userSeq!="") {
+      this.getRecommendArticle(this.$store.userSeq);
+    }
+    
+
   },
   methods: {
+    getRecommendArticle(userSeq) {
+       axios
+        .get(`${SERVER_HOST}/recom/keyword`, {
+          params: {
+            userSeq: userSeq,
+          },
+        })
+        .then((res)=>{
+          //유저 추천 기사 응답 성공
+            console.log("추천기사 DATA");
+            console.log(res.data);
+        })
+        .catch((err) => {
+          console.log("에러");
+          console.log(err);
+        });
+    },
     generate(category) {
       axios
         .get(`${SERVER_HOST}/news/main/wordcloud`, {
@@ -670,7 +701,6 @@ canvas([canvas]): 캔버스 생성기
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
-
 }
 
 @import url("https://fonts.googleapis.com/css?family=Lato");
