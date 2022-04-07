@@ -98,8 +98,8 @@ export default {
               localStorage.setItem("userSeq", res.data.data.userSeq);
               // this.$router.push({ name: 'home'});
               this.$router.go();
-            } else if (res.status === 202) {
-              alert("가입 정보가 없습니다.");
+            } else {
+              alert("이메일, 비밀번호가 일치하지 않습니다.");
             }
           })
           .catch((e) => {
