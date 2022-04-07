@@ -308,6 +308,7 @@ export default {
 
       todayNewsData: [0, 0, 0, 0, 0, 0],
       todayNews: null,
+      userSeq: localStorage.getItem('userSeq') || null,
     }; //return
   }, //data
 
@@ -317,12 +318,13 @@ export default {
     // this.generate(0);
     this.getTodayNews();
     console.log("로그인체크");
-    console.log(this.$store.authToken);
-    console.log(this.$store.userSeq);
+    
+    console.log(this.userSeq);
+
     console.log("===================");
 
-    if(this.$store.userSeq!=null && this.$store.userSeq!="") {
-      this.getRecommendArticle(this.$store.userSeq);
+    if(this.userSeq!=null && this.userSeq!="") {
+      this.getRecommendArticle(this.userSeq);
     }
     
 
