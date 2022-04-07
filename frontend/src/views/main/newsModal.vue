@@ -23,9 +23,23 @@
         </div>
         <div class="col-8" style="text-align: right; padding-right:10px; padding-top:8px"> {{this.date}}  | {{news.newsAuthor}} 기자</div>
         </div>
+         <hr>
+         <div><img v-bind:src="news.newsPhoto" class="image mt-4 mb-4" style="width:100%;"></div>
+         <div class="modal-body" v-html="desc"  style="text-align: left;  font-size:20px;"></div>
+        <div class="modal-footer mb-4"><button type="button" class="btn btn-danger"   @click="$emit('close')"  data-bs-dismiss="modal">닫기</button></div>
       </div>
+
+        <div class="col-1"> </div>
+
+      </div>
+
+      <!-- Modal body -->
+
+      <!-- Modal footer -->
     </div>
   </div>
+</div>
+</div>
 </template>
 
 <script>
