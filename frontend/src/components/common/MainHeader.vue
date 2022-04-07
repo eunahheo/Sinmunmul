@@ -40,9 +40,9 @@
           <button type="button" class="btn btn-outline-secondary m-2" v-if="authToken == null">
             <router-link to="/register">회원가입</router-link>
           </button>
-          <button type="button" class="btn btn-outline-secondary m-2">
+          <button type="button" class="btn btn-outline-secondary m-2" v-if="authToken !== null">
             <router-link to="/mypage">마이페이지</router-link>
-            </button>
+          </button>
 
         </div>
 
