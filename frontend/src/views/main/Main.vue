@@ -424,7 +424,17 @@ export default {
     this.getTodayNews();
     var endHour = new Date().getHours();
     var startHour = endHour-1;
-    if(startHour<0) startHour=23;
+    if(endHour==0) {
+      startHour=23;
+      endHour='00';
+    }
+    else if(endHour==1) {
+      startHour='00';
+    }
+    
+
+    var testNum = '00';
+    console.log("testnum ="+testNum);
     
     this.realHour="";
     this.realHour +="("+startHour+":00 ~ "+endHour+":00)";
