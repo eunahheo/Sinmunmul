@@ -13,19 +13,20 @@ import com.newsbig.sinmunmul.entity.QNewsRecommend;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 @Repository
-public class NewsRecommendRepositorySupport {
-
+public class NewsRecommendRepositorySupport {	
+	
 	@Autowired
 	private JPAQueryFactory jpaQueryFactory;
 	 
 	QNewsRecommend qNewsR = QNewsRecommend.newsRecommend;
 	QNews qNews = QNews.news;
 	
-	public List<Long> searchList(int code, String keyword) {
+	// 키워드로 뉴스 추천 DB 검색
+	public List<Long> searchList(String keyword) {
 		List<Long> result = jpaQueryFactory
 				.select(qNewsR.newsSeq)
 				.from(qNewsR)
-				.where(qNewsR.delYn.eq("n"),qNewsR.code.eq(code),(
+				.where(qNewsR.delYn.eq("n"),(
 						(qNewsR.keyword1.eq(keyword))
 						.or(qNewsR.keyword2.eq(keyword))
 						.or(qNewsR.keyword3.eq(keyword))))
@@ -34,30 +35,20 @@ public class NewsRecommendRepositorySupport {
 		return result;
 	}
 	
-	public Map<String,Object> searchByCodeAndKeyword(int code, String keyword) {
-		List<Long> list = searchList(code, keyword);
-		List<News> positiveNews = jpaQueryFactory
+	// 키워드로 검색한 리스트 + 대분류 검색
+	public Map<String,Object> searchByCodeGroupAndKeyword(int codeGroup, String keyword) {
+		List<Long> list = searchList(keyword);
+		List<News> newsList = jpaQueryFactory
 				.select(qNews)
 				.from(qNews)
-				.where(qNews.delYn.eq("n"), qNews.newsSeq.in(list))
-				.orderBy(qNews.newsPositive.desc())
-				.offset(0)
-				.limit(1)
-				.fetch(); 
-		List<News> NegativeNews = jpaQueryFactory
-				.select(qNews)
-				.from(qNews)
-				.where(qNews.delYn.eq("n"), qNews.newsSeq.in(list))
-				.orderBy(qNews.newsNegative.desc())
-				.offset(1)
-				.limit(1)
+				.where(qNews.delYn.eq("n"), qNews.newsSeq.in(list), qNews.commonCodeGroup.codeGroup.eq(codeGroup))
+				.limit(50)
 				.fetch(); 
 		
 		Map<String, Object> result = new HashMap<>();
-		result.put("code", code);
-		result.put("keyword", keyword);
-		result.put("posivite", positiveNews.get(0));
-		result.put("negative", NegativeNews.get(0));
+//		System.out.println(codeGroup+","+keyword);
+//		System.out.println("사이즈 : " + newsList.size());
+		result.put("News", newsList);
 		
 		return result;
 	}

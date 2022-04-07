@@ -1,9 +1,10 @@
 import { createStore } from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
-import {authToken} from './authToken.js'
+import {authToken} from './modules/authToken.js'
 
 export default createStore({
   state: {
+    userSeq: null
   },
   getters: {
   },
@@ -12,11 +13,11 @@ export default createStore({
   actions: {
   },
   modules: {
-    token: 'authToken',
+    authToken: authToken
   },
   plugins: [
     createPersistedState({
-      paths: ['token']
+      paths: ['authToken']
     })
   ]
 })

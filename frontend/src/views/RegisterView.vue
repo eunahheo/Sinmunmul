@@ -233,6 +233,12 @@ export default {
             livingCultureList: [],
             itScienceList: [],
             worldList: [],
+            authToken: localStorage.getItem('authToken') || null,
+        }
+    },
+    mounted() {
+        if(this.authToken) {
+            this.$router.push('/')
         }
     },
     methods: {
@@ -291,8 +297,8 @@ export default {
                             console.log(res)
                             if(res.status === 200){
                                 alert("로그인 성공")
-                                this.$store.authToken = res.data.data;
-                                this.$router.push({ name: 'home'});
+                                localStorage.setItem('authToken', res.data.data.accessToken);
+                                this.$router.go();
                             } else {
                                 alert("로그인 실패")
                             }

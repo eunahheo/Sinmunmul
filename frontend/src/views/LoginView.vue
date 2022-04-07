@@ -1,5 +1,5 @@
 <template>
-    <div class="login d-flex flex-wrap  align-item-center justify-content-center" style="height: 60%">
+    <div class="login d-flex flex-wrap  align-item-center justify-content-center" style="height: 60%" v-on:change="checkLogin">
         <div class="container m-5 align-item-center" style="border: 3px solid black">
             <h1 class="m-5">로그인</h1>
 
@@ -43,16 +43,22 @@ export default {
     name: "login",
     data() {
         return{
+            authToken: localStorage.getItem('authToken') || null,
             emailData: '',
             passwdData: '',
             kakaoToken: '',
             kakaoEmail: '',
         }
     },
+    mounted() {
+        if(this.authToken) {
+            this.$router.push('/')
+        }
+    },
     methods: {
         loginBtn() {
             console.log("login triggerd ");
-            
+
             if(this.emailData != null && this.passwdData !="") {
                 console.log('login data : ', this.emailData, this.passwdData);
                 axios.post(`${API_SERVER}/user/login`, {
@@ -62,12 +68,13 @@ export default {
                 .then((res) =>{
                     console.log(res);
                     if(res.status === 200){
-                        $store.authToken = res.data.data;
-                        $router.push({ name: 'home'});
+                        localStorage.setItem('authToken', res.data.data.accessToken);
+                        // this.$router.push({ name: 'home'});
+                        this.$router.go()
                     } else if (res.status === 202) {
                         alert("가입 정보가 없습니다.")
                     }
-                    
+
                 }).catch((e) => {
                     console.log(e);
                 })
@@ -90,21 +97,10 @@ export default {
                 }
             }).then((res) => {
                 if(res.status === 200){
-                    this.$store.authToken = res.data.data;
-                    this.$router.push({ name: 'home'});
+                    localStorage.setItem('authToken', res.data.data.accessToken);
+                    this.$router.go()
                 } else if (res.status === 202) {
                     alert("등록되지 않은 계정입니다. 회원가입 페이지로 이동합니다.");
-                    // window.Kakao.API.request({
-                    //     url:'/v2/user/me',
-                    //     success: res => {
-                    //         const kakao_account = res.kakao_account;
-                    //         const userInfo = {
-                    //             email: kakao_account.email,
-                    //             gender: kakao_account.gender,
-                    //         }
-                    //         console.log(userInfo)
-                    //     }
-                    // })
                     this.$router.push({
                         name: 'register',
                         params: {
