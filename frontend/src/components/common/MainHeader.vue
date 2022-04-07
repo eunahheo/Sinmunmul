@@ -1,13 +1,6 @@
 <template>
 <div class="px-3 py-0 mt-4 mb-2">
-
-
-
-
       <div class="row">
-
-
-
 
            <div class="col-4 col-lg-auto mt-1 mb-2 mb-lg-0 me-lg-auto">
 
@@ -38,15 +31,18 @@
 
 
         <div class="text-end col-4 mt-2" style=" text-align:center">
-          <button type="button" class="btn btn-outline-secondary m-2">
+          <button type="button" v-on:click="logOut" class="btn btn-outline-secondary m-2" v-if="authToken !== null">
+            로그아웃
+          </button>
+          <button type="button" class="btn btn-outline-secondary m-2" v-else>
             <router-link to="/login">로그인</router-link>
           </button>
-          <button type="button" class="btn btn-outline-secondary m-2">
+          <button type="button" class="btn btn-outline-secondary m-2" v-if="authToken == null">
             <router-link to="/register">회원가입</router-link>
           </button>
-          <button type="button" class="btn btn-outline-secondary m-2">
+          <button type="button" class="btn btn-outline-secondary m-2" v-if="authToken !== null">
             <router-link to="/mypage">마이페이지</router-link>
-            </button>
+          </button>
 
         </div>
 
@@ -74,16 +70,23 @@
 export default {
   data() {
     return {
+      authToken: localStorage.getItem('authToken') || null,
       showSearch : true,
-      searchWord : null
+      searchWord : null,
+      loginCheck : null,
     }
   },
   created() {
     this.showSearch = true;
+
+    console.log(this.$store.authToken);
+    
   },
 
   mounted() {
     this.showSearch = true;
+    console.log('로그인 체크');
+    console.log(this.$store.authToken);
   },
   methods : {
     renew() {
@@ -99,6 +102,11 @@ export default {
         params: { searchWord : this.searchWord }
         });
     },
+    logOut() {
+      localStorage.removeItem('authToken');
+      this.$router.go();
+      // this.$router.push({name : 'home'});
+    }
 
   }
 }

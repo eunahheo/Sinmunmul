@@ -17,6 +17,7 @@ import com.newsbig.sinmunmul.dto.CodeDto;
 import com.newsbig.sinmunmul.entity.News;
 import com.newsbig.sinmunmul.entity.NewsRecommend;
 import com.newsbig.sinmunmul.exception.NotExistsUserException;
+import com.newsbig.sinmunmul.exception.NotRecommendException;
 import com.newsbig.sinmunmul.response.AdvancedResponseBody;
 import com.newsbig.sinmunmul.response.BaseResponseBody;
 import com.newsbig.sinmunmul.service.NewsRecommendService;
@@ -47,9 +48,9 @@ public class NewsRecommendController {
 		try {
 			result = newsRService.recommentArticle(userSeq);
 		}
-		catch(IndexOutOfBoundsException e) {
+		catch(NotRecommendException e) {
 			return ResponseEntity.status(202).body(BaseResponseBody.of(202, "키워드에 해당하는 기사가 없습니다."));
 		}
-		return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "관심사 등록 성공",result));
+		return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "추천 기사 조회 성공",result));
 	}
 }

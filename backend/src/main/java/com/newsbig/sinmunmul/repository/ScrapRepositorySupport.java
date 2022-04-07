@@ -46,8 +46,10 @@ public class ScrapRepositorySupport {
 	}
 	
 	public boolean checkScrap(int userSeq, long newsSeq) {
+		Scrap s;
+		
 		try {
-			jpaQueryFactory.select(qScrap)
+			s = jpaQueryFactory.select(qScrap)
 				.from(qScrap)
 					.leftJoin(qUser).on(qUser.userSeq.eq(qScrap.user.userSeq))
 					.leftJoin(qNews).on(qNews.newsSeq.eq(qScrap.news.newsSeq))
@@ -55,6 +57,8 @@ public class ScrapRepositorySupport {
 		} catch(NullPointerException e) {
 			return false;
 		}
+		
+		if(s==null) return false;
 		
 		return true;
 	}

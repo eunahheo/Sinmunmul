@@ -23,46 +23,32 @@
         </div>
         <div class="col-8" style="text-align: right; padding-right:10px; padding-top:8px"> {{this.date}}  | {{news.newsAuthor}} 기자</div>
         </div>
-         <hr>
-         <div><img v-bind:src="news.newsPhoto" class="image mt-4 mb-4" style="width:100%;"></div>
-         <div class="modal-body" v-html="desc"  style="text-align: left;  font-size:20px;"></div>
-        <div class="modal-footer mb-4"><button type="button" class="btn btn-danger"   @click="$emit('close')"  data-bs-dismiss="modal">닫기</button></div>
       </div>
-
-        <div class="col-1"> </div>
-
-      </div>
-
-      <!-- Modal body -->
-
-      <!-- Modal footer -->
     </div>
   </div>
-</div>
-</div>
 </template>
 
 <script>
 import axios from 'axios'
 const API_SERVER = 'https://j6a406.p.ssafy.io/api'
 export default {
-  name: 'newsModal',
-  props: ['visible', 'news'],
+  name: "newsModal",
+  props: ["visible", "news"],
 
   data: function () {
     return {
-      desc: '',
-      date: ''
-    }
+      desc: "",
+      date: "",
+    };
   },
   watch: {
-    news () {
-      this.date = this.news.newsRegDt
-      const text = this.news.newsDesc
-      const tmp = this.date.split(' ')
-      this.date = tmp[0]
+    news() {
+      this.date = this.news.newsRegDt;
+      const text = this.news.newsDesc;
+      const tmp = this.date.split(" ");
+      this.date = tmp[0];
 
-      this.desc = text
+      this.desc = text;
       // console.log(this.desc)
 
       this.desc = this.desc.replace(/^\s*/, '')
@@ -76,7 +62,7 @@ export default {
         this.desc = this.desc.replace(/(?:\n)/g, '<br/>')
       }
       // this.desc = this.desc.replace(/(?:\r\n|\r|\n|\s\n)/g, '<br />')
-    }
+    },
   },
   methods: {
     scrap: function (newsSeq) {
@@ -103,40 +89,40 @@ export default {
 }
 </script>
 <style scoped>
-
 #myModal {
   position: fixed;
-top: 50%;
-left: 50%;
--webkit-transform: translate(-50%, -50%);
--moz-transform: translate(-50%, -50%);
--ms-transform: translate(-50%, -50%);
--o-transform: translate(-50%, -50%);
-transform: translate(-50%, -50%);
-
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 
 .modal-dialog {
-width: 100%;
-max-width:1000px;
-padding: 30px;
-margin:0 auto;
+  width: 100%;
+  max-width: 1000px;
+  padding: 30px;
+  margin: 0 auto;
 }
 
-.row>* {
+.row > * {
   padding-right: 1px;
-    padding-left: 1px;
+  padding-left: 1px;
 }
 
 .modal-body {
- /* white-space: pre-line; */
-    padding: 0px;
+  /* white-space: pre-line; */
+  padding: 0px;
 }
 .modal__background {
   position: fixed;
-  top:0; left: 0; bottom: 0; right: 0;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
   background: rgba(0, 0, 0, 0.8);
-  z-index:6;
+  z-index: 6;
 }
-
 </style>
