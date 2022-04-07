@@ -151,17 +151,17 @@ public class UserController {
 		try {
 			Map<String, String> map = userService.getKakaoUserInfo(accessToken);
 			if(map.get("responseCode").equals("401")) 
-				return ResponseEntity.status(401).body(AdvancedResponseBody.of(401, "만료된 토큰입니다.", map));
-			if(result.get("responseCode").equals("400")) 
-				return ResponseEntity.status(400).body(AdvancedResponseBody.of(400, "잘못된 요청입니다.", map));
+				return ResponseEntity.status(401).body(AdvancedResponseBody.of(401, "만료된 토큰입니다.", result));
+			if(map.get("responseCode").equals("400")) 
+				return ResponseEntity.status(400).body(AdvancedResponseBody.of(400, "잘못된 요청입니다.", result));
 			
 			try {
-				Map<String, Object> obj = userService.getUserByEmail(map.get("email"));
+				Map<String, Object> obj = userService.getUserByEmail(map.get("email").toString());
 		        List<String> auth = new ArrayList<>();
 		        auth.add("ROLE_USER");
 		        result.put("accessToken", jwtTokenProvider.createToken(obj.get("userEmail").toString(),auth));
-		        result.put("userSeq", userService.getUserByEmail(obj.get("email").toString()).get("userSeq"));
-		        return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "로그인 성공", jwtTokenProvider.createToken(obj.get("userEmail").toString(),auth)));
+		        result.put("userSeq", userService.getUserByEmail(obj.get("userEmail").toString()).get("userSeq"));
+		        return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "로그인 성공",result));
 			}
 			catch(NotExistsUserException e) {
 				return ResponseEntity.status(202).body(AdvancedResponseBody.of(202, "가입 정보가 없습니다.", result));
