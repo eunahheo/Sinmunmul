@@ -16,7 +16,8 @@ import com.newsbig.sinmunmul.dto.CodeDto;
 import com.newsbig.sinmunmul.dto.InterestDto;
 import com.newsbig.sinmunmul.dto.RecomNewsDto;
 import com.newsbig.sinmunmul.entity.News;
-import com.newsbig.sinmunmul.exception.NotRecommendException;
+import com.newsbig.sinmunmul.exception.NotExistsInterestException;
+import com.newsbig.sinmunmul.exception.NotExistsRecommendException;
 import com.newsbig.sinmunmul.repository.InterestRepositorySupport;
 import com.newsbig.sinmunmul.repository.NewsRecommendRepositorySupport;
 import com.newsbig.sinmunmul.repository.NewsTopicRepository;
@@ -51,6 +52,7 @@ public class NewsRecommendServiceImpl implements NewsRecommendService{
 		// 사용자 관심사 코드들 불러오기
 		InterestDto interestDto = interestRepositorySupport.searchInterest(userSeq);
 		List<CodeDto> list = interestDto.getYesInterest();
+		if(list.isEmpty()) throw new NotExistsInterestException();
 
 		// 소분류에 해당하는 키워드들 불러오기
 		List<Keyword> keywords = new ArrayList<>();
@@ -83,13 +85,13 @@ public class NewsRecommendServiceImpl implements NewsRecommendService{
 			obj = newsrRepositorySupport.searchByCodeGroupAndKeyword(keyword.code, keyword.word);			
 			newsList = (ArrayList<News>) obj.get("News");
 			if(cnt++>50) {
-				throw new NotRecommendException();
+				throw new NotExistsRecommendException();
 			}
 		}
 		
 		for(News news : newsList) {
 			miniNewsList.add(new RecomNewsDto(news.getNewsSeq(),Math.abs(news.getNewsPositive())-Math.abs(news.getNewsNegative()),
-					news.getNewsPhoto(), news.getNewsTitle(), news.getNewsSummary()));
+					news.getNewsPhoto(), news.getNewsTitle(), news.getNewsDesc()));
 		}
 		
 		Collections.sort(miniNewsList);
