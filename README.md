@@ -1,10 +1,166 @@
 # 빅데이터 신문 분석 서비스 "신문물"
+![header](https://capsule-render.vercel.app/api?type=waving&color=0:9e9e9e,45:EFECEA,70:8d8d8d,100:eeeeee&height=300&section=header&text=신%20문%20물&fontColor=343a40&fontSize=120)
 
-## 설명
+## 프로젝트 소개
+### 🗞 신문물
+- 신문물은 hadoop을 사용해 뉴스기사를 저장하고 읽어서 토큰화하여 분석하는 서비스입니다.
+<br/>
 
-hadoop을 사용해 뉴스기사를 저장하고 읽어서 토큰화하여 분석하는 서비스입니다.
+### :star2: 특징
+- 시간별(실시간, 주별, 월별) 이슈 키워드 정보를 제공합니다.
+- 기사 검색 서비스를 제공합니다.
+- 검색 키워드 연관어 정보를 제공합니다.
+- 사용자 추천 기사 서비스를 제공합니다.
+<br/>
 
-## 파일 구조
+### :gift_heart: 주요 기능
+    * 회원 관리 (회원가입, 로그인, 수정)
+    * 오늘의 키워드
+    * 키워드 검색
+    * 외 사용자 편의 기능 
+      (🗂️ 스크랩, )
+<br/>
+
+### ⚙️ 주요 기술
+    * Scrapy
+      => 네이버 뉴스의 기사를 수집하기 위해 크롤러로 사용합니다.
+    * KoBERT
+      => 관심사별 뉴스를 추천하기 위해 KoBERT 모델로 뉴스의 감정을 분석합니다.
+    * Spring Security / JWT Authentication
+      => 사용자의 간편 로그인과 보안을 위해 Spring Security를 통해 사용자 정보를 암호화 합니다.
+    * JPA
+      => 빠른 개발을 위해 JPA를 통해 데이터를 조작합니다.
+    * REST API
+      => Server와 Frontend와의 효율적인 협업을 위해 REST API방식으로 통신합니다.
+<br/>
+
+### 💎 참조 리소스
+    * Bootstrap : 디자인 전반 적용
+    * Chart.js : 데이터 시각화
+    * vue-number-animation : 애니메이션 파일. 디자인 포인트로 사용
+    * KoBERT : 감정 분석을 위해 사용
+<br/>
+
+### :ship: 배포 환경
+    URL : [https://j6a406.p.ssafy.io/]
+<br/>
+<br/>
+
+## 팀원 소개 
+<table>
+  <tr height="125px">
+    <td align="center" width="15%">
+      <a href="https://github.com/"><img src=""/></a>
+    </td>
+    <td align="center" width="15%">
+      <a href="https://github.com/"><img src=""/></a>
+    </td>
+    <td align="center" width="15%">
+      <a href="https://github.com/"><img src=""/></a>
+    </td>
+    <td align="center" width="15%">
+      <a href="https://github.com/sksy368"><img src=""/></a>
+    </td>
+    <td align="center" width="15%">
+      <a href="https://github.com/"><img src=""/></a>
+    </td>
+    <td align="center" width="15%">
+      <a href="https://github.com/"><img src=""/></a>
+    </td>
+  </tr>
+  <tr height="70px">
+    <td align="center" width="15%">
+      <a href="https://github.com/hean1103">임재현(팀장)</a>
+      <br />
+      프론트엔드 개발 및 Jira 관리
+    </td>
+    <td align="center" width="15%">
+      <a href="https://github.com/hean1103">김하영</a>
+      <br />
+      프론트엔드 개발 및 발표
+    </td>
+    <td align="center" width="15%">
+      <a href="https://github.com/hean1103">배용한</a>
+      <br />
+      프론트엔드 개발 및 UCC 제작
+    </td>
+    <td align="center" width="15%">
+      <a href="https://github.com/hean1103">손수연</a>
+      <br />
+      백엔드 개발
+    </td>
+    <td align="center" width="15%">
+      <a href="https://github.com/hean1103">유민상</a>
+      <br />
+      백엔드 개발
+    </td>
+    <td align="center" width="15%">
+      <a href="https://github.com/hean1103">허은아</a>
+      <br />
+      백엔드 개발 및 AWS, CI/CD 담당
+    </td>
+  </tr>
+</table>
+<br/>
+<br/>
+
+## 프로젝트 상세 설명
+### ⚙️ 개발 환경
+- JIRA : 애자일 및 소프트웨어 개발 프로젝트를 기획, 트래킹 및 관리 협업 툴
+- Gitlab : 깃 저장소 및 CI/CD, 이슈 추적, 보안성 테스트 등의 기능을 갖춘 웹 기반의 데브옵스 플랫폼
+- Visual Studio Code : JavaScript 및 웹 개발을 위한 소스 코드 편집기, 다양한 확장 기능 제공
+- SpringToolSuite : Spring 기반 엔터프라이즈 애플리케이션 개발을 위한 지원을 제공하는 통합 개발 환경
+<br/>
+
+### 🔨 기술 스택
+- Vue.js 3.0.0
+- JavaScript
+- Bootstrap 5
+- Java (Open JDK 1.8.0)
+- Spring Boot 2.5.6
+- FastAPI 0.75.0
+- MySQL 8.0.27
+- Ubuntu 20.04
+
+### And Our Basic Skills 🛠️
+<img src="https://img.shields.io/badge/JAVA-007396?style=flat-square&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/Spring-6DB33F?style=flat-square&logo=Spring&logoColor=white">
+<img src="https://img.shields.io/badge/mysql-4479A1?style=flat-square&logo=mysql&logoColor=white">
+<br/>
+<img src="https://img.shields.io/badge/html-E34F26?style=flat-square&logo=html5&logoColor=white">
+<img src="https://img.shields.io/badge/css-1572B6?style=flat-square&logo=css3&logoColor=white">
+<img src="https://img.shields.io/badge/javascript-F7DF1E?style=flat-square&logo=javascript&logoColor=black">
+<img src="https://img.shields.io/badge/jquery-0769AD?style=flat-square&logo=jquery&logoColor=white&">
+<img src="https://img.shields.io/badge/bootstrap-7952B3?style=flat-square&logo=bootstrap&logoColor=white">
+<br/>
+<br/>
+
+### 🚩 시스템 구성도
+![SYSTEM.png](./img/SYSTEM.png)
+<br/>
+
+### 🎫 ERD 
+  * 사용자 정보를 저장한 user 테이블
+  * 사용자의 관심분야를 저장한 interest 테이블
+  * 관심분야 분류를 위해 공통코드 대분류를 저장한 common_code_group 테이블
+  * 관심분야 분류를 위해 공통코드 소분류를 저장한 common_code 테이블
+  * 뉴스 정보를 저장한 news 테이블
+  * 뉴스 분류를 위해 뉴스 토픽을 저장한 news_topic 테이블
+  * 사용자별 뉴스 추천을 위한 recommand 테이블
+  * 관심사별 뉴스 추천을 위한 news_recommend 테이블
+  * 워드클라우드를 저장한 news_wordcloud 테이블
+  * 사용자의 뉴스 스크랩을 저장한 scrap 테이블
+
+![ERD_TABEL.png](./img/ERD_TABEL.png)
+<br/>
+
+### 🥊 기능 상세 설명
+👉️ [기능 설명 & 시연 시나리오]() 👈️  
+1.   
+2.   
+3.   
+<br/>
+
+### 🧩 파일 구조
 
 ```bash
 S06P22A406
@@ -14,5 +170,6 @@ S06P22A406
 │   └── README.md
 └── README.md
 ```
+<br/>
 
-## 참고사항
+### ❗️ 참고사항

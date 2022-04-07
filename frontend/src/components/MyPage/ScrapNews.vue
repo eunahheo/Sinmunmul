@@ -176,7 +176,7 @@ export default {
     deleteNews: function (seq) { // 유저 시퀀스도 가져오도록 변경?
       axios({
         method: 'delete',
-        url: `${SERVER_HOST}/mypage/${this.$store.userSeq}/deleteScrap/${seq}`,
+        url: `${SERVER_HOST}/mypage/${localStorage.getItem('userSeq')}/deleteScrap/${seq}`,
         params: {
           news_seq: seq
         }

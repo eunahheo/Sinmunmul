@@ -1,7 +1,7 @@
 <template>
   <div class="register" style="margin-left: 19%">
     <div class="m-5 align-item-center;" style="text-align: center; width: 70%">
-      <h1 class="m-3">회원가입</h1>
+      <h2 class="m-3">회원가입</h2>
 
       <form>
         <div class="input-group mb-3" style="padding: 0% 5% 0% 5%">
