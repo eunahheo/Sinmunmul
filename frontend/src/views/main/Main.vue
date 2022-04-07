@@ -108,9 +108,10 @@
         <br />
         <div class="row mb-2">
           <div class="col-6 mb-4">
-            <div class="container2">
-              <h3>워드 클라우드</h3>
-
+            <div class="container2">             
+              <div><span style="font-size: calc(1.3rem + .6vw);"> 실시간 이슈  </span> 
+                  <span style="font-size: calc(1.0rem + .6vw);"> {{this.realHour}} </span>
+            </div>
               <div class="mb-2">
                 <button
                   :class="{
@@ -152,8 +153,8 @@
                         <img
                           class="card-img main-card-img"
                           v-if="item.news_photo == ''"
-                          style="object-fit: contain"
-                          src="../../../public/img/no_image.jpg"
+                          style="object-fit: contail"
+                          src="../../../src/assets/shin_logo.png"
                         />
                         <img
                           class="card-img main-card-img"
@@ -193,9 +194,8 @@
         <br />
         <div class="row mb-2">
           <div class="col-6 mb-3">
+             <h3>최고 빈도 키워드</h3>
             <div class="container3">
-              <h3>최고 빈도 키워드</h3>
-
               <!-- <bar-chart :data="chartData"></bar-chart> -->
               <bar-chart
                 :data="chartData"
@@ -212,8 +212,8 @@
             </div>
           </div>
           <div class="col-6 mb-3">
-            <div class="container3">
-              <h3>키워드 언급량 추이 그래프</h3>
+            <h3>키워드 주간 기사량</h3>
+            <div class="container3">   
               <div class="spinner-div2" v-if="this.lineData == null">
                 <button class="btn">
                   <span class="spinner-border spinner-border-m"></span>
@@ -226,14 +226,15 @@
         </div>
 
         <hr />
-        <div v-if="this.authToken==null || this.positiveArticle==null"> <!--로그인안됨  -->
-          {{this.ArticleMsg}}
-      </div>
-      <div v-else class="row mb-2">
-        <div class="col-6 mb-3">
-          <div>
-            <h2>긍정적 추천 기사</h2>
-            <br>
+        <div v-if="this.authToken == null || this.positiveArticle == null">
+          <!--로그인안됨  -->
+          {{ this.ArticleMsg }}
+        </div>
+        <div v-else class="row mb-2">
+          <div class="col-6 mb-3">
+            <div>
+              <h2>긍정적 추천 기사</h2>
+              <br />
               <div>
                 <div
                   class="mb-1 main-news-list"
@@ -246,7 +247,7 @@
                           class="card-img main-card-img"
                           v-if="this.positiveArticle.newsPhoto == ''"
                           style="object-fit: contain"
-                          src="../../../public/img/no_image.jpg"
+                          src="../../../src/assets/shin_logo.png"
                         />
                         <img
                           class="card-img main-card-img"
@@ -280,15 +281,14 @@
                   </div>
                 </div>
               </div>
-
+            </div>
           </div>
-        </div>
 
-        <div class="col-6 mb-3">
-          <div>
-            <h2>부정적 추천 기사</h2>
+          <div class="col-6 mb-3">
+            <div>
+              <h2>부정적 추천 기사</h2>
               <!-- card -->
-              <br>
+              <br />
               <div>
                 <div
                   class="mb-1 main-news-list"
@@ -301,7 +301,7 @@
                           class="card-img main-card-img"
                           v-if="this.negativeArticle.newsPhoto == ''"
                           style="object-fit: contain"
-                          src="../../../public/img/no_image.jpg"
+                          src="../../../src/assets/shin_logo.png"
                         />
                         <img
                           class="card-img main-card-img"
@@ -335,14 +335,11 @@
                   </div>
                 </div>
               </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-      </div>
-
-
-
 
     <div class="col-1"></div>
   </div>
@@ -353,7 +350,7 @@ import axios from "axios";
 import VueWordCloud from "vuewordcloud";
 import wordcloud from "vue-wordcloud";
 import img from "@/assets/default.png";
-import newsModal from './newsModal.vue'
+import newsModal from "./newsModal.vue";
 import VueNumber from "vue-number-animation";
 // const LOCAL_HOST = 'http://localhost:3030/api'
 const SERVER_HOST = "https://j6a406.p.ssafy.io/api";
@@ -370,6 +367,7 @@ export default {
   components: { VueWordCloud, wordcloud, newsModal, VueNumber },
   data() {
     return {
+      realHour : null,
       newsData2: {},
       newsVisible: false,
       newsData: null,
@@ -410,13 +408,12 @@ export default {
 
       todayNewsData: [0, 0, 0, 0, 0, 0],
       todayNews: null,
-      userSeq: localStorage.getItem('userSeq') || null,
-      authToken: localStorage.getItem('authToken') || null,
+      userSeq: localStorage.getItem("userSeq") || null,
+      authToken: localStorage.getItem("authToken") || null,
       negativeArticle: null,
       positiveArticle: null,
-      ArticleSuccess : false,
-      ArticleMsg : "",
-
+      ArticleSuccess: false,
+      ArticleMsg: "",
     }; //return
   }, //data
 
@@ -425,36 +422,37 @@ export default {
     // this.genLayout();
     // this.generate(0);
     this.getTodayNews();
-
-    if(this.userSeq!=null && this.userSeq!="") {
+    var endHour = new Date().getHours();
+    var startHour = endHour-1;
+    if(startHour<0) startHour=23;
+    
+    this.realHour="";
+    this.realHour +="("+startHour+":00 ~ "+endHour+":00)";
+    if (this.userSeq != null && this.userSeq != "") {
       this.getRecommendArticle(this.userSeq);
     }
-
   },
   methods: {
     getRecommendArticle(userSeq) {
-       axios
+      axios
         .get(`${SERVER_HOST}/recom/keyword`, {
           params: {
             userSeq: userSeq,
           },
         })
-        .then((res)=>{
+        .then((res) => {
           //유저 추천 기사 응답 성공
           console.log(res.data);
 
-          if(res.data.statusCode==200) {
-            this.ArticleSuccess=true;
+          if (res.data.statusCode == 200) {
+            this.ArticleSuccess = true;
             this.negativeArticle = res.data.data.negative;
             this.positiveArticle = res.data.data.positive;
           }
 
-          this.ArticleMsg=res.data.message;
+          this.ArticleMsg = res.data.message;
           console.log(this.positiveArticle);
-          console.log('===========================');
-
-
-
+          console.log("===========================");
         })
         .catch((err) => {
           console.log("에러");

@@ -27,7 +27,7 @@
         </div>
 
         <div class="plan span--2 long--2">
-          <h3>키워드 검색량 추이 그래프</h3>
+          <h3>키워드 언급량 추이 그래프</h3>
           <line-chart :data="chartData"></line-chart>
         </div>
       </main>
@@ -49,46 +49,50 @@
       >
         <span class="visually-hidden">Loading...</span>
       </div>
-
+<div>
       <div
-        class="card m-3 row"
+        class="card m-3"
         style="max-width: 100%; height: 410px"
         v-for="news in searchedData"
         :key="news.news_seq"
       >
         <div class="cards">
           <div @click="detail(news.news_seq)" style="cursor: pointer">
-            <div class="card__image-holder" style="object-fit: cover">
+            <div class="card__image-holder">
               <img
                 v-if="news.news_photo !== ''"
                 class="card-img-top"
                 v-bind:src="news.news_photo"
-                style="object-fit: cover"
                 alt="Card image"
+                style="object-fit: cover"
                 @error="replaceDefault"
               />
               <img
                 v-else
                 src="../../../src/assets/shin_logo.png"
                 class="card-img-top"
-                style="object-fit: cover"
+                style="object-fit: fill"
                 @error="replaceDefault"
               />
             </div>
-            <div class="card-title">
+            <div class="m-2 card-title ">
               <h2>
+                <div style="height:50px">
                 {{
-                  news.news_Title.length > 33
-                    ? news.news_Title.substring(0, 33) + "..."
+                  news.news_Title.length > 25
+                    ? news.news_Title.substring(0, 25) + "..."
                     : news.news_Title
                 }}
+                </div>
                 <hr />
-                <small>{{ news.news_desc.substring(0, 100) }}...</small>
+                <small class="m-2 detail-card-desc mb-1">{{ news.news_desc}}</small>
               </h2>
             </div>
           </div>
         </div>
       </div>
+      </div>
+
 
       <nav aria-label="..." class="d-flex justify-content-center mb-4">
         <ul class="pagination d-flex justify-content-between">
@@ -179,7 +183,7 @@ export default {
         { text: "글자19", size: 18, color: "#6E6E6E" },
         { text: "글자20", size: 18, color: "#6E6E6E" },
       ],
-
+      preWord: null,
       searchWord: null,
       newsData: {},
       newsVisible: false,
@@ -203,6 +207,7 @@ export default {
   },
   created() {
     this.searchWord = this.$route.params.searchWord;
+    this.preWord = this.searchWord
     this.wordcloud();
     this.chartMake(this.searchWord);
     this.search();
@@ -309,6 +314,14 @@ export default {
       this.newsVisible = false;
     },
     search() {
+
+      if(this.searchWord !== this.preWord)
+      {
+        this.preWord = this.searchWord
+        this.nowPage = 1
+      this.wordcloud()
+      }
+      this.searchedData = []
       // console.log("검색 키워드 확인 : "+this.searchWord);
       if (this.searchWord != null && this.searchWord != "") {
         this.loading = true;
@@ -366,7 +379,7 @@ export default {
 
       const s = this.startPage;
       const e = this.endPage;
-      this.pageNumbers = []
+      this.pageNumbers = [];
       for (let i = s; i <= e; i++) {
         this.pageNumbers[i - s] = i;
       }
@@ -426,6 +439,11 @@ export default {
     grid-gap: 1.2rem;
   }
 }
+.card-img-top {
+  height:200px
+}
+
+
 
 .span--2 {
   grid-column: span 2;
@@ -505,7 +523,7 @@ div.card .card__image-holder {
   height: 0;
   padding-bottom: 75%;
   max-width: 300px;
-  /* height: 150px;   */
+  height: 150px;
 }
 
 div.card div.card-title {
@@ -524,11 +542,13 @@ div.card div.card-title h2 {
   padding: 0;
 }
 div.card div.card-title h2 small {
-  display: block;
-  font-size: 18px;
-  font-weight: 600;
-  letter-spacing: -0.025em;
-  text-overflow: ellipsis;
+ display:-webkit-box;
+  word-wrap:break-word;
+  -webkit-line-clamp:4;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+  text-overflow:ellipsis;
+    height:90px
 }
 div.card div.card-description {
   padding: 0 15px 10px;
