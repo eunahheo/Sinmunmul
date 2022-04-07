@@ -476,9 +476,6 @@ export default {
       startHour = "00";
     }
 
-    var testNum = "00";
-    console.log("testnum =" + testNum);
-
     this.realHour = "";
     this.realHour += "(" + startHour + ":00 ~ " + endHour + ":00)";
     if (this.userSeq != null && this.userSeq != "") {
