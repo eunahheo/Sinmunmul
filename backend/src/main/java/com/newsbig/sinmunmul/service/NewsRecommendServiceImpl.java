@@ -91,7 +91,7 @@ public class NewsRecommendServiceImpl implements NewsRecommendService{
 		
 		for(News news : newsList) {
 			miniNewsList.add(new RecomNewsDto(news.getNewsSeq(),Math.abs(news.getNewsPositive())-Math.abs(news.getNewsNegative()),
-					news.getNewsPhoto(), news.getNewsTitle(), news.getNewsSummary()));
+					news.getNewsPhoto(), news.getNewsTitle(), news.getNewsDesc()));
 		}
 		
 		Collections.sort(miniNewsList);

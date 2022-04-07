@@ -19,7 +19,7 @@ public class RecomNewsDto implements Comparable<RecomNewsDto>{
 	private double emotion;
 	private String newsPhoto;
 	private String newsTitle;
-	private String newsSummary;
+	private String newsDesc;
 	
 	@Override
 	public int compareTo(RecomNewsDto o) {
