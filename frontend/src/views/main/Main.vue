@@ -331,6 +331,7 @@ export default {
           },
         })
         .then((res)=>{
+          //유저 추천 기사 응답 성공
             console.log("추천기사 DATA");
             console.log(res.data);
         })
