@@ -46,6 +46,7 @@ public class UserServiceImpl implements UserService{
 				.userGender(user.getUserGender())
 				.userAge(user.getUserAge())
 				.userSgtype(user.getUserSgtype())
+				.delYn("n")
 				.regDt(user.getRegDt())
 				.regId(user.getUserEmail())
 				.modDt(user.getModDt())
