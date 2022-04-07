@@ -74,13 +74,15 @@ export default {
   },
   created() {
     this.showSearch = true;
-    console.log('로그인 체크');
-    console.log(this.$store.authToken);
 
+    console.log(this.$store.authToken);
+    
   },
 
   mounted() {
     this.showSearch = true;
+    console.log('로그인 체크');
+    console.log(this.$store.authToken);
   },
   methods : {
     renew() {

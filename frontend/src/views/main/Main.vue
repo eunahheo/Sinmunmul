@@ -311,6 +311,8 @@ export default {
     // this.genLayout();
     // this.generate(0);
     this.getTodayNews();
+    console.log("로그인체크");
+    console.log(this.$store.authToken);
   },
   methods: {
     generate(category) {
