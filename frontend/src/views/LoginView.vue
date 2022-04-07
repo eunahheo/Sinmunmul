@@ -69,7 +69,7 @@ export default {
                     console.log(res);
                     if(res.status === 200){
                         localStorage.setItem('authToken', res.data.data.accessToken);
-                        this.$store.userSeq = res.data.data.userSeq;
+                        localStorage.setItem('userSeq', res.data.data.userSeq);
                         // this.$router.push({ name: 'home'});
                         this.$router.go()
                     } else if (res.status === 202) {
@@ -99,6 +99,7 @@ export default {
             }).then((res) => {
                 if(res.status === 200){
                     localStorage.setItem('authToken', res.data.data.accessToken);
+                    localStorage.setItem('userSeq', res.data.data.userSeq);
                     this.$router.go()
                 } else if (res.status === 202) {
                     alert("등록되지 않은 계정입니다. 회원가입 페이지로 이동합니다.");
