@@ -228,15 +228,116 @@
         <hr />
       </div>
 
-      <div class="row mb-2">
+
+      <div v-if="this.authToken==null || this.positiveArticle==null"> <!--로그인안됨  -->
+          {{this.ArticleMsg}}      
+      </div>            
+      <div v-else class="row mb-2">
         <div class="col-6 mb-3">
           <div>
             <h2>긍정적 추천 기사</h2>
+            <br>             
+              <div>
+                <div
+                  class="mb-1 main-news-list"
+                  @click="modal(this.positiveArticle.newsSeq)"
+                >
+                  <div class="card">
+                    <div class="row">
+                      <div class="col-4">
+                        <img
+                          class="card-img main-card-img"
+                          v-if="this.positiveArticle.newsPhoto == ''"
+                          style="object-fit: contain"
+                          src="../../../public/img/no_image.jpg"
+                        />
+                        <img
+                          class="card-img main-card-img"
+                          v-bind:src="this.positiveArticle.newsPhoto"
+                          v-else
+                          alt="Card image"
+                          style="object-fit: cover"
+                          @error="replaceDefault"
+                        />
+                      </div>
+
+                      <div class="col-8">
+                        <div class="card-body">
+                          <div class="mb-2">
+                            <h5 class="card-title" style="text-align: left">
+                              {{ this.positiveArticle.newsTitle }}
+                            </h5>
+                          </div>
+                          <hr />
+                          <div>
+                            <p
+                              class="card-text main-card"
+                              style="text-align: left; font-size: 12px"
+                            >
+                              {{ this.positiveArticle.newsDesc }}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
           </div>
         </div>
+
         <div class="col-6 mb-3">
           <div>
             <h2>부정적 추천 기사</h2>
+              <!-- card -->
+              <br>             
+              <div>
+                <div
+                  class="mb-1 main-news-list"
+                  @click="modal(this.negativeArticle.newsSeq)"
+                >
+                  <div class="card">
+                    <div class="row">
+                      <div class="col-4">
+                        <img
+                          class="card-img main-card-img"
+                          v-if="this.negativeArticle.newsPhoto == ''"
+                          style="object-fit: contain"
+                          src="../../../public/img/no_image.jpg"
+                        />
+                        <img
+                          class="card-img main-card-img"
+                          v-bind:src="this.negativeArticle.newsPhoto"
+                          v-else
+                          alt="Card image"
+                          style="object-fit: cover"
+                          @error="replaceDefault"
+                        />
+                      </div>
+
+                      <div class="col-8">
+                        <div class="card-body">
+                          <div class="mb-2">
+                            <h5 class="card-title" style="text-align: left">
+                              {{ this.negativeArticle.newsTitle }}
+                            </h5>
+                          </div>
+                          <hr />
+                          <div>
+                            <p
+                              class="card-text main-card"
+                              style="text-align: left; font-size: 12px"
+                            >
+                              {{ this.negativeArticle.newsDesc }}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
           </div>
         </div>
       </div>
@@ -309,6 +410,12 @@ export default {
       todayNewsData: [0, 0, 0, 0, 0, 0],
       todayNews: null,
       userSeq: localStorage.getItem('userSeq') || null,
+      authToken: localStorage.getItem('authToken') || null,
+      negativeArticle: null,
+      positiveArticle: null,
+      ArticleSuccess : false,
+      ArticleMsg : "",
+
     }; //return
   }, //data
 
@@ -317,17 +424,11 @@ export default {
     // this.genLayout();
     // this.generate(0);
     this.getTodayNews();
-    console.log("로그인체크");
-    
-    console.log(this.userSeq);
-
-    console.log("===================");
 
     if(this.userSeq!=null && this.userSeq!="") {
       this.getRecommendArticle(this.userSeq);
     }
     
-
   },
   methods: {
     getRecommendArticle(userSeq) {
@@ -339,8 +440,20 @@ export default {
         })
         .then((res)=>{
           //유저 추천 기사 응답 성공
-            console.log("추천기사 DATA");
-            console.log(res.data);
+          console.log(res.data);
+
+          if(res.data.statusCode==200) {
+            this.ArticleSuccess=true;
+            this.negativeArticle = res.data.data.negative;
+            this.positiveArticle = res.data.data.positive;
+          }
+          
+          this.ArticleMsg=res.data.message;
+          console.log(this.positiveArticle);
+          console.log('===========================');
+
+
+            
         })
         .catch((err) => {
           console.log("에러");
