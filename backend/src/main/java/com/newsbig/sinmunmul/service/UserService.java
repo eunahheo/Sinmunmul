@@ -13,5 +13,4 @@ public interface UserService {
 	public Map<String, String> getKakaoUserInfo(String accessToken);
 	// 비밀번호 찾기를 통한 임시 비밀번호로 변경
 	public String changePassword(String email);
-	// 
 }

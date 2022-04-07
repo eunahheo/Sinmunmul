@@ -43,7 +43,7 @@ public class NewsRecommendController {
 			  @ApiResponse(code = 202, message = "키워드에 해당하는 기사가 없습니다.")
 			})
 	public ResponseEntity<? extends BaseResponseBody> registInterest(@RequestParam int userSeq) {
-		Map<String, News> result = new HashMap<>();
+		Map<String, Object> result = new HashMap<>();
 		try {
 			result = newsRService.recommentArticle(userSeq);
 		}

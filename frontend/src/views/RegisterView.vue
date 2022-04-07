@@ -272,25 +272,21 @@ export default {
         },
 
         registerBtn() {
-            if (this.isEmailChecked){
+            if (this.isEmailChecked == true){
                 const curDate = new Date()
                 axios.post(`${API_SERVER}/user/signin`, {
-                    params: {
                         userEmail : this.emailData,
                         userGender : this.genderValue,
                         userPwd : this.passwdData,
-                        userBirth : (curDate.getFullYear() - this.birthDate),
+                        userAge : (curDate.getFullYear() - this.birthDate)*1,
                         usersgType : this.usersgType,
-                    }
                 }).then((res) => {
                     console.log(res)
                     if(res.status === 200){
                         alert("회원가입 성공")
                         axios.post(`${API_SERVER}/user/login`, {
-                            params: {
                                 userEmail : this.emailData,
                                 userPwd : this.passwdData,
-                            }
                         }).then((res) => {
                             console.log(res)
                             if(res.status === 200){
