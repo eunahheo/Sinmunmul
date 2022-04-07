@@ -36,11 +36,17 @@
               </li>
             </ul></span
           >
-          <div id="word-cloud"></div>
-        </div>
 
-          <div  v-show="this.wordcloudState == 3" class="temp" > <small style="    font-size=20px;"> 관련된 키워드를 불러올 수 없습니다 </small> </div>
-        </div>
+ <div style=" width = 600; height = 300;">
+              <div class="spinner-div temp" v-show="this.wordcloudState === 1">
+                  <span class="spinner-border spinner-border-m"  ></span>
+                  조회중입니다.
+              </div>
+
+          <div v-show="this.wordcloudState === 2" id="word-cloud"></div>
+
+          <div v-show="this.wordcloudState === 3" class="temp"  ><small style="font-size:20px">연관 키워드를 불러올 수 없습니다. </small></div>
+</div>
 </div>
         <div class="plan span--2 long--2">
           <span style="font-size: calc(1.3rem + 0.6vw)">
@@ -723,5 +729,10 @@ body {
 .wrapper .facebook:hover .tooltip::before {
   background: #1877f2;
   color: #ffffff;
+}
+
+.temp {
+  line-height: 300px;
+  text-align: center;
 }
 </style>
