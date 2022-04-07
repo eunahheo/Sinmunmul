@@ -56,18 +56,14 @@ export default {
             if(this.emailData != null && this.passwdData !="") {
                 console.log('login data : ', this.emailData, this.passwdData);
                 axios.post(`${API_SERVER}/user/login`, {
-                params: {
-                    SigninDto : {
                         userEmail : this.emailData,
                         userPwd : this.passwdData,
-                    }
-                }
                 })
                 .then((res) =>{
                     console.log(res);
                     if(res.status === 200){
-                        this.$store.authToken = res.data.data;
-                        this.$router.push({ name: 'home'});
+                        $store.authToken = res.data.data;
+                        $router.push({ name: 'home'});
                     } else if (res.status === 202) {
                         alert("가입 정보가 없습니다.")
                     }
@@ -95,7 +91,7 @@ export default {
             }).then((res) => {
                 if(res.status === 200){
                     this.$store.authToken = res.data.data;
-                    // this.$router.push({ name: 'home'});
+                    this.$router.push({ name: 'home'});
                 } else if (res.status === 202) {
                     alert("등록되지 않은 계정입니다. 회원가입 페이지로 이동합니다.");
                     // window.Kakao.API.request({
