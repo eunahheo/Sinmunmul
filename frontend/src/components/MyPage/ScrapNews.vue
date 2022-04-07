@@ -115,7 +115,7 @@ export default {
       axios({
         method: 'get',
         // /mypage/{user_seq}/updatePassword
-        url: `${SERVER_HOST}/mypage/${this.$store.userSeq}/searchScrap`,
+        url: `${SERVER_HOST}/mypage/${localStorage.getItem('userSeq')}/searchScrap`,
         params: {
           page: this.nowPage
         }

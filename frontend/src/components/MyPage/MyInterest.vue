@@ -124,7 +124,7 @@ export default {
     axios({
       method: 'get',
       // /mypage/{user_seq}/updatePassword
-      url: `${SERVER_HOST}/mypage/${this.$store.userSeq}/searchInterest`
+      url: `${SERVER_HOST}/mypage/${localStorage.getItem('userSeq')}/searchInterest`
     }).then((res) => {
       this.yesInterest = res.data.data.yesInterest
       this.noInterest = res.data.data.noInterest
@@ -166,7 +166,7 @@ export default {
       axios({
         method: 'put',
         // /mypage/{user_seq}/updatePassword
-        url: `${SERVER_HOST}/mypage/${this.$store.userSeq}/updateInterest`,
+        url: `${SERVER_HOST}/mypage/${localStorage.getItem('userSeq')}/updateInterest`,
         data: this.updateData
       })
         .then((res) => {
