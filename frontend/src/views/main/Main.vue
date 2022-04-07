@@ -149,13 +149,18 @@
                   <div class="card">
                     <div class="row">
                       <div class="col-4">
-                        <img class="card-img main-card-img" v-if="item.news_photo == ''" style="object-fit: contain;" src="../../../public/img/no_image.jpg">
+                        <img
+                          class="card-img main-card-img"
+                          v-if="item.news_photo == ''"
+                          style="object-fit: contain"
+                          src="../../../public/img/no_image.jpg"
+                        />
                         <img
                           class="card-img main-card-img"
                           v-bind:src="item.news_photo"
                           v-else
                           alt="Card image"
-                          style="object-fit: cover;"
+                          style="object-fit: cover"
                           @error="replaceDefault"
                         />
                       </div>
@@ -210,11 +215,11 @@
           <div class="col-6 mb-3">
             <div class="container3">
               <h3>키워드 언급량 추이 그래프</h3>
-                <div class="spinner-div2" v-if="this.lineData == null" >
-              <button class="btn" >
-                <span class="spinner-border spinner-border-m"></span>
-                조회중입니다.
-              </button>
+              <div class="spinner-div2" v-if="this.lineData == null">
+                <button class="btn">
+                  <span class="spinner-border spinner-border-m"></span>
+                  조회중입니다.
+                </button>
               </div>
               <line-chart v-else :data="lineData"></line-chart>
             </div>
@@ -262,7 +267,7 @@ axios.defaults.paramsSerializer = function (paramObj) {
 
 export default {
   components: { VueWordCloud, wordcloud, newsModal, VueNumber },
-  data () {
+  data() {
     return {
       newsData2: {},
       newsVisible: false,
@@ -670,7 +675,6 @@ canvas([canvas]): 캔버스 생성기
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
-
 }
 
 @import url("https://fonts.googleapis.com/css?family=Lato");
