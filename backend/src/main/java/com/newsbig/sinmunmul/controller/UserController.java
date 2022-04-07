@@ -78,6 +78,7 @@ public class UserController {
 				.userGender(signInDto.getUserGender())
 				.userAge(signInDto.getUserAge())
 				.userSgtype(signInDto.getUsersgType())
+				.delYn("n")
 				.regDt(now)
 				.regId(signInDto.getUserEmail())
 				.modDt(now)
