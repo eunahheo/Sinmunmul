@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import img from '@/assets/default.png'
+import img from '@/assets/shin_logo.png'
 import newsModal from './newsModal.vue'
 import deleteModal from './deleteModal.vue'
 import axios from 'axios'
@@ -211,8 +211,8 @@ body{
 
 .cardImage {
   height: 150px;
-  object-fit: cover;
-
+  /* object-fit: cover; */
+  /* object-fit: contain; */
 }
 
 .scrap-card {
