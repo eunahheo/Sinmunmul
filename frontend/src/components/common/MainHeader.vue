@@ -38,10 +38,13 @@
 
 
         <div class="text-end col-4 mt-2" style=" text-align:center">
-          <button type="button" class="btn btn-outline-secondary m-2">
+          <button type="button" v-on:click="logOut" class="btn btn-outline-secondary m-2" v-if="authToken !== null">
+            로그아웃
+          </button>
+          <button type="button" class="btn btn-outline-secondary m-2" v-else>
             <router-link to="/login">로그인</router-link>
           </button>
-          <button type="button" class="btn btn-outline-secondary m-2">
+          <button type="button" class="btn btn-outline-secondary m-2" v-if="authToken == null">
             <router-link to="/register">회원가입</router-link>
           </button>
           <button type="button" class="btn btn-outline-secondary m-2">
@@ -74,6 +77,7 @@
 export default {
   data() {
     return {
+      authToken: localStorage.getItem('authToken') || null,
       showSearch : true,
       searchWord : null
     }
@@ -99,6 +103,11 @@ export default {
         params: { searchWord : this.searchWord }
         });
     },
+    logOut() {
+      localStorage.removeItem('authToken');
+      this.$router.go();
+      // this.$router.push({name : 'home'});
+    }
 
   }
 }

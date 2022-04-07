@@ -1,8 +1,8 @@
 // src/store/token.js
 
-const authToken = {
+export const authToken = {
     state: {
-        token: null,
+        
     },
     mutations: {
 
@@ -11,5 +11,3 @@ const authToken = {
 
     },
 }
-
-export default authToken
