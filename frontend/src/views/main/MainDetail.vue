@@ -337,8 +337,8 @@ export default {
       }
     },
     pagination: function (total) {
-      this.totalPage = parseInt(total / 6);
-      if (total % 6 !== 0) {
+      this.totalPage = parseInt(total / 9);
+      if (total % 9 !== 0) {
         this.totalPage = this.totalPage + 1;
       }
       this.startPage = parseInt((this.nowPage - 1) / 5) * 5 + 1;
@@ -366,6 +366,7 @@ export default {
 
       const s = this.startPage;
       const e = this.endPage;
+      this.pageNumbers = []
       for (let i = s; i <= e; i++) {
         this.pageNumbers[i - s] = i;
       }
