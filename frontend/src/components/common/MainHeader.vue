@@ -1,13 +1,6 @@
 <template>
 <div class="px-3 py-0 mt-4 mb-2">
-
-
-
-
       <div class="row">
-
-
-
 
            <div class="col-4 col-lg-auto mt-1 mb-2 mb-lg-0 me-lg-auto">
 
@@ -75,15 +68,21 @@ export default {
   data() {
     return {
       showSearch : true,
-      searchWord : null
+      searchWord : null,
+      loginCheck : null,
     }
   },
   created() {
     this.showSearch = true;
+
+    console.log(this.$store.authToken);
+    
   },
 
   mounted() {
     this.showSearch = true;
+    console.log('로그인 체크');
+    console.log(this.$store.authToken);
   },
   methods : {
     renew() {
