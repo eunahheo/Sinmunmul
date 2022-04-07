@@ -226,12 +226,12 @@
       <div class="row mb-2">
         <div class="col-6 mb-3">
           <div>
-            <h2>추천 기사 자리 1</h2>
+            <h2>긍정적 추천 기사</h2>
           </div>
         </div>
         <div class="col-6 mb-3">
           <div>
-            <h2>추천기사 자리 2</h2>
+            <h2>부정적 추천 기사</h2>
           </div>
         </div>
       </div>
@@ -313,8 +313,32 @@ export default {
     this.getTodayNews();
     console.log("로그인체크");
     console.log(this.$store.authToken);
+    console.log(this.$store.userSeq);
+    console.log("===================");
+
+    if(this.$store.userSeq!=null && this.$store.userSeq!="") {
+      this.getRecommendArticle(this.$store.userSeq);
+    }
+    
+
   },
   methods: {
+    getRecommendArticle(userSeq) {
+       axios
+        .get(`${SERVER_HOST}/recom/keyword`, {
+          params: {
+            userSeq: userSeq,
+          },
+        })
+        .then((res)=>{
+            console.log("추천기사 DATA");
+            console.log(res.data);
+        })
+        .catch((err) => {
+          console.log("에러");
+          console.log(err);
+        });
+    },
     generate(category) {
       axios
         .get(`${SERVER_HOST}/news/main/wordcloud`, {
