@@ -180,6 +180,7 @@ public class UserController {
 			  @ApiResponse(code = 206, message = "비밀 번호가 일치하지 않습니다.")
 			})
 	public ResponseEntity<? extends BaseResponseBody> login(@RequestBody LoginDto loginDto) {
+		Map<String,Object> result = new HashMap<>();
 		try {
 			Map<String, Object> obj = userService.getUserByEmail(loginDto.getUserEmail());
 	        if (!passwordEncoder.matches(loginDto.getUserPwd(), obj.get("userPwd").toString())) {
@@ -187,13 +188,15 @@ public class UserController {
 	        }
 	        List<String> auth = new ArrayList<>();
 	        auth.add("ROLE_USER");
-	        return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "로그인 성공", jwtTokenProvider.createToken(obj.get("userEmail").toString(),auth)));
+	        result.put("accessToken", jwtTokenProvider.createToken(obj.get("userEmail").toString(),auth));
+	        result.put("userSeq", userService.getUserByEmail(loginDto.getUserEmail()).get("userSeq"));
+	        return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "로그인 성공", result));
 		}
 		catch(NotExistsUserException e) {
 			return ResponseEntity.status(202).body(AdvancedResponseBody.of(202, "가입 정보가 없습니다.", ""));
 		}
 		catch(IllegalArgumentException e) {
-			return ResponseEntity.status(206).body(AdvancedResponseBody.of(206, "패스워드를 확인해주세요.", ""));
+			return ResponseEntity.status(206).body(BaseResponseBody.of(206, "패스워드를 확인해주세요."));
 		}
 	}
 	
