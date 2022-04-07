@@ -200,7 +200,6 @@
                   '#3B3EAC',
                   '#0099C6',
                 ]"
-                @click="getGraphKey"
               ></bar-chart>
             </div>
           </div>
