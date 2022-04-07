@@ -4,6 +4,7 @@ import {authToken} from './authToken.js'
 
 export default createStore({
   state: {
+    userSeq: null
   },
   getters: {
   },
