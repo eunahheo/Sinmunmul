@@ -27,7 +27,7 @@
         </div>
 
         <div class="plan span--2 long--2">
-          <h3>키워드 검색량 추이 그래프</h3>
+          <h3>키워드 언급량 추이 그래프</h3>
           <line-chart :data="chartData"></line-chart>
         </div>
       </main>
@@ -183,7 +183,7 @@ export default {
         { text: "글자19", size: 18, color: "#6E6E6E" },
         { text: "글자20", size: 18, color: "#6E6E6E" },
       ],
-
+      preWord: null,
       searchWord: null,
       newsData: {},
       newsVisible: false,
@@ -207,6 +207,7 @@ export default {
   },
   created() {
     this.searchWord = this.$route.params.searchWord;
+    this.preWord = this.searchWord
     this.wordcloud();
     this.chartMake(this.searchWord);
     this.search();
@@ -313,6 +314,14 @@ export default {
       this.newsVisible = false;
     },
     search() {
+
+      if(this.searchWord !== this.preWord)
+      {
+        this.preWord = this.searchWord
+        this.nowPage = 1
+      this.wordcloud()
+      }
+      this.searchedData = []
       // console.log("검색 키워드 확인 : "+this.searchWord);
       if (this.searchWord != null && this.searchWord != "") {
         this.loading = true;
