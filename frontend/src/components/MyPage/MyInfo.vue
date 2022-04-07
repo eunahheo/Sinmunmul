@@ -16,11 +16,8 @@
     {{text}}
 </div>
 
-  <div class="mb-2 mt-5" style="width">
+  <div class=" mt-5" style="width">
   <button type="button" @click="passwordUpdate"   class="btn btn-primary">변경</button>
-  </div>
-  <div class="mb-2" style="width">
-  <button type="button" class="btn btn-secondary ">취소</button>
   </div>
 
 </form>
@@ -31,7 +28,7 @@
 
 <script>
 import axios from 'axios'
-//const SERVER_HOST = process.env.VUE_APP_SERVER_HOST
+// const SERVER_HOST = process.env.VUE_APP_SERVER_HOST
 const SERVER_HOST = 'https://j6a406.p.ssafy.io/api'
 
 export default {
@@ -126,13 +123,13 @@ export default {
   padding: 40px;
   margin-top:150px;
   max-width: 680px;
-  height: 450px;
+  height: 400px;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
    border-radius: 10px;
-  -webkit-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+ -webkit-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
   -moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
-  box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15)
+  box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
 }
 
 .password {
