@@ -13,8 +13,18 @@ import MyPageSidebar from '@/components/MyPage/MyPageSidebar.vue'
 
 export default {
   name: 'MyPage',
-  components: { MyPageSidebar }
+  components: { MyPageSidebar },
 
+  data() {
+        return{
+            authToken: localStorage.getItem('authToken') || null,
+        }
+    },
+    mounted() {
+        if(!this.authToken) {
+            this.$router.push('/')
+        }
+    },
 }
 </script>
 
