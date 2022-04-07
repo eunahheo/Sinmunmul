@@ -146,19 +146,21 @@ public class UserController {
 			  @ApiResponse(code = 202, message = "해당 카카오 계정으로 가입된 회원 정보가 없습니다.")
 			})
 	public ResponseEntity<? extends BaseResponseBody> getKakaoUserInfo(@RequestHeader @ApiParam(value = "카카오 인가코드로 발급받은 accessToken") String accessToken) {
-		Map<String, String> result = new HashMap<>();
+		Map<String, Object> result = new HashMap<>();
 		
 		try {
-			result = userService.getKakaoUserInfo(accessToken);
-			if(result.get("responseCode").equals("401")) 
-				return ResponseEntity.status(401).body(AdvancedResponseBody.of(401, "만료된 토큰입니다.", result));
+			Map<String, String> map = userService.getKakaoUserInfo(accessToken);
+			if(map.get("responseCode").equals("401")) 
+				return ResponseEntity.status(401).body(AdvancedResponseBody.of(401, "만료된 토큰입니다.", map));
 			if(result.get("responseCode").equals("400")) 
-				return ResponseEntity.status(400).body(AdvancedResponseBody.of(400, "잘못된 요청입니다.", result));
+				return ResponseEntity.status(400).body(AdvancedResponseBody.of(400, "잘못된 요청입니다.", map));
 			
 			try {
-				Map<String, Object> obj = userService.getUserByEmail(result.get("email"));
+				Map<String, Object> obj = userService.getUserByEmail(map.get("email"));
 		        List<String> auth = new ArrayList<>();
 		        auth.add("ROLE_USER");
+		        result.put("accessToken", jwtTokenProvider.createToken(obj.get("userEmail").toString(),auth));
+		        result.put("userSeq", userService.getUserByEmail(obj.get("email").toString()).get("userSeq"));
 		        return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "로그인 성공", jwtTokenProvider.createToken(obj.get("userEmail").toString(),auth)));
 			}
 			catch(NotExistsUserException e) {
