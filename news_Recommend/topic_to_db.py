@@ -21,6 +21,10 @@ if __name__ == '__main__':
     curtime = datetime.now().strftime('%Y-%m-%d %H:%M:%2S')
 
     code_num = [264,265,268,266,267,269,259,258,261,771,260,262,310,263,249,250,251,254,252,59,255,256,276,257,241,239,240,237,238,376,242,243,244,248,245,231,232,233,234,322,731,226,227,230,732,283,229,228]
+    
+    sql = "UPDATE news_topic SET del_yn=%s WHERE del_yn=%s" 
+    curs.execute(sql, ('y','n'))
+
     for code in code_num:
         path = 'topic/output/' + str(code) + "/part-r-00000"
 
