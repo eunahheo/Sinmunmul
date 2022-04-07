@@ -52,18 +52,18 @@
 
       <div
         class="card m-3 row"
-        style="max-width: 100%; max-height: 420px"
+        style="max-width: 100%; height: 410px"
         v-for="news in searchedData"
         :key="news.news_seq"
       >
         <div class="cards">
           <div @click="detail(news.news_seq)" style="cursor: pointer">
-            <div class="card__image-holder">
+            <div class="card__image-holder" style="object-fit: cover">
               <img
                 v-if="news.news_photo !== ''"
-                class="card-img main-card-img"
+                class="card-img-top"
                 v-bind:src="news.news_photo"
-                style="max-height: 160px; object-fit: cover"
+                style="object-fit: cover"
                 alt="Card image"
                 @error="replaceDefault"
               />
@@ -71,66 +71,22 @@
                 v-else
                 src="../../../src/assets/shin_logo.png"
                 class="card-img-top"
-                style="max-height: 160px; object-fit: contain"
+                style="object-fit: cover"
                 @error="replaceDefault"
               />
             </div>
             <div class="card-title">
               <h2>
-                {{ news.news_Title }}
+                {{
+                  news.news_Title.length > 33
+                    ? news.news_Title.substring(0, 33) + "..."
+                    : news.news_Title
+                }}
+                <hr />
                 <small>{{ news.news_desc.substring(0, 100) }}...</small>
               </h2>
             </div>
           </div>
-
-          <!-- <img v-if="news.news_photo !== ''" v-bind:src="news.news_photo" class="card-img-top" style="max-height : 180px ; "  @error="replaceDefault"> -->
-          <!-- <img
-              v-if="news.news_photo !== ''"
-              class="card-img main-card-img"
-              v-bind:src="news.news_photo"
-              style="max-height: 180px; object-fit: cover"
-              alt="Card image"
-              @error="replaceDefault"
-            />
-            <img
-              v-else
-              src="../../../public/img/no_image.jpg"
-              class="card-img-top"
-              style="max-height: 180px; object-fit: contain"
-              @error="replaceDefault"
-            />
-          </div>
-          <div class="col-md-7">
-            <div class="card-body">
-              <h5
-                class="card-title px-4"
-                style="font-size: 25px; font-family: ChosunKm"
-              >
-                {{ news.news_Title }}
-              </h5>
-              <hr style="border: solid 1px black" />
-              <p class="card-text px-4">
-                <small class="text-muted" style="font-size: 17px"
-                  >{{ news.news_desc.substring(0, 100) }}...</small
-                >
-              </p>
-            </div> -->
-          <!-- <div class="col-md-1">
-            <button
-              @click="detail(news.news_seq)"
-              class="btn btn-detail"
-              style="
-                display: block;
-                max-width: 100%;
-                max-height: 180px;
-                width: 100%;
-                height: 100%;
-                vertical-align: middle;
-              "
-            >
-              상세 보기
-            </button>
-          </div> -->
         </div>
       </div>
 
@@ -361,7 +317,7 @@ export default {
             params: {
               keyword: this.searchWord,
               page: this.nowPage,
-              size: 10,
+              size: 9,
             },
           })
           .then((res) => {
@@ -527,14 +483,11 @@ a.btn:active {
   transform: translate3d(0, 1px, 0);
   transition: all 0.025s 0s ease-out;
 }
-/* div.cards {
-  margin: 80px auto;
-  max-width: 960px;
-  text-align: center;
-} */
+
 div.card {
   background: #ffffff;
   display: inline-block;
+  height: 410px;
   margin: 13px;
   max-width: 300px;
   position: relative;
@@ -545,45 +498,23 @@ div.card {
 }
 div.card img {
   max-width: 300px;
+  object-fit: cover;
 }
 div.card .card__image-holder {
-  background: rgba(0, 0, 0, 0.1);
   height: 0;
   padding-bottom: 75%;
+  max-width: 300px;
+  /* height: 150px;   */
 }
+
 div.card div.card-title {
   background: #ffffff;
-  padding: 6px 15px 10px;
+  padding: auto;
   position: relative;
   height: 100%;
   z-index: 0;
 }
-div.card div.card-title a.toggle-info {
-  border-radius: 32px;
-  height: 32px;
-  padding: 0;
-  position: absolute;
-  right: 15px;
-  top: 10px;
-  width: 32px;
-}
-div.card div.card-title a.toggle-info span {
-  background: #ffffff;
-  display: block;
-  height: 2px;
-  position: absolute;
-  top: 16px;
-  transition: all 0.15s 0s ease-out;
-  width: 12px;
-}
-div.card div.card-title a.toggle-info span.left {
-  right: 14px;
-  transform: rotate(45deg);
-}
-div.card div.card-title a.toggle-info span.right {
-  left: 14px;
-  transform: rotate(-45deg);
-}
+
 div.card div.card-title h2 {
   font-size: 22px;
   font-weight: 700;
@@ -607,26 +538,7 @@ div.card div.card-actions {
   box-shadow: 0 2px 0px 0 rgba(0, 0, 0, 0.075);
   padding: 10px 15px 20px;
 }
-div.card div.card-flap {
-  background: #d9d9d9;
-  position: absolute;
-  width: 100%;
-  transform-origin: top;
-  transform: rotateX(-90deg);
-}
-div.card div.flap1 {
-  transition: all 0.3s 0.3s ease-out;
-  z-index: -1;
-}
-div.card div.flap2 {
-  transition: all 0.3s 0s ease-out;
-  z-index: -2;
-}
-/* div.cards.showing div.card {
-  cursor: pointer;
-  opacity: 0.6;
-  transform: scale(0.88);
-} */
+
 .no-touch div.cards.showing div.card:hover {
   opacity: 0.94;
   transform: scale(0.92);

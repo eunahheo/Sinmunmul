@@ -69,6 +69,7 @@ export default {
                     console.log(res);
                     if(res.status === 200){
                         localStorage.setItem('authToken', res.data.data.accessToken);
+                        this.$store.userSeq = res.data.data.userSeq;
                         // this.$router.push({ name: 'home'});
                         this.$router.go()
                     } else if (res.status === 202) {
