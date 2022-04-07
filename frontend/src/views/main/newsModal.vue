@@ -1,7 +1,34 @@
 <template>
+
+
+  <div class="modal " id="myModal2" >
+  <div class="modal-dialog   modal-dialog-centered">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">알림창</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        {{this.message}}
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">닫기</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <div class="modal__background"  v-if="visible">
+
  <div class="modal" id="myModal"  style="display:block">
-  <div class="modal-dialog modal-lg  modal-dialog-centered" >
+  <div class="modal-dialog modal-lg  modal-dialog-centered  news-modal" >
     <div class="modal-content p-3">
       <!-- Modal Header -->
       <div class="row" style="height:60px">
@@ -19,7 +46,7 @@
           <div class="row mt-3" style="height:22px ">
         <div class=" col-4" style="text-align: left; padding-left:10px"
         ><button type="button"  class="btn m-1"  style="border:1px solid; width:75px;  font-size:12px; " @click="redirect(news.newsLink)">기사원문</button>
-        <button type="button"  class="btn "  style="border:1px solid; width:75px;  font-size:12px; " @click="scrap(news.newsSeq)"  v-if="this.$store.userSeq != null" >스크랩</button>
+        <button type="button"  class="btn "  style="border:1px solid; width:75px;  font-size:12px; " @click="scrap(news.newsSeq)"  v-if="this.userSeq != null"  data-bs-toggle="modal" data-bs-target="#myModal2">스크랩</button>
         </div>
         <div class="col-8" style="text-align: right; padding-right:10px; padding-top:8px"> {{this.date}}  | {{news.newsAuthor}} 기자</div>
         </div>
@@ -51,8 +78,10 @@ export default {
 
   data: function () {
     return {
+      userSeq: localStorage.getItem('userSeq'),
       desc: "",
       date: "",
+      message:"",
     };
   },
   watch: {
@@ -85,15 +114,17 @@ export default {
         // /mypage/{user_seq}/updatePassword
         url: `${API_SERVER}/news/${newsSeq}/scrap`,
         params: {
-          user_Seq: this.$store.userSeq
+          user_Seq: this.userSeq
         }
       })
         .then((res) => {
+          this.message = '스크랩 등록 완료'
           console.log(res)
-          this.modalView()
         })
-        .catch(err => console.log(err)
-        )
+        .catch(err => {
+          console.log(err)
+          this.message = '이미 등록된 기사입니다.'
+        })
     },
     redirect: function (data) { // 기사원문 버튼 클릭
       // window.location.href = data // 바로 이동
@@ -114,7 +145,7 @@ export default {
   transform: translate(-50%, -50%);
 }
 
-.modal-dialog {
+ .news-modal {
   width: 100%;
   max-width: 1000px;
   padding: 30px;
