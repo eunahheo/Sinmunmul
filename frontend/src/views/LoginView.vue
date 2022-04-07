@@ -52,7 +52,7 @@ export default {
     methods: {
         loginBtn() {
             console.log("login triggerd ");
-            
+
             if(this.emailData != null && this.passwdData !="") {
                 console.log('login data : ', this.emailData, this.passwdData);
                 axios.post(`${API_SERVER}/user/login`, {
@@ -62,12 +62,13 @@ export default {
                 .then((res) =>{
                     console.log(res);
                     if(res.status === 200){
-                        this.$store.authToken = res.data.data;
+                        this.$store.authToken = res.data.data.accessToken
+                        this.$store.userSeq = res.data.data.userSeq;
                         this.$router.push({ name: 'home'});
                     } else if (res.status === 202) {
                         alert("가입 정보가 없습니다.")
                     }
-                    
+
                 }).catch((e) => {
                     console.log(e);
                 })
