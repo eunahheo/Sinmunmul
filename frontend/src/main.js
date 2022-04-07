@@ -11,6 +11,8 @@ import "vuex-persistedstate";
 // import Vue from "vue";
 import VueNumber from "vue-number-animation";
 
+window.Kakao.init('864650259e852266a14e98b75eedc985')
+
 const app = createApp(App);
 app.use(VueNumber);
 

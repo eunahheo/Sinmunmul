@@ -41,6 +41,7 @@ public class InterestServiceImpl implements InterestService {
 					.user(userRepository.getById(userSeq))
 					.commonCodeGroup(commonCodeGroupRepositorySupport.findByCodeGroup(codeDto.getCodeGroup()))
 					.commonCode(commonCodeRepositorySupport.findByCode(codeDto.getCodeGroup(), codeDto.getCode()))
+					.delYn("n")
 					.regDt(now)
 					.regId(user.getUserEmail())
 					.modDt(now)

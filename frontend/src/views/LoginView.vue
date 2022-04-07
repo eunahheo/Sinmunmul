@@ -25,7 +25,7 @@
                 <div class="social-login m-5">
                     <h3>소셜 로그인</h3>
                     <section>
-                        <img src="/frontend/public/img/kakao_login_medium_narrow.png" class="rounded" alt="카카오 로그인" v-on:click="kakaoLogin">
+                        <img src="../../public/img/kakao_login_medium_narrow.png" class="rounded" alt="카카오 로그인" v-on:click="kakaoLogin">
                     </section>
                 </div>
             </form>
@@ -55,16 +55,23 @@ export default {
             
             if(this.emailData != null && this.passwdData !="") {
                 console.log('login data : ', this.emailData, this.passwdData);
-                axios.get(`${API_SERVER}/user/login`, {
+                axios.post(`${API_SERVER}/user/login`, {
                 params: {
-                    userEmail : this.emailData,
-                    userPwd : this.passwdData,
+                    SigninDto : {
+                        userEmail : this.emailData,
+                        userPwd : this.passwdData,
+                    }
                 }
                 })
                 .then((res) =>{
                     console.log(res);
-                    this.$store.authToken = res.data.data;
-                    this.$router.push({ name: 'home'});
+                    if(res.status === 200){
+                        this.$store.authToken = res.data.data;
+                        this.$router.push({ name: 'home'});
+                    } else if (res.status === 202) {
+                        alert("가입 정보가 없습니다.")
+                    }
+                    
                 }).catch((e) => {
                     console.log(e);
                 })
@@ -74,54 +81,42 @@ export default {
         },
 
         kakaoLogin:function() {
-            window.Kakao.init('864650259e852266a14e98b75eedc985')
-
-            if (window.Kakao.Auth.getAccessToken()) {
-                window.Kakao.API.request({
-                    url: '/v1/user/unlink',
-                    sucess: function(reponse) {
-                        console.log("unlink")
-                        console.log(reponse)
-                    },
-                    fail: function(error) {
-                        console.log("unlink")
-                        console.log(error)
-                    },
-                })
-                window.Kakao.Auth.setAccessToken(undefined)
-            }
-
             window.Kakao.Auth.login({
-                success: function(authObj) {
-                    window.Kakao.API.request({
-                        url: '/v2/user/me',
-                        data: {
-                            property_keys: ["kaccount_email"]
-                        },
-                        success: async function(res) {
-                            console.log(res);
-                            axios.post(`${API_SERVER}/user/kakao/login`, {
-                                accessToken: res.id,
-                            }).then((res) => {
-                                console.log(res);
-                                if(res.status == 200) {
-                                    alert("로그인 성공");
-                                    window.location.href = "/";
-                                } else if (res.status == 202) {
-                                    alert("등록되지 않은 계정입니다. 회원가입 페이지로 이동합니다.");
-                                    this.$router.push({name: 'register', query: {email: res.data.email, gender: res.data.gender, usersgType: 'kakao'}});
-                                }
-                            }).catch((e) => {
-                                console.log(e);
-                            })
-                        },
-                        fail: function(error) {
-                            console.log(error);
+                scope: 'account_email, gender',
+                success: this.getInfo
+            });
+        },
+        getInfo(authObj){
+            console.log(authObj.access_token);
+            axios.post(`${API_SERVER}/user/kakao/login`, {}, {
+                headers: {
+                    accessToken: authObj.access_token,
+                }
+            }).then((res) => {
+                if(res.status === 200){
+                    this.$store.authToken = res.data.data;
+                    // this.$router.push({ name: 'home'});
+                } else if (res.status === 202) {
+                    alert("등록되지 않은 계정입니다. 회원가입 페이지로 이동합니다.");
+                    // window.Kakao.API.request({
+                    //     url:'/v2/user/me',
+                    //     success: res => {
+                    //         const kakao_account = res.kakao_account;
+                    //         const userInfo = {
+                    //             email: kakao_account.email,
+                    //             gender: kakao_account.gender,
+                    //         }
+                    //         console.log(userInfo)
+                    //     }
+                    // })
+                    this.$router.push({
+                        name: 'register',
+                        params: {
+                            email: res.data.data.email,
+                            gender: res.data.data.gender,
+                            usersgType: "kakao"
                         }
-                    });
-                },
-                fail: function(err) {
-                    console.log(err);
+                    })
                 }
             })
         }
