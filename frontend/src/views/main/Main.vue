@@ -108,10 +108,10 @@
         <br />
         <div class="row mb-2">
           <div class="col-6 mb-4">
-            <div><span style="font-size: calc(1.3rem + .6vw);"> 실시간 이슈  </span> 
+            <div class="container2">             
+              <div><span style="font-size: calc(1.3rem + .6vw);"> 실시간 이슈  </span> 
                   <span style="font-size: calc(1.0rem + .6vw);"> {{this.realHour}} </span>
             </div>
-            <div class="container2">             
               <div class="mb-2">
                 <button
                   :class="{
