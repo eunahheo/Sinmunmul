@@ -78,8 +78,8 @@
             <div class="card-title">
               <h2>
                 {{
-                  news.news_Title.length > 33
-                    ? news.news_Title.substring(0, 33) + "..."
+                  news.news_Title.length > 25
+                    ? news.news_Title.substring(0, 25) + "..."
                     : news.news_Title
                 }}
                 <hr />
@@ -366,7 +366,7 @@ export default {
 
       const s = this.startPage;
       const e = this.endPage;
-      this.pageNumbers = []
+      this.pageNumbers = [];
       for (let i = s; i <= e; i++) {
         this.pageNumbers[i - s] = i;
       }
