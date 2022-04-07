@@ -41,18 +41,19 @@ public class NewsRecommendServiceImpl implements NewsRecommendService{
 	}
 	
 	@Override
-	public Map<String, News> recommentArticle(int userSeq) {
+	public Map<String, Object> recommentArticle(int userSeq) {
 		
 		// 사용자 관심사 코드들 불러오기
 		InterestDto interestDto = interestRepositorySupport.searchInterest(userSeq);
 		List<CodeDto> list = interestDto.getYesInterest();
-		
+
 		// 소분류에 해당하는 키워드들 불러오기
 		List<Keyword> keywords = new ArrayList<>();
 		StringTokenizer st = null;
 		
 		for(CodeDto codeDto : list) {
 			String keyword = newsTopicRepository.findBydelYnAndCode("n", codeDto.getCode()).getKeyword();
+			System.out.println("코드리스트 : " + codeDto.getCode() + ",  키워드 : "+keyword);
 			st = new StringTokenizer(keyword,",");
 			
 			while(st.hasMoreTokens()) {
@@ -62,11 +63,11 @@ public class NewsRecommendServiceImpl implements NewsRecommendService{
 		
 		// 키워드 중 랜덤으로 1개 선택
 		Random random = new Random();
-		int idx = random.nextInt(list.size());
+		int idx = random.nextInt(keywords.size());
 		
 		Keyword keyword = keywords.get(idx);
 		System.out.println("코드 : " +  keyword.code + ", 단어 : " + keyword.word);
-		Map<String, News> result = new HashMap<>();
+		Map<String, Object> result = new HashMap<>();
 		result = newsrRepositorySupport.searchByCodeAndKeyword(keyword.code, keyword.word);
 		return result;
 	}

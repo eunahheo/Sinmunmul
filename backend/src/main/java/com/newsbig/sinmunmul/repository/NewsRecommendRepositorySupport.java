@@ -34,13 +34,14 @@ public class NewsRecommendRepositorySupport {
 		return result;
 	}
 	
-	public Map<String,News> searchByCodeAndKeyword(int code, String keyword) {
+	public Map<String,Object> searchByCodeAndKeyword(int code, String keyword) {
 		List<Long> list = searchList(code, keyword);
 		List<News> positiveNews = jpaQueryFactory
 				.select(qNews)
 				.from(qNews)
 				.where(qNews.delYn.eq("n"), qNews.newsSeq.in(list))
 				.orderBy(qNews.newsPositive.desc())
+				.offset(0)
 				.limit(1)
 				.fetch(); 
 		List<News> NegativeNews = jpaQueryFactory
@@ -48,10 +49,13 @@ public class NewsRecommendRepositorySupport {
 				.from(qNews)
 				.where(qNews.delYn.eq("n"), qNews.newsSeq.in(list))
 				.orderBy(qNews.newsNegative.desc())
+				.offset(1)
 				.limit(1)
 				.fetch(); 
 		
-		Map<String, News> result = new HashMap<>();
+		Map<String, Object> result = new HashMap<>();
+		result.put("code", code);
+		result.put("keyword", keyword);
 		result.put("posivite", positiveNews.get(0));
 		result.put("negative", NegativeNews.get(0));
 		
