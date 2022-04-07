@@ -119,10 +119,12 @@ export default {
     InterestModal
   },
   created () {
+    console.log("현재 로그인한 유저 시퀀스")
+    console.log(this.$store.userSeq)
     axios({
       method: 'get',
       // /mypage/{user_seq}/updatePassword
-      url: `${SERVER_HOST}/mypage/7/searchInterest`
+      url: `${SERVER_HOST}/mypage/${this.$store.userSeq}/searchInterest`
     }).then((res) => {
       this.yesInterest = res.data.data.yesInterest
       this.noInterest = res.data.data.noInterest
@@ -164,7 +166,7 @@ export default {
       axios({
         method: 'put',
         // /mypage/{user_seq}/updatePassword
-        url: `${SERVER_HOST}/mypage/7/updateInterest`,
+        url: `${SERVER_HOST}/mypage/${this.$store.userSeq}/updateInterest`,
         data: this.updateData
       })
         .then((res) => {

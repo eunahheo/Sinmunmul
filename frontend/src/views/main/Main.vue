@@ -247,7 +247,7 @@ import axios from "axios";
 import VueWordCloud from "vuewordcloud";
 import wordcloud from "vue-wordcloud";
 import img from "@/assets/default.png";
-import newsModal from "@/components/MyPage/newsModal.vue";
+import newsModal from './newsModal.vue'
 import VueNumber from "vue-number-animation";
 // const LOCAL_HOST = 'http://localhost:3030/api'
 const SERVER_HOST = "https://j6a406.p.ssafy.io/api";

@@ -18,7 +18,8 @@
 
           <div class="row mt-3" style="height:22px ">
         <div class=" col-4" style="text-align: left; padding-left:10px"
-        ><button type="button"  class="btn "  style="border:1px solid; width:75px;  font-size:12px; " @click="redirect(news.newsLink)">기사원문</button>
+        ><button type="button"  class="btn m-1"  style="border:1px solid; width:75px;  font-size:12px; " @click="redirect(news.newsLink)">기사원문</button>
+        <button type="button"  class="btn "  style="border:1px solid; width:75px;  font-size:12px; " @click="scrap(news.newsSeq)"  v-if="this.$store.userSeq != null" >스크랩</button>
         </div>
         <div class="col-8" style="text-align: right; padding-right:10px; padding-top:8px"> {{this.date}}  | {{news.newsAuthor}} 기자</div>
         </div>
@@ -42,6 +43,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+const API_SERVER = 'https://j6a406.p.ssafy.io/api'
 export default {
   name: 'newsModal',
   props: ['visible', 'news'],
@@ -61,7 +64,7 @@ export default {
 
       this.desc = text
       // console.log(this.desc)
-      
+
       this.desc = this.desc.replace(/^\s*/, '')
       this.desc = this.desc.replace(/\t/g, '')
       this.desc = this.desc.replace(/\n$/gm, '<br/>')
@@ -71,15 +74,30 @@ export default {
       } else {
         this.desc = this.desc.replace(/(?:\.\r\n|\.\r|\.\n|\.\s*\n)/g, '. <br/> <br/>')
         this.desc = this.desc.replace(/(?:\n)/g, '<br/>')
-        
       }
       // this.desc = this.desc.replace(/(?:\r\n|\r|\n|\s\n)/g, '<br />')
     }
   },
   methods: {
+    scrap: function (newsSeq) {
+      axios({
+        method: 'post',
+        // /mypage/{user_seq}/updatePassword
+        url: `${API_SERVER}/news/${newsSeq}/scrap`,
+        params: {
+          user_Seq: this.$store.userSeq
+        }
+      })
+        .then((res) => {
+          console.log(res)
+          this.modalView()
+        })
+        .catch(err => console.log(err)
+        )
+    },
     redirect: function (data) { // 기사원문 버튼 클릭
       // window.location.href = data // 바로 이동
-       window.open(data) // 새 창 열기
+      window.open(data) // 새 창 열기
     }
   }
 }

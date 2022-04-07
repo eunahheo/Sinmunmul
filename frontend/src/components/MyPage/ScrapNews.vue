@@ -115,7 +115,7 @@ export default {
       axios({
         method: 'get',
         // /mypage/{user_seq}/updatePassword
-        url: `${SERVER_HOST}/mypage/7/searchScrap`,
+        url: `${SERVER_HOST}/mypage/${this.$store.userSeq}/searchScrap`,
         params: {
           page: this.nowPage
         }
@@ -176,7 +176,7 @@ export default {
     deleteNews: function (seq) { // 유저 시퀀스도 가져오도록 변경?
       axios({
         method: 'delete',
-        url: `${SERVER_HOST}/mypage/7/deleteScrap/${seq}`,
+        url: `${SERVER_HOST}/mypage/${this.$store.userSeq}/deleteScrap/${seq}`,
         params: {
           news_seq: seq
         }
