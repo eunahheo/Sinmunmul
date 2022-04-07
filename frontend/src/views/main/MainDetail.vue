@@ -22,20 +22,42 @@
 
       <main class="m-3">
         <div class="plan span--2 long--2">
-          <h3>연관 키워드</h3>
-    <div style=" width = 600; height = 300;">
-              <div class="spinner-div temp" v-show="this.wordcloudState === 1">
-                  <span class="spinner-border spinner-border-m"  ></span>
-                  조회중입니다.
-              </div>
+          <span style="font-size: calc(1.3rem + 0.6vw)"> 연관 키워드 </span>
 
-          <div v-show="this.wordcloudState === 2" id="word-cloud"></div>
+          <span style="float: right"
+            ><ul class="wrapper">
+              <li class="icon facebook">
+                <span class="tooltip"
+                  >검색 키워드가 언급된 기사들을 Word2Vec을 활용하여 연관어
+                  분석을 수행합니다. <br />(연관도) X (키워드 언급횟수) 를
+                  계산하여 상위 20개의 키워드를 워드클라우드 형태로 제공됩니다.
+                </span>
+                <span><i class="fab">i</i></span>
+              </li>
+            </ul></span
+          >
+          <div id="word-cloud"></div>
+        </div>
 
           <div  v-show="this.wordcloudState == 3" class="temp" > <small style="    font-size=20px;"> 관련된 키워드를 불러올 수 없습니다 </small> </div>
         </div>
 </div>
         <div class="plan span--2 long--2">
-          <h3>키워드 언급량 추이 그래프</h3>
+          <span style="font-size: calc(1.3rem + 0.6vw)">
+            키워드 주간 기사량
+          </span>
+
+          <span style="float: right"
+            ><ul class="wrapper">
+              <li class="icon facebook">
+                <span class="tooltip"
+                  >검색 키워드의 주간 기사량 추이를 나타내는 그래프입니다.
+                </span>
+                <span><i class="fab">i</i></span>
+              </li>
+            </ul></span
+          >
+
           <line-chart :data="chartData"></line-chart>
         </div>
       </main>
@@ -57,50 +79,51 @@
       >
         <span class="visually-hidden">Loading...</span>
       </div>
-<div>
-      <div
-        class="card m-3"
-        style="max-width: 100%; height: 410px"
-        v-for="news in searchedData"
-        :key="news.news_seq"
-      >
-        <div class="cards">
-          <div @click="detail(news.news_seq)" style="cursor: pointer">
-            <div class="card__image-holder">
-              <img
-                v-if="news.news_photo !== ''"
-                class="card-img-top"
-                v-bind:src="news.news_photo"
-                alt="Card image"
-                style="object-fit: cover"
-                @error="replaceDefault"
-              />
-              <img
-                v-else
-                src="../../../src/assets/shin_logo.png"
-                class="card-img-top"
-                style="object-fit: fill"
-                @error="replaceDefault"
-              />
-            </div>
-            <div class="m-2 card-title ">
-              <h2>
-                <div style="height:50px">
-                {{
-                  news.news_Title.length > 25
-                    ? news.news_Title.substring(0, 25) + "..."
-                    : news.news_Title
-                }}
-                </div>
-                <hr />
-                <small class="m-2 detail-card-desc mb-1">{{ news.news_desc}}</small>
-              </h2>
+      <div>
+        <div
+          class="card m-3"
+          style="max-width: 100%; height: 410px"
+          v-for="news in searchedData"
+          :key="news.news_seq"
+        >
+          <div class="cards">
+            <div @click="detail(news.news_seq)" style="cursor: pointer">
+              <div class="card__image-holder">
+                <img
+                  v-if="news.news_photo !== ''"
+                  class="card-img-top"
+                  v-bind:src="news.news_photo"
+                  alt="Card image"
+                  style="object-fit: cover"
+                  @error="replaceDefault"
+                />
+                <img
+                  v-else
+                  src="../../../src/assets/shin_logo.png"
+                  class="card-img-top"
+                  style="object-fit: fill"
+                  @error="replaceDefault"
+                />
+              </div>
+              <div class="m-2 card-title">
+                <h2>
+                  <div style="height: 50px">
+                    {{
+                      news.news_Title.length > 25
+                        ? news.news_Title.substring(0, 25) + "..."
+                        : news.news_Title
+                    }}
+                  </div>
+                  <hr />
+                  <small class="m-2 detail-card-desc mb-1">{{
+                    news.news_desc
+                  }}</small>
+                </h2>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      </div>
-
 
       <nav aria-label="..." class="d-flex justify-content-center mb-4">
         <ul class="pagination d-flex justify-content-between">
@@ -216,7 +239,7 @@ export default {
   },
   created() {
     this.searchWord = this.$route.params.searchWord;
-    this.preWord = this.searchWord
+    this.preWord = this.searchWord;
     this.wordcloud();
     this.chartMake(this.searchWord);
     this.search();
@@ -337,14 +360,12 @@ export default {
       this.newsVisible = false;
     },
     search() {
-
-      if(this.searchWord !== this.preWord)
-      {
-        this.preWord = this.searchWord
-        this.nowPage = 1
-      this.wordcloud()
+      if (this.searchWord !== this.preWord) {
+        this.preWord = this.searchWord;
+        this.nowPage = 1;
+        this.wordcloud();
       }
-      this.searchedData = []
+      this.searchedData = [];
       // console.log("검색 키워드 확인 : "+this.searchWord);
       if (this.searchWord != null && this.searchWord != "") {
         this.loading = true;
@@ -463,10 +484,8 @@ export default {
   }
 }
 .card-img-top {
-  height:200px
+  height: 200px;
 }
-
-
 
 .span--2 {
   grid-column: span 2;
@@ -565,13 +584,13 @@ div.card div.card-title h2 {
   padding: 0;
 }
 div.card div.card-title h2 small {
- display:-webkit-box;
-  word-wrap:break-word;
-  -webkit-line-clamp:4;
-  -webkit-box-orient:vertical;
-  overflow:hidden;
-  text-overflow:ellipsis;
-    height:90px
+  display: -webkit-box;
+  word-wrap: break-word;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 90px;
 }
 div.card div.card-description {
   padding: 0 15px 10px;
@@ -613,9 +632,96 @@ div.card.show div.flap1 {
 div.card.show div.flap2 {
   transition: all 0.3s 0.2s ease-out;
 }
+/* tooltip */
+/*
+    Auther: Abdelrhman Said
+*/
 
-.temp {
-  line-height: 300px;
-  text-align: center;
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+*:focus,
+*:active {
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  display: grid;
+  height: 100%;
+  width: 100%;
+  font-family: "Poppins", sans-serif;
+  place-items: center;
+  background: linear-gradient(315deg, #ffffff, #d7e1ec);
+}
+
+.wrapper {
+  display: inline-flex;
+  list-style: none;
+}
+
+.wrapper .icon {
+  position: relative;
+  background: rgb(255, 254, 254);
+  border-radius: 50%;
+  padding: 15px;
+  margin: 10px;
+  width: 10px;
+  height: 10px;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.wrapper .tooltip {
+  position: absolute;
+  top: 0;
+  font-size: 14px;
+  background: #ffffff;
+  color: #ffffff;
+  padding: 5px 8px;
+  border-radius: 5px;
+  width: 300px;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.wrapper .tooltip::before {
+  position: absolute;
+  content: "";
+  height: 8px;
+  width: 5px;
+  background: #ffffff;
+  bottom: -3px;
+  left: 50%;
+  transform: translate(-50%) rotate(45deg);
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.wrapper .icon:hover .tooltip {
+  top: -45px;
+  width: 250px;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.wrapper .icon:hover span,
+.wrapper .icon:hover .tooltip {
+  text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.1);
+}
+
+.wrapper .facebook:hover,
+.wrapper .facebook:hover .tooltip,
+.wrapper .facebook:hover .tooltip::before {
+  background: #1877f2;
+  color: #ffffff;
 }
 </style>
