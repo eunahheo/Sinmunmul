@@ -62,8 +62,8 @@ export default {
                 .then((res) =>{
                     console.log(res);
                     if(res.status === 200){
-                        $store.authToken = res.data.data;
-                        $router.push({ name: 'home'});
+                        this.$store.authToken = res.data.data;
+                        this.$router.push({ name: 'home'});
                     } else if (res.status === 202) {
                         alert("가입 정보가 없습니다.")
                     }
