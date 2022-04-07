@@ -104,6 +104,8 @@ export default {
     },
     logOut() {
       localStorage.removeItem('authToken');
+      localStorage.removeItem('userSeq');
+      
       this.$router.go();
       // this.$router.push({name : 'home'});
     }

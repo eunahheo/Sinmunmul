@@ -40,7 +40,7 @@ export default {
       password: '',
       newpassword: '',
       newpasswordcon: '',
-      seq: 13, // 유저의 기본키
+      seq: localStorage.getItem('userSeq'), // 유저의 기본키
       text: '비밀번호를 입력하세요', // alert창의 글자
       alertState: 'alert alert-danger',
       alertStyle: {

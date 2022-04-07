@@ -17,7 +17,8 @@ import com.newsbig.sinmunmul.dto.CodeDto;
 import com.newsbig.sinmunmul.entity.News;
 import com.newsbig.sinmunmul.entity.NewsRecommend;
 import com.newsbig.sinmunmul.exception.NotExistsUserException;
-import com.newsbig.sinmunmul.exception.NotRecommendException;
+import com.newsbig.sinmunmul.exception.NotExistsInterestException;
+import com.newsbig.sinmunmul.exception.NotExistsRecommendException;
 import com.newsbig.sinmunmul.response.AdvancedResponseBody;
 import com.newsbig.sinmunmul.response.BaseResponseBody;
 import com.newsbig.sinmunmul.service.NewsRecommendService;
@@ -41,15 +42,18 @@ public class NewsRecommendController {
 			{ @ApiResponse(code = 200, message = "등록 성공"),
 			  @ApiResponse(code = 400, message = "잘못된 요청입니다."),
 			  @ApiResponse(code = 500, message = "서버 오류"),
-			  @ApiResponse(code = 202, message = "키워드에 해당하는 기사가 없습니다.")
+			  @ApiResponse(code = 202, message = "키워드에 해당하는 기사가 없거나 사용자의 관심사가 없는 경우")
 			})
 	public ResponseEntity<? extends BaseResponseBody> registInterest(@RequestParam int userSeq) {
 		Map<String, Object> result = new HashMap<>();
 		try {
 			result = newsRService.recommentArticle(userSeq);
 		}
-		catch(NotRecommendException e) {
+		catch(NotExistsRecommendException e) {
 			return ResponseEntity.status(202).body(BaseResponseBody.of(202, "키워드에 해당하는 기사가 없습니다."));
+		}
+		catch(NotExistsInterestException e) {
+			return ResponseEntity.status(202).body(BaseResponseBody.of(202, "사용자가 등록한 관심사가 없습니다."));
 		}
 		return ResponseEntity.status(200).body(AdvancedResponseBody.of(200, "추천 기사 조회 성공",result));
 	}

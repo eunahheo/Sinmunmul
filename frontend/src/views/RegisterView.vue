@@ -298,6 +298,7 @@ export default {
                             if(res.status === 200){
                                 alert("로그인 성공")
                                 localStorage.setItem('authToken', res.data.data.accessToken);
+                                localStorage.setItem('userSeq', res.data.data.userSeq);
                                 this.$router.go();
                             } else {
                                 alert("로그인 실패")
