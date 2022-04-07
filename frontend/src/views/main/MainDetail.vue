@@ -23,9 +23,17 @@
       <main class="m-3">
         <div class="plan span--2 long--2">
           <h3>연관 키워드</h3>
-          <div id="word-cloud"></div>
-        </div>
+    <div style=" width = 600; height = 300;">
+              <div class="spinner-div temp" v-show="this.wordcloudState === 1">
+                  <span class="spinner-border spinner-border-m"  ></span>
+                  조회중입니다.
+              </div>
 
+          <div v-show="this.wordcloudState === 2" id="word-cloud"></div>
+
+          <div  v-show="this.wordcloudState == 3" class="temp" > <small style="    font-size=20px;"> 관련된 키워드를 불러올 수 없습니다 </small> </div>
+        </div>
+</div>
         <div class="plan span--2 long--2">
           <h3>키워드 언급량 추이 그래프</h3>
           <line-chart :data="chartData"></line-chart>
@@ -200,6 +208,7 @@ export default {
       start: false,
       end: false,
       chartData: [{ name: "", data: {} }],
+      wordcloudState: null // 1은 조회 중  ,2 관련 키워드 조회 성공 , 3 관련 키워드 조회 실패
     };
   },
   components: {
@@ -274,19 +283,33 @@ export default {
 
     wordcloud() {
       // 키워드 연관어 받아오는 api 호출
+      this.wordcloudState = 1
       axios({
         method: "get",
         url: "https://j6a406.p.ssafy.io/fapi/news/search/wordcloud",
         params: { keyword: this.searchWord },
       })
         .then((res) => {
-          const data = res.data.data;
+          console.log(res);
+
+            if(res.data.statusCode === 200)
+            {
+
+          console.log('여기 오는거 아닌가요?')
+            this.wordcloudState = 2
+                 console.log(this.wordcloudState)
+                  const data = res.data.data;
 
           for (let index = 0; index < 20; index++) {
             this.words[index].text = data[index].keyword;
           }
-          console.log(res);
           this.genLayout();
+            }
+
+        else {
+          this.wordcloudState = 3
+        }
+
         })
         .catch((err) => {
           console.log(err);
@@ -589,5 +612,10 @@ div.card.show div.flap1 {
 }
 div.card.show div.flap2 {
   transition: all 0.3s 0.2s ease-out;
+}
+
+.temp {
+  line-height: 300px;
+  text-align: center;
 }
 </style>

@@ -108,8 +108,8 @@
         <br />
         <div class="row mb-2">
           <div class="col-6 mb-4">
-            <div class="container2">             
-              <div><span style="font-size: calc(1.3rem + .6vw);"> 실시간 이슈  </span> 
+            <div class="container2">
+              <div><span style="font-size: calc(1.3rem + .6vw);"> 실시간 이슈  </span>
                   <span style="font-size: calc(1.0rem + .6vw);"> {{this.realHour}} </span>
             </div>
               <div class="mb-2">
@@ -213,7 +213,7 @@
           </div>
           <div class="col-6 mb-3">
             <h3>키워드 주간 기사량</h3>
-            <div class="container3">   
+            <div class="container3">
               <div class="spinner-div2" v-if="this.lineData == null">
                 <button class="btn">
                   <span class="spinner-border spinner-border-m"></span>
@@ -425,7 +425,7 @@ export default {
     var endHour = new Date().getHours();
     var startHour = endHour-1;
     if(startHour<0) startHour=23;
-    
+
     this.realHour="";
     this.realHour +="("+startHour+":00 ~ "+endHour+":00)";
     if (this.userSeq != null && this.userSeq != "") {
