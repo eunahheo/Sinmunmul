@@ -226,17 +226,14 @@
         </div>
 
         <hr />
+        <div v-if="this.authToken==null || this.positiveArticle==null"> <!--로그인안됨  -->
+          {{this.ArticleMsg}}
       </div>
-
-
-      <div v-if="this.authToken==null || this.positiveArticle==null"> <!--로그인안됨  -->
-          {{this.ArticleMsg}}      
-      </div>            
       <div v-else class="row mb-2">
         <div class="col-6 mb-3">
           <div>
             <h2>긍정적 추천 기사</h2>
-            <br>             
+            <br>
               <div>
                 <div
                   class="mb-1 main-news-list"
@@ -291,7 +288,7 @@
           <div>
             <h2>부정적 추천 기사</h2>
               <!-- card -->
-              <br>             
+              <br>
               <div>
                 <div
                   class="mb-1 main-news-list"
@@ -342,6 +339,10 @@
         </div>
       </div>
     </div>
+      </div>
+
+
+
 
     <div class="col-1"></div>
   </div>
@@ -428,7 +429,7 @@ export default {
     if(this.userSeq!=null && this.userSeq!="") {
       this.getRecommendArticle(this.userSeq);
     }
-    
+
   },
   methods: {
     getRecommendArticle(userSeq) {
@@ -447,13 +448,13 @@ export default {
             this.negativeArticle = res.data.data.negative;
             this.positiveArticle = res.data.data.positive;
           }
-          
+
           this.ArticleMsg=res.data.message;
           console.log(this.positiveArticle);
           console.log('===========================');
 
 
-            
+
         })
         .catch((err) => {
           console.log("에러");
