@@ -1,7 +1,8 @@
 <template>
 <div class="container">
-<div id="mypageheader" style="text-align: left"> <h3>스크랩기사</h3>  </div>
-<hr>
+  <div class="row mt-3" ></div>
+<div id="mypageheader   mb-1" style="text-align: left"> <h3>스크랩 기사</h3>  </div>
+<hr >
 <div class="row" >
   <div class="col-4 mb-5" v-for="news in newsList" :key="news.scrapSeq">
     <div class="card" id="scrapCard" style="width: 21rem;  cursor: pointer" >

@@ -259,7 +259,7 @@ axios.defaults.paramsSerializer = function (paramObj) {
 
 export default {
   components: { VueWordCloud, wordcloud, newsModal, VueNumber },
-  data() {
+  data () {
     return {
       newsData2: {},
       newsVisible: false,
@@ -378,51 +378,6 @@ export default {
           console.log(err);
         });
     },
-
-    newsInit: function () {
-      this.newsVisible = false;
-    },
-
-    modal: function (seq) {
-      //seq로  뉴스 상세정보 조회
-      axios({
-        method: "get",
-        url: `${SERVER_HOST}/news/detail`,
-        params: {
-          newsSeq: seq,
-        },
-      })
-        .then((res) => {
-          this.lineData = [
-            { name: "", data: {} },
-            { name: "", data: {} },
-            { name: "", data: {} },
-            { name: "", data: {} },
-            { name: "", data: {} },
-            { name: "", data: {} },
-            { name: "", data: {} },
-          ];
-
-          for (var i = 0; i < 7; i++) {
-            var values = Object.values(res.data.data[i].stat); //받은 result value들만 따로 정제
-            var temp = {}; //value를 속성, 값으로 만들어줄 객체
-            for (var j = 0; j < values.length; j++) {
-              let label = values[j].label;
-              temp[label] = values[j].count; //temp 객체에 label 속성과 count 값 할당
-            }
-            this.lineData[i].name = keyword[i];
-            this.lineData[i].data = temp;
-          }
-
-          //  console.log(this.lineData);
-        })
-        .catch((err) => {
-          console.log("에러");
-          alert("그래프 데이터 없음");
-          console.log(err);
-        });
-    },
-
     newsInit: function () {
       this.newsVisible = false;
     },
@@ -712,9 +667,7 @@ canvas([canvas]): 캔버스 생성기
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
-  -webkit-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.05);
-  -moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.05);
-  box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.05);
+
 }
 
 @import url("https://fonts.googleapis.com/css?family=Lato");
