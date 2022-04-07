@@ -75,7 +75,7 @@
                 @error="replaceDefault"
               />
             </div>
-            <div class="card-title">
+            <div class="m-2 card-title ">
               <h2>
                 <div style="height:50px">
                 {{
@@ -85,7 +85,7 @@
                 }}
                 </div>
                 <hr />
-                <small class="detail-card-desc mb-1">{{ news.news_desc}}</small>
+                <small class="m-2 detail-card-desc mb-1">{{ news.news_desc}}</small>
               </h2>
             </div>
           </div>
