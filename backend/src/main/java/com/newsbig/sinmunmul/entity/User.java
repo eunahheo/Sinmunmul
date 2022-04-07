@@ -76,7 +76,7 @@ public class User implements UserDetails {
 //    private List<String> roles = new ArrayList<>();
 	
 	@Builder
-	public User(String userEmail, String userPwd, String userGender, int userAge, String userSgtype, String regDt, String regId,
+	public User(String userEmail, String userPwd, String userGender, int userAge, String userSgtype, String delYn, String regDt, String regId,
 			String modDt, String modId) {
 		super();
 		this.userEmail = userEmail;
@@ -84,6 +84,7 @@ public class User implements UserDetails {
 		this.userGender = userGender;
 		this.userAge = userAge;
 		this.userSgtype = userSgtype;
+		this.delYn = "n";
 		this.regDt = regDt;
 		this.regId = regId;
 		this.modDt = modDt;
