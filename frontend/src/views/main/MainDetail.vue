@@ -36,18 +36,9 @@
               </li>
             </ul></span
           >
+          <div id="word-cloud"></div>
+        </div>
 
- <div style=" width = 600; height = 300;">
-              <div class="spinner-div temp" v-show="this.wordcloudState === 1">
-                  <span class="spinner-border spinner-border-m"  ></span>
-                  조회중입니다.
-              </div>
-
-          <div v-show="this.wordcloudState === 2" id="word-cloud"></div>
-
-          <div v-show="this.wordcloudState === 3" class="temp"  ><small style="font-size:20px">연관 키워드를 불러올 수 없습니다. </small></div>
-</div>
-</div>
         <div class="plan span--2 long--2">
           <span style="font-size: calc(1.3rem + 0.6vw)">
             키워드 주간 기사량
@@ -237,7 +228,6 @@ export default {
       start: false,
       end: false,
       chartData: [{ name: "", data: {} }],
-      wordcloudState: null // 1은 조회 중  ,2 관련 키워드 조회 성공 , 3 관련 키워드 조회 실패
     };
   },
   components: {
@@ -268,7 +258,6 @@ export default {
         .stop();
     },
     wordcloudend(words) {
-      console.log(words);
       const d3 = require("d3");
       const width = 600;
       const height = 300;
@@ -312,40 +301,22 @@ export default {
 
     wordcloud() {
       // 키워드 연관어 받아오는 api 호출
-      this.wordcloudState = 1
       axios({
         method: "get",
         url: "https://j6a406.p.ssafy.io/fapi/news/search/wordcloud",
         params: { keyword: this.searchWord },
       })
         .then((res) => {
-          console.log(res);
-
-            if(res.data.statusCode === 200)
-            {
-
-          console.log('여기 오는거 아닌가요?')
-            this.wordcloudState = 2
-                 console.log(this.wordcloudState)
-                  const data = res.data.data;
+          const data = res.data.data;
 
           for (let index = 0; index < 20; index++) {
             this.words[index].text = data[index].keyword;
           }
           this.genLayout();
-            }
-
-        else {
-          this.wordcloudState = 3
-        }
-
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
     },
     detail(seq) {
-      // console.log("검색 시퀀스 : "+seq);
       axios
         .get(`${SERVER_HOST}/news/detail`, {
           params: {
@@ -353,14 +324,10 @@ export default {
           },
         })
         .then((res) => {
-          //  console.log(res.data.data);
           this.newsData = res.data.data;
           this.newsVisible = !this.newsVisible;
         })
-        .catch((err) => {
-          console.log("에러");
-          console.log(err);
-        });
+        .catch((err) => {});
     },
     newsInit: function () {
       this.newsVisible = false;
@@ -372,7 +339,6 @@ export default {
         this.wordcloud();
       }
       this.searchedData = [];
-      // console.log("검색 키워드 확인 : "+this.searchWord);
       if (this.searchWord != null && this.searchWord != "") {
         this.loading = true;
         axios
@@ -384,7 +350,6 @@ export default {
             },
           })
           .then((res) => {
-            console.log(res.data);
             this.searchedData = res.data.data;
             const totalElements = res.data.data[0].totalElements;
             this.pagination(totalElements);
@@ -392,9 +357,7 @@ export default {
             this.loading = false;
           })
           .catch((err) => {
-            console.log("에러");
             alert("검색 결과가 없습니다.");
-            console.log(err);
             this.loading = false;
           });
       }
@@ -448,7 +411,6 @@ export default {
     },
 
     chartMake(keyword) {
-      // console.log("차트 검색 키워드 "+keyword);
       axios
         .get(`${SERVER_HOST}/news/keyword/trend/week`, {
           params: {
@@ -468,13 +430,9 @@ export default {
           //차트 데이터 할당
           this.chartData[0].name = keyword;
           this.chartData[0].data = temp;
-
-          console.log(this.chartData);
         })
         .catch((err) => {
-          console.log("에러");
           alert("검색 결과가 없습니다.");
-          console.log(err);
         });
     },
   },
@@ -729,10 +687,5 @@ body {
 .wrapper .facebook:hover .tooltip::before {
   background: #1877f2;
   color: #ffffff;
-}
-
-.temp {
-  line-height: 300px;
-  text-align: center;
 }
 </style>

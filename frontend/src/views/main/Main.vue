@@ -492,8 +492,6 @@ export default {
         })
         .then((res) => {
           //유저 추천 기사 응답 성공
-          console.log(res.data);
-
           if (res.data.statusCode == 200) {
             this.ArticleSuccess = true;
             this.negativeArticle = res.data.data.negative;
@@ -501,13 +499,8 @@ export default {
           }
 
           this.ArticleMsg = res.data.message;
-          console.log(this.positiveArticle);
-          console.log("===========================");
         })
-        .catch((err) => {
-          console.log("에러");
-          console.log(err);
-        });
+        .catch((err) => {});
     },
     generate(category) {
       axios
@@ -518,24 +511,18 @@ export default {
         })
         .then((res) => {
           this.chartData = [];
-          // console.log(res.data.data);
           var keywords = [];
 
           for (var i = 0; i < 7; i++) {
-            //  console.log(res.data.data[i].keyword +" , "+res.data.data[i].count);
             var temp = [res.data.data[i].keyword, res.data.data[i].count];
             keywords.push(res.data.data[i].keyword);
             this.chartData.push(temp);
           }
 
-          // console.log(keywords);
           this.lineData = null;
           this.LinechartMake(keywords);
         })
-        .catch((err) => {
-          console.log("에러");
-          console.log(err);
-        });
+        .catch((err) => {});
     },
 
     LinechartMake(keyword) {
@@ -567,13 +554,9 @@ export default {
             this.lineData[i].name = keyword[i];
             this.lineData[i].data = temp;
           }
-
-          //  console.log(this.lineData);
         })
         .catch((err) => {
-          console.log("에러");
           alert("그래프 데이터 없음");
-          console.log(err);
         });
     },
     newsInit: function () {
@@ -590,13 +573,10 @@ export default {
         },
       })
         .then((res) => {
-          console.log(res.data.data);
           this.newsData2 = res.data.data;
           this.newsVisible = !this.newsVisible;
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
     },
 
     replaceDefault: function (e) {
@@ -613,7 +593,6 @@ export default {
         }
       }
 
-      console.log(number);
       axios({
         method: "get",
         url: `${SERVER_HOST}/news/main/wordcloud`,
@@ -622,7 +601,6 @@ export default {
         },
       })
         .then((res) => {
-          console.log(res);
           const data = res.data.data;
           let flag = false;
 
@@ -645,28 +623,20 @@ export default {
               },
             })
               .then((res) => {
-                console.log(res);
                 this.newsData = res.data.data;
               })
-              .catch((err) => {
-                console.log(err);
-              });
+              .catch((err) => {});
           }
 
-          console.log(this.words);
           this.genLayout();
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
     },
     check(d, d3) {
       this.newsData = null;
 
-      console.log(d);
       d3.selectAll("text").style("fill-opacity", 0.5);
       d3.select("." + d.text).style("fill-opacity", 1);
-      console.log(d.text);
 
       axios({
         method: "get",
@@ -678,12 +648,9 @@ export default {
         },
       })
         .then((res) => {
-          console.log(res);
           this.newsData = res.data.data;
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
     },
 
     genLayout() {
@@ -702,7 +669,6 @@ export default {
       // .stop();
     },
     end(words) {
-      console.log(words);
       const d3 = require("d3");
       const width = 660;
       const height = 400;
@@ -767,7 +733,6 @@ export default {
       axios
         .get(`${SERVER_HOST}/news/today`)
         .then((res) => {
-          //console.log(res.data.data);
           this.todayNewsData = res.data.data;
 
           var keys = Object.keys(this.todayNewsData);
@@ -777,16 +742,11 @@ export default {
             news += keys[i];
             const per = values[i].percent;
             news += " " + per.toFixed(1) + "% ";
-            console.log(per);
             this.todayNewsData[i] = parseFloat(per.toFixed(1));
           }
-          console.log("todayNewsData", this.todayNewsData);
           this.todayNews = news;
         })
-        .catch((err) => {
-          console.log("에러");
-          console.log(err);
-        });
+        .catch((err) => {});
     },
   }, //methods
 };

@@ -19,8 +19,6 @@ export default {
   font-family: "NanumBarunGothic";
 
   font-weight: 100;
-  /* font-family: Avenir, Helvetica, Arial, sans-serif; */
-  /* background-color: rgb(251, 251, 251); */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
