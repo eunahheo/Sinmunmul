@@ -314,8 +314,8 @@
                           <hr />
                           <div>
                             <p
-                              class="card-text main-card"
-                              style="text-align: left; font-size: 12px"
+                              class="card-text recommend-main-card"
+                              style="text-align: left"
                             >
                               {{ this.positiveArticle.newsDesc }}
                             </p>
@@ -368,8 +368,8 @@
                           <hr />
                           <div>
                             <p
-                              class="card-text main-card"
-                              style="text-align: left; font-size: 12px"
+                              class="card-text recommend-main-card"
+                              style="text-align: "
                             >
                               {{ this.negativeArticle.newsDesc }}
                             </p>
@@ -809,7 +809,16 @@ canvas([canvas]): 캔버스 생성기
   object-fit: cover;
   margin: 0px;
 }
-
+.recommend-main-card
+{
+   display: -webkit-box;
+  word-wrap: break-word;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 70px;
+}
 .main-card {
   display: -webkit-box;
   word-wrap: break-word;
@@ -817,7 +826,7 @@ canvas([canvas]): 캔버스 생성기
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  height: 60px;
+  height: 70px;
 }
 
 #word-cloud {
