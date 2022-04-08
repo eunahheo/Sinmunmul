@@ -36,7 +36,17 @@
               </li>
             </ul></span
           >
-          <div id="word-cloud"></div>
+          <div style=" width = 600; height = 300;">
+              <div class="spinner-div temp" v-show="this.wordcloudState === 1">
+                  <span class="spinner-border spinner-border-m"  ></span>
+                  조회중입니다.
+              </div>
+
+          <div v-show="this.wordcloudState === 2" id="word-cloud"></div>
+
+          <div v-show="this.wordcloudState === 3" class="temp"  ><small style="font-size:20px">연관 키워드를 불러올 수 없습니다. </small></div>
+</div>
+
         </div>
 
         <div class="plan span--2 long--2">
@@ -228,6 +238,7 @@ export default {
       start: false,
       end: false,
       chartData: [{ name: "", data: {} }],
+      wordcloudState: null // 1은 조회 중  ,2 관련 키워드 조회 성공 , 3 관련 키워드 조회 실패
     };
   },
   components: {
@@ -300,6 +311,7 @@ export default {
     },
 
     wordcloud() {
+       this.wordcloudState = 1
       // 키워드 연관어 받아오는 api 호출
       axios({
         method: "get",
@@ -309,10 +321,19 @@ export default {
         .then((res) => {
           const data = res.data.data;
 
+ if(res.data.statusCode === 200)
+            {
+
+               this.wordcloudState = 2
           for (let index = 0; index < 20; index++) {
             this.words[index].text = data[index].keyword;
           }
           this.genLayout();
+            }
+
+            else{
+              this.wordcloudState = 3
+            }
         })
         .catch((err) => {});
     },
@@ -439,6 +460,12 @@ export default {
 };
 </script>
 <style scoped>
+.temp {
+  line-height: 300px;
+  text-align: center;
+}
+
+
 @media (min-width: 700px) {
   main {
     display: grid;
