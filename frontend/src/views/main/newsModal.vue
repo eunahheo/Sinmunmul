@@ -1,87 +1,145 @@
 <template>
+  <div class="modal" id="myModal2">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">알림창</h4>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
 
+        <!-- Modal body -->
+        <div class="modal-body">
+          {{ this.message }}
+        </div>
 
-  <div class="modal " id="myModal2" >
-  <div class="modal-dialog   modal-dialog-centered">
-    <div class="modal-content">
-
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h4 class="modal-title">알림창</h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+            닫기
+          </button>
+        </div>
       </div>
-
-      <!-- Modal body -->
-      <div class="modal-body">
-        {{this.message}}
-      </div>
-
-      <!-- Modal footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">닫기</button>
-      </div>
-
     </div>
   </div>
-</div>
 
-<div class="modal__background"  v-if="visible">
+  <div class="modal__background" v-if="visible">
+    <div class="modal" id="myModal" style="display: block">
+      <div class="modal-dialog modal-lg modal-dialog-centered news-modal">
+        <div class="modal-content p-3">
+          <!-- Modal Header -->
+          <div class="row" style="height: 60px">
+            <div class="col-11"></div>
+            <div class="col-1 mt-2">
+              <button
+                type="button"
+                class="btn-close mt-2,mr-2"
+                @click="$emit('close')"
+                data-bs-dismiss="modal"
+              ></button>
+            </div>
+          </div>
 
- <div class="modal" id="myModal"  style="display:block">
-  <div class="modal-dialog modal-lg  modal-dialog-centered  news-modal" >
-    <div class="modal-content p-3">
-      <!-- Modal Header -->
-      <div class="row" style="height:60px">
-        <div class="col-11"></div>
-        <div class="col-1 mt-2" ><button type="button" class="btn-close mt-2,mr-2"  @click="$emit('close')" data-bs-dismiss="modal"  ></button></div>
-         </div>
+          <div class="row" style="padding-top: 0px">
+            <div class="col-1"></div>
 
-      <div  class="row" style="padding-top: 0px;">
-        <div class="col-1" > </div>
+            <div class="col-10">
+              <div style="text-align: left">
+                <h3>{{ news.newsPress }}</h3>
+              </div>
+              <div>
+                <h4 class="modal-title" style="text-align: left">
+                  {{ news.newsTitle }}
+                </h4>
+              </div>
 
-      <div class="col-10">
-           <div  style="text-align: left;"><h3> {{news.newsPress}} </h3></div>
-           <div ><h4 class="modal-title" style="text-align: left; " >{{news.newsTitle}}</h4></div>
+              <div class="row mt-3" style="height: 22px">
+                <div class="col-4" style="text-align: left; padding-left: 10px">
+                  <button
+                    type="button"
+                    class="btn m-1"
+                    style="border: 1px solid; width: 75px; font-size: 12px"
+                    @click="redirect(news.newsLink)"
+                  >
+                    기사원문
+                  </button>
+                  <button
+                    type="button"
+                    class="btn"
+                    style="border: 1px solid; width: 75px; font-size: 12px"
+                    @click="scrap(news.newsSeq)"
+                    v-if="this.userSeq != null"
+                    data-bs-toggle="modal"
+                    data-bs-target="#myModal2"
+                  >
+                    스크랩
+                  </button>
+                </div>
+                <div
+                  class="col-8"
+                  style="
+                    text-align: right;
+                    padding-right: 10px;
+                    padding-top: 8px;
+                  "
+                >
+                  {{ this.date }} | {{ news.newsAuthor }} 기자
+                </div>
+              </div>
+              <hr />
+              <div>
+                <img
+                  v-bind:src="news.newsPhoto"
+                  class="image mt-4 mb-4"
+                  style="width: 100%"
+                />
+              </div>
+              <div
+                class="modal-body"
+                v-html="desc"
+                style="text-align: left; font-size: 20px"
+              ></div>
+              <div class="modal-footer mb-4">
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  @click="$emit('close')"
+                  data-bs-dismiss="modal"
+                >
+                  닫기
+                </button>
+              </div>
+            </div>
 
-          <div class="row mt-3" style="height:22px ">
-        <div class=" col-4" style="text-align: left; padding-left:10px"
-        ><button type="button"  class="btn m-1"  style="border:1px solid; width:75px;  font-size:12px; " @click="redirect(news.newsLink)">기사원문</button>
-        <button type="button"  class="btn "  style="border:1px solid; width:75px;  font-size:12px; " @click="scrap(news.newsSeq)"  v-if="this.userSeq != null"  data-bs-toggle="modal" data-bs-target="#myModal2">스크랩</button>
+            <div class="col-1"></div>
+          </div>
+
+          <!-- Modal body -->
+
+          <!-- Modal footer -->
         </div>
-        <div class="col-8" style="text-align: right; padding-right:10px; padding-top:8px"> {{this.date}}  | {{news.newsAuthor}} 기자</div>
-        </div>
-         <hr>
-         <div><img v-bind:src="news.newsPhoto" class="image mt-4 mb-4" style="width:100%;"></div>
-         <div class="modal-body" v-html="desc"  style="text-align: left;  font-size:20px;"></div>
-        <div class="modal-footer mb-4"><button type="button" class="btn btn-danger"   @click="$emit('close')"  data-bs-dismiss="modal">닫기</button></div>
       </div>
-
-        <div class="col-1"> </div>
-
-      </div>
-
-      <!-- Modal body -->
-
-      <!-- Modal footer -->
     </div>
   </div>
-</div>
-</div>
 </template>
 
 <script>
-import axios from 'axios'
-const API_SERVER = 'https://j6a406.p.ssafy.io/api'
+import axios from "axios";
+const API_SERVER = "https://j6a406.p.ssafy.io/api";
 export default {
   name: "newsModal",
   props: ["visible", "news"],
 
   data: function () {
     return {
-      userSeq: localStorage.getItem('userSeq'),
+      userSeq: localStorage.getItem("userSeq"),
       desc: "",
       date: "",
-      message:"",
+      message: "",
     };
   },
   watch: {
@@ -92,46 +150,45 @@ export default {
       this.date = tmp[0];
 
       this.desc = text;
-      // console.log(this.desc)
 
-      this.desc = this.desc.replace(/^\s*/, '')
-      this.desc = this.desc.replace(/\t/g, '')
-      this.desc = this.desc.replace(/\n$/gm, '<br/>')
-      console.log('해당문자를 포함하고 있나요? ' + this.desc.indexOf(('\n')))
-      if (this.desc.indexOf(('\n')) === -1) {
-        this.desc = this.desc.replace(/(?:\.\s)/g, '. <br /> <br />')
+      this.desc = this.desc.replace(/^\s*/, "");
+      this.desc = this.desc.replace(/\t/g, "");
+      this.desc = this.desc.replace(/\n$/gm, "<br/>");
+      if (this.desc.indexOf("\n") === -1) {
+        this.desc = this.desc.replace(/(?:\.\s)/g, ". <br /> <br />");
       } else {
-        this.desc = this.desc.replace(/(?:\.\r\n|\.\r|\.\n|\.\s*\n)/g, '. <br/> <br/>')
-        this.desc = this.desc.replace(/(?:\n)/g, '<br/>')
+        this.desc = this.desc.replace(
+          /(?:\.\r\n|\.\r|\.\n|\.\s*\n)/g,
+          ". <br/> <br/>"
+        );
+        this.desc = this.desc.replace(/(?:\n)/g, "<br/>");
       }
-      // this.desc = this.desc.replace(/(?:\r\n|\r|\n|\s\n)/g, '<br />')
     },
   },
   methods: {
     scrap: function (newsSeq) {
       axios({
-        method: 'post',
+        method: "post",
         // /mypage/{user_seq}/updatePassword
         url: `${API_SERVER}/news/${newsSeq}/scrap`,
         params: {
-          user_Seq: this.userSeq
-        }
+          user_Seq: this.userSeq,
+        },
       })
         .then((res) => {
-          this.message = '스크랩 등록 완료'
-          console.log(res)
+          this.message = "스크랩 등록 완료";
         })
-        .catch(err => {
-          console.log(err)
-          this.message = '이미 등록된 기사입니다.'
-        })
+        .catch((err) => {
+          this.message = "이미 등록된 기사입니다.";
+        });
     },
-    redirect: function (data) { // 기사원문 버튼 클릭
+    redirect: function (data) {
+      // 기사원문 버튼 클릭
       // window.location.href = data // 바로 이동
-      window.open(data) // 새 창 열기
-    }
-  }
-}
+      window.open(data); // 새 창 열기
+    },
+  },
+};
 </script>
 <style scoped>
 #myModal {
@@ -145,7 +202,7 @@ export default {
   transform: translate(-50%, -50%);
 }
 
- .news-modal {
+.news-modal {
   width: 100%;
   max-width: 1000px;
   padding: 30px;

@@ -16,13 +16,9 @@ export default {
 
 <style>
 #app {
-  /* font-family: "ChosunCentennial"; */
-  font-family: "ChosunSm";
-  /* font-family: "ChosunNm"; */
-  /* font-family: "ChosunKm"; */
+  font-family: "NanumBarunGothic";
+
   font-weight: 100;
-  /* font-family: Avenir, Helvetica, Arial, sans-serif; */
-  /* background-color: rgb(251, 251, 251); */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -43,19 +39,8 @@ nav a.router-link-exact-active {
 }
 
 @font-face {
-  font-family: "ChosunNm";
-  src: url("assets/fonts/ChosunNm.ttf") format("truetype");
-  font-weight: 700;
-}
-
-@font-face {
-  font-family: "ChosunSm";
-  src: url("assets/fonts/ChosunSm.ttf") format("truetype");
-  font-weight: bold;
-}
-@font-face {
-  font-family: "ChosunKm";
-  src: url("assets/fonts/ChosunKm.ttf") format("truetype");
+  font-family: "NanumBarunGothic";
+  src: url("assets/fonts/NanumBarunGothic.ttf") format("truetype");
   font-weight: bold;
 }
 </style>

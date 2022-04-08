@@ -692,7 +692,6 @@ export default {
           },
         })
         .then((res) => {
-          console.log(res);
           if (res.status === 200) {
             alert("이미 가입된 이메일입니다.");
           } else if (res.status === 202) {
@@ -703,15 +702,12 @@ export default {
                 },
               })
               .then((res) => {
-                console.log(res.data.data);
                 this.emailCheckCode = res.data.data;
               });
             alert("이메일로 인증번호를 보냈습니다.");
           }
         })
-        .catch((e) => {
-          console.log(e);
-        });
+        .catch((e) => {});
     },
 
     verifyCodeCheck() {
@@ -735,7 +731,6 @@ export default {
             usersgType: this.usersgType,
           })
           .then((res) => {
-            console.log(res);
             if (res.status === 200) {
               alert("회원가입 성공");
               axios
@@ -744,7 +739,6 @@ export default {
                   userPwd: this.passwdData,
                 })
                 .then((res) => {
-                  console.log(res);
                   if (res.status === 200) {
                     alert("로그인 성공");
                     localStorage.setItem(
@@ -761,9 +755,7 @@ export default {
               alert(res.status);
             }
           })
-          .catch((e) => {
-            console.log(e);
-          });
+          .catch((e) => {});
       } else {
         alert("이메일 인증을 진행해주세요.");
       }

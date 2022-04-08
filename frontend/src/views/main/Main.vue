@@ -108,10 +108,27 @@
         <br />
         <div class="row mb-2">
           <div class="col-6 mb-4">
-            <div class="container2">             
-              <div><span style="font-size: calc(1.3rem + .6vw);"> 실시간 이슈  </span> 
-                  <span style="font-size: calc(1.0rem + .6vw);"> {{this.realHour}} </span>
-            </div>
+            <div class="container2">
+              <div>
+                <span style="font-size: calc(1.3rem + 0.6vw)">
+                  실시간 이슈
+                </span>
+                <span style="font-size: calc(1rem + 0.6vw)">
+                  {{ this.realHour }}
+                </span>
+                <span style="float: right"
+                  ><ul class="wrapper">
+                    <li class="icon facebook">
+                      <span class="tooltip"
+                        >현재 시각을 기준으로 이전 1시간 동안의 언급량 상위
+                        20개의 키워드를 나타냅니다.<br />
+                        키워드를 클릭하면 관련 기사 목록을 확인할 수 있습니다.
+                      </span>
+                      <span><i class="fab">i</i></span>
+                    </li>
+                  </ul></span
+                >
+              </div>
               <div class="mb-2">
                 <button
                   :class="{
@@ -177,7 +194,7 @@
                           <div>
                             <p
                               class="card-text main-card"
-                              style="text-align: left; font-size: 12px"
+                              style="text-align: left; font-size: 16px"
                             >
                               {{ item.news_desc }}
                             </p>
@@ -194,7 +211,21 @@
         <br />
         <div class="row mb-2">
           <div class="col-6 mb-3">
-             <h3>최고 빈도 키워드</h3>
+            <span style="font-size: calc(1.3rem + 0.6vw)">
+              최고 빈도 키워드
+            </span>
+
+            <span style="float: right"
+              ><ul class="wrapper">
+                <li class="icon facebook">
+                  <span class="tooltip"
+                    >위 워드클라우드의 상위 7개 키워드의 언급량을 막대 그래프로
+                    한 눈에 확인할 수 있습니다.</span
+                  >
+                  <span><i class="fab">i</i></span>
+                </li>
+              </ul></span
+            >
             <div class="container3">
               <!-- <bar-chart :data="chartData"></bar-chart> -->
               <bar-chart
@@ -212,8 +243,22 @@
             </div>
           </div>
           <div class="col-6 mb-3">
-            <h3>키워드 주간 기사량</h3>
-            <div class="container3">   
+            <span style="font-size: calc(1.3rem + 0.6vw)">
+              키워드 주간 기사량
+            </span>
+
+            <span style="float: right"
+              ><ul class="wrapper">
+                <li class="icon facebook">
+                  <span class="tooltip"
+                    >최고 빈도 키워드들의 주간 기사량 추이를 나타내는
+                    그래프입니다.</span
+                  >
+                  <span><i class="fab">i</i></span>
+                </li>
+              </ul></span
+            >
+            <div class="container3">
               <div class="spinner-div2" v-if="this.lineData == null">
                 <button class="btn">
                   <span class="spinner-border spinner-border-m"></span>
@@ -367,7 +412,7 @@ export default {
   components: { VueWordCloud, wordcloud, newsModal, VueNumber },
   data() {
     return {
-      realHour : null,
+      realHour: null,
       newsData2: {},
       newsVisible: false,
       newsData: null,
@@ -423,21 +468,16 @@ export default {
     // this.generate(0);
     this.getTodayNews();
     var endHour = new Date().getHours();
-    var startHour = endHour-1;
-    if(endHour==0) {
-      startHour=23;
-      endHour='00';
+    var startHour = endHour - 1;
+    if (endHour == 0) {
+      startHour = 23;
+      endHour = "00";
+    } else if (endHour == 1) {
+      startHour = "00";
     }
-    else if(endHour==1) {
-      startHour='00';
-    }
-    
 
-    var testNum = '00';
-    console.log("testnum ="+testNum);
-    
-    this.realHour="";
-    this.realHour +="("+startHour+":00 ~ "+endHour+":00)";
+    this.realHour = "";
+    this.realHour += "(" + startHour + ":00 ~ " + endHour + ":00)";
     if (this.userSeq != null && this.userSeq != "") {
       this.getRecommendArticle(this.userSeq);
     }
@@ -452,8 +492,6 @@ export default {
         })
         .then((res) => {
           //유저 추천 기사 응답 성공
-          console.log(res.data);
-
           if (res.data.statusCode == 200) {
             this.ArticleSuccess = true;
             this.negativeArticle = res.data.data.negative;
@@ -461,13 +499,8 @@ export default {
           }
 
           this.ArticleMsg = res.data.message;
-          console.log(this.positiveArticle);
-          console.log("===========================");
         })
-        .catch((err) => {
-          console.log("에러");
-          console.log(err);
-        });
+        .catch((err) => {});
     },
     generate(category) {
       axios
@@ -478,24 +511,18 @@ export default {
         })
         .then((res) => {
           this.chartData = [];
-          // console.log(res.data.data);
           var keywords = [];
 
           for (var i = 0; i < 7; i++) {
-            //  console.log(res.data.data[i].keyword +" , "+res.data.data[i].count);
             var temp = [res.data.data[i].keyword, res.data.data[i].count];
             keywords.push(res.data.data[i].keyword);
             this.chartData.push(temp);
           }
 
-          // console.log(keywords);
           this.lineData = null;
           this.LinechartMake(keywords);
         })
-        .catch((err) => {
-          console.log("에러");
-          console.log(err);
-        });
+        .catch((err) => {});
     },
 
     LinechartMake(keyword) {
@@ -527,13 +554,9 @@ export default {
             this.lineData[i].name = keyword[i];
             this.lineData[i].data = temp;
           }
-
-          //  console.log(this.lineData);
         })
         .catch((err) => {
-          console.log("에러");
           alert("그래프 데이터 없음");
-          console.log(err);
         });
     },
     newsInit: function () {
@@ -550,13 +573,10 @@ export default {
         },
       })
         .then((res) => {
-          console.log(res.data.data);
           this.newsData2 = res.data.data;
           this.newsVisible = !this.newsVisible;
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
     },
 
     replaceDefault: function (e) {
@@ -573,7 +593,6 @@ export default {
         }
       }
 
-      console.log(number);
       axios({
         method: "get",
         url: `${SERVER_HOST}/news/main/wordcloud`,
@@ -582,7 +601,6 @@ export default {
         },
       })
         .then((res) => {
-          console.log(res);
           const data = res.data.data;
           let flag = false;
 
@@ -605,28 +623,20 @@ export default {
               },
             })
               .then((res) => {
-                console.log(res);
                 this.newsData = res.data.data;
               })
-              .catch((err) => {
-                console.log(err);
-              });
+              .catch((err) => {});
           }
 
-          console.log(this.words);
           this.genLayout();
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
     },
     check(d, d3) {
       this.newsData = null;
 
-      console.log(d);
       d3.selectAll("text").style("fill-opacity", 0.5);
       d3.select("." + d.text).style("fill-opacity", 1);
-      console.log(d.text);
 
       axios({
         method: "get",
@@ -638,12 +648,9 @@ export default {
         },
       })
         .then((res) => {
-          console.log(res);
           this.newsData = res.data.data;
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
     },
 
     genLayout() {
@@ -662,7 +669,6 @@ export default {
       // .stop();
     },
     end(words) {
-      console.log(words);
       const d3 = require("d3");
       const width = 660;
       const height = 400;
@@ -727,7 +733,6 @@ export default {
       axios
         .get(`${SERVER_HOST}/news/today`)
         .then((res) => {
-          //console.log(res.data.data);
           this.todayNewsData = res.data.data;
 
           var keys = Object.keys(this.todayNewsData);
@@ -737,16 +742,11 @@ export default {
             news += keys[i];
             const per = values[i].percent;
             news += " " + per.toFixed(1) + "% ";
-            console.log(per);
             this.todayNewsData[i] = parseFloat(per.toFixed(1));
           }
-          console.log("todayNewsData", this.todayNewsData);
           this.todayNews = news;
         })
-        .catch((err) => {
-          console.log("에러");
-          console.log(err);
-        });
+        .catch((err) => {});
     },
   }, //methods
 };
@@ -817,7 +817,7 @@ canvas([canvas]): 캔버스 생성기
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  height: 54px;
+  height: 60px;
 }
 
 #word-cloud {
@@ -898,5 +898,104 @@ body .container .block .string {
   font-size: 15px;
   line-height: 18px;
   opacity: 0.8;
+}
+
+/* tooltip */
+/*
+    Auther: Abdelrhman Said
+*/
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+*:focus,
+*:active {
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  display: grid;
+  height: 100%;
+  width: 100%;
+  font-family: "Poppins", sans-serif;
+  place-items: center;
+  background: linear-gradient(315deg, #ffffff, #d7e1ec);
+}
+
+.wrapper {
+  display: inline-flex;
+  list-style: none;
+}
+
+.wrapper .icon {
+  position: relative;
+  background: rgb(255, 254, 254);
+  border-radius: 50%;
+  padding: 15px;
+  margin: 10px;
+  width: 10px;
+  height: 10px;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.wrapper .tooltip {
+  position: absolute;
+  top: 0;
+  font-size: 14px;
+  background: #ffffff;
+  color: #ffffff;
+  padding: 5px 8px;
+  border-radius: 5px;
+  width: 300px;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.wrapper .tooltip::before {
+  position: absolute;
+  content: "";
+  height: 8px;
+  width: 5px;
+  background: #ffffff;
+  bottom: -3px;
+  left: 50%;
+  transform: translate(-50%) rotate(45deg);
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.wrapper .icon:hover .tooltip {
+  top: -45px;
+  width: 250px;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.wrapper .icon:hover span,
+.wrapper .icon:hover .tooltip {
+  text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.1);
+}
+
+.wrapper .facebook:hover,
+.wrapper .facebook:hover .tooltip,
+.wrapper .facebook:hover .tooltip::before {
+  background: #1877f2;
+  color: #ffffff;
 }
 </style>

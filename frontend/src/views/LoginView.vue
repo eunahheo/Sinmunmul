@@ -82,17 +82,13 @@ export default {
   },
   methods: {
     loginBtn() {
-      console.log("login triggerd ");
-
       if (this.emailData != null && this.passwdData != "") {
-        console.log("login data : ", this.emailData, this.passwdData);
         axios
           .post(`${API_SERVER}/user/login`, {
             userEmail: this.emailData,
             userPwd: this.passwdData,
           })
           .then((res) => {
-            console.log(res);
             if (res.status === 200) {
               localStorage.setItem("authToken", res.data.data.accessToken);
               localStorage.setItem("userSeq", res.data.data.userSeq);
@@ -102,9 +98,7 @@ export default {
               alert("이메일, 비밀번호가 일치하지 않습니다.");
             }
           })
-          .catch((e) => {
-            console.log(e);
-          });
+          .catch((e) => {});
       } else {
         alert("로그인 정보를 입력해주세요");
       }
@@ -117,7 +111,6 @@ export default {
       });
     },
     getInfo(authObj) {
-      console.log(authObj.access_token);
       axios
         .post(
           `${API_SERVER}/user/kakao/login`,
