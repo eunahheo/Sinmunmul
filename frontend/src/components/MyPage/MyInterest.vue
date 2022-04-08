@@ -119,8 +119,6 @@ export default {
     InterestModal
   },
   created () {
-    console.log("현재 로그인한 유저 시퀀스")
-    console.log(this.$store.userSeq)
     axios({
       method: 'get',
       // /mypage/{user_seq}/updatePassword
@@ -128,14 +126,13 @@ export default {
     }).then((res) => {
       this.yesInterest = res.data.data.yesInterest
       this.noInterest = res.data.data.noInterest
-      console.log(res)
+      
       // 해시맵에 카테고리 번호와 이름 설정
       for (let index = 0; index < this.category.length; index++) {
         this.hashMap.set(this.category[index].code, this.category[index].name)
       }
       for (let index = 0; index < this.yesInterest.length; index++) {
         const value = this.yesInterest[index]
-        console.log(this.hashMap.get(value.code))
         this.state[this.hashMap.get(value.codeGroup)].data.push({ codeGroup: value.codeGroup, code: value.code, name: this.hashMap.get(value.code), state: true })
       }
       for (let index = 0; index < this.noInterest.length; index++) {
@@ -143,12 +140,7 @@ export default {
         this.state[this.hashMap.get(value.codeGroup)].data.push({ codeGroup: value.codeGroup, code: value.code, name: this.hashMap.get(value.code), state: false })
       }
       this.numberSort()
-      console.log(this.state[0].data)
-      console.log(this.state[1].data)
-      console.log(this.state[2].data)
-      console.log(this.state[3].data)
-      console.log(this.state[4].data)
-      console.log(this.state[5].data)
+
     }).catch((err) => {
       console.log(err)
     })
@@ -170,7 +162,6 @@ export default {
         data: this.updateData
       })
         .then((res) => {
-          console.log(res)
           this.modalView()
         })
         .catch(err => console.log(err)

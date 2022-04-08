@@ -87,14 +87,12 @@ export default {
             this.alertChange('비밀번호 변경 완료', 'visible', 'alert alert-primary')
             this.password = ''
             this.newpassword = ''
-            this.newpasswordcon = ''
-            console.log(res)
+            this.newpasswordcon = '' 
           }).catch((err) => {
             this.alertChange('비밀번호가 올바르지 않습니다', 'visible', 'alert alert-danger')
             this.password = ''
             this.newpassword = ''
             this.newpasswordcon = ''
-            console.log(err)
           })
         }
       }

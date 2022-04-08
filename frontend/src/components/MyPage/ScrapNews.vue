@@ -121,7 +121,6 @@ export default {
         }
       })
         .then((res) => {
-          console.log(res)
           this.newsList = res.data.data.content
           this.pagination(res.data.data.totalElements)
         })
@@ -156,14 +155,12 @@ export default {
         this.next = true
         this.end = true
       }
-      console.log(this.startPage)
-      console.log(this.endPage)
+      
       this.pageNumbers = []
       const s = this.startPage
       const e = this.endPage
       for (let i = s; i <= e; i++) {
         this.pageNumbers[i - s] = i
-        console.log(this.pageNumbers)
       }
     },
     thisPage: function (num) {
@@ -182,7 +179,6 @@ export default {
         }
       })
         .then((res) => {
-          console.log(res)
           this.deleteModalView()
         })
         .catch((err) => {
