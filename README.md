@@ -17,8 +17,7 @@
     * 회원 관리 (회원가입, 로그인, 수정)
     * 오늘의 키워드
     * 키워드 검색
-    * 외 사용자 편의 기능 
-      (🗂️ 스크랩, )
+    * 스크랩 기능
 <br/>
 
 ### ⚙️ 주요 기술
@@ -48,56 +47,56 @@
 
 ## 팀원 소개 
 <table>
-  <tr height="125px">
+  <tr height="100px">
     <td align="center" width="15%">
-      <a href="https://github.com/"><img src=""/></a>
+      <img src="/uploads/9f8342fb55906d0acf5becd196bcd815/임재현.jpg"/></a>
     </td>
     <td align="center" width="15%">
-      <a href="https://github.com/"><img src=""/></a>
+      <img src="/uploads/040dbaa665fa16ff2d331ff81138e550/김하영.jpg"/></a>
     </td>
     <td align="center" width="15%">
-      <a href="https://github.com/"><img src=""/></a>
+      <img src="/uploads/6a03fcf074f519531b443703b6622e00/배용한.jpg"/></a>
     </td>
     <td align="center" width="15%">
-      <a href="https://github.com/sksy368"><img src=""/></a>
+      <img src="/uploads/50b904954fb5a9e184e3e985f363993c/손수연.jpg"/></a>
     </td>
     <td align="center" width="15%">
-      <a href="https://github.com/"><img src=""/></a>
+      <img src="/uploads/d25860b0128eace18acaa0dd757a6019/유민상.jpg"/></a>
     </td>
     <td align="center" width="15%">
-      <a href="https://github.com/"><img src=""/></a>
+      <img src="/uploads/ceb7f0aea9925d8c04b533221cdb87a6/허은아.jpg"/></a>
     </td>
   </tr>
   <tr height="70px">
     <td align="center" width="15%">
-      <a href="https://github.com/hean1103">임재현(팀장)</a>
-      <br />
-      프론트엔드 개발 및 Jira 관리
+      👑 임재현(팀장)
+      <br /><br />
+      프론트엔드 개발<br />Jira 관리
     </td>
     <td align="center" width="15%">
-      <a href="https://github.com/hean1103">김하영</a>
-      <br />
-      프론트엔드 개발 및 발표
+      김하영
+      <br /><br />
+      프론트엔드 개발<br />발표
     </td>
     <td align="center" width="15%">
-      <a href="https://github.com/hean1103">배용한</a>
-      <br />
-      프론트엔드 개발 및 UCC 제작
+      배용한
+      <br /><br />
+      프론트엔드 개발<br />UCC 제작
     </td>
     <td align="center" width="15%">
-      <a href="https://github.com/hean1103">손수연</a>
-      <br />
+      손수연
+      <br /><br />
       백엔드 개발
     </td>
     <td align="center" width="15%">
-      <a href="https://github.com/hean1103">유민상</a>
-      <br />
+      유민상
+      <br /><br />
       백엔드 개발
     </td>
     <td align="center" width="15%">
-      <a href="https://github.com/hean1103">허은아</a>
-      <br />
-      백엔드 개발 및 AWS, CI/CD 담당
+      허은아
+      <br /><br />
+      백엔드 개발<br />AWS, CI/CD 담당
     </td>
   </tr>
 </table>
@@ -125,6 +124,7 @@
 ### And Our Basic Skills 🛠️
 <img src="https://img.shields.io/badge/JAVA-007396?style=flat-square&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/Spring-6DB33F?style=flat-square&logo=Spring&logoColor=white">
 <img src="https://img.shields.io/badge/mysql-4479A1?style=flat-square&logo=mysql&logoColor=white">
+<img src="https://img.shields.io/badge/python-F6C73B?style=flat-square&logo=python&logoColor=white">
 <br/>
 <img src="https://img.shields.io/badge/html-E34F26?style=flat-square&logo=html5&logoColor=white">
 <img src="https://img.shields.io/badge/css-1572B6?style=flat-square&logo=css3&logoColor=white">
@@ -135,8 +135,8 @@
 <br/>
 
 ### 🚩 시스템 구성도
-![SYSTEM.png](./img/SYSTEM.png)
-<br/>
+![SYSTEM.png](/uploads/ce1c94c34d8b2e43e4e63e2e99367ce8/시스템_구성도.png)
+<br/><br/>
 
 ### 🎫 ERD 
   * 사용자 정보를 저장한 user 테이블
@@ -150,14 +150,15 @@
   * 워드클라우드를 저장한 news_wordcloud 테이블
   * 사용자의 뉴스 스크랩을 저장한 scrap 테이블
 
-![ERD_TABEL.png](./img/ERD_TABEL.png)
-<br/>
+![ERD_TABEL.png](/uploads/b60ea236f1ddff43569d7cf59dd6bf93/ERD.png)
+<br/><br/>
 
-### 🥊 기능 상세 설명
-👉️ [기능 설명 & 시연 시나리오]() 👈️  
-1.   
-2.   
-3.   
+### 🥊 프로젝트 차별점/독창성 (기술관점)  
+1. 크론탭을 활용하여 실시간으로 뉴스 데이터 수집
+2. FULL TEXT SEARCH 인덱스를 적용하고 쿼리문 개선으로 조회 속도 40초 → 2초로 단축
+3. 실시간으로 이루어지는 연관어 분석의 빠른 처리를 위해 FastAPI를 도입하고 형태소 분석기 Mecab을 사용하여 분석 속도 단축
+4. tf-idf 알고리즘으로 주요 키워드 산출 정확도 증가
+5. 좋은 데이터로 학습된 95% 정확도의 KoBERT 모델로 감정 분석
 <br/>
 
 ### 🧩 파일 구조
@@ -171,5 +172,3 @@ S06P22A406
 └── README.md
 ```
 <br/>
-
-### ❗️ 참고사항
