@@ -194,7 +194,7 @@
                           <div>
                             <p
                               class="card-text main-card"
-                              style="text-align: left; font-size: 12px"
+                              style="text-align: left; font-size: 16px"
                             >
                               {{ item.news_desc }}
                             </p>
@@ -857,7 +857,7 @@ canvas([canvas]): 캔버스 생성기
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  height: 54px;
+  height: 60px;
 }
 
 #word-cloud {
