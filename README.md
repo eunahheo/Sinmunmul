@@ -135,7 +135,8 @@
 <br/>
 
 ### 🚩 시스템 구성도
-![SYSTEM.png](/uploads/ce1c94c34d8b2e43e4e63e2e99367ce8/시스템_구성도.png)
+![시스템_구성도](https://user-images.githubusercontent.com/63037344/162619192-34423de5-c5eb-4270-baa5-c50208fa6b90.png)
+
 <br/><br/>
 
 ### 🎫 ERD 
@@ -150,7 +151,8 @@
   * 워드클라우드를 저장한 news_wordcloud 테이블
   * 사용자의 뉴스 스크랩을 저장한 scrap 테이블
 
-![ERD_TABEL.png](/uploads/b60ea236f1ddff43569d7cf59dd6bf93/ERD.png)
+![ERD](https://user-images.githubusercontent.com/63037344/162619215-b59cc1ad-dfda-4469-a411-90519b543031.png)
+
 <br/><br/>
 
 ### 🥊 프로젝트 차별점/독창성 (기술관점)  
