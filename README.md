@@ -1,4 +1,4 @@
-# 빅데이터 신문 분석 서비스 "신문물"
+# 빅데이터 신문 분석 서비스 "신문물" 
 ![header](https://capsule-render.vercel.app/api?type=waving&color=0:9e9e9e,45:EFECEA,70:8d8d8d,100:eeeeee&height=300&section=header&text=신%20문%20물&fontColor=343a40&fontSize=120)
 
 ## 프로젝트 소개
